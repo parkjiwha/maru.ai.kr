@@ -814,47 +814,25 @@
                     </div>
                 </a>
 
-                <!-- AI Editor Windows -->
-                <a href="AI자동편집기.exe" download="AI자동편집기.exe"
-                   class="flex items-center gap-4 p-4 rounded-2xl bg-white/[0.03] border border-white/[0.07] hover:border-orange-500/40 hover:bg-orange-500/5 hover:shadow-[0_0_20px_rgba(249,115,22,0.10)] transition-all duration-200 group cursor-pointer">
-                    <div class="w-11 h-11 rounded-xl bg-orange-500/12 border border-orange-500/18 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
-                        <!-- Windows icon -->
-                        <svg class="w-5 h-5 text-orange-400" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M3 5.557L10.373 4.5V11.5H3V5.557zM11.373 4.36L21 3v8.5h-9.627V4.36zM3 12.5h7.373v7l-7.373-1.05V12.5zM11.373 12.5H21v8.5l-9.627-1.14V12.5z"/>
-                        </svg>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="font-semibold text-white text-sm">AI 자동 영상 편집 시스템</p>
-                        <p class="text-xs text-gray-500 mt-0.5">Windows · .exe 설치 파일</p>
-                    </div>
-                    <div class="flex items-center gap-1.5 text-xs text-gray-500 group-hover:text-orange-400 transition-colors flex-shrink-0">
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                        <span class="font-mono">.exe</span>
-                    </div>
-                </a>
-
-                <!-- AI Editor macOS -->
+                <!-- AI Editor macOS (다운로드 비활성화 — href는 코드에 유지) -->
                 <a href="https://huggingface.co/datasets/maruofficial/maru_ai/resolve/main/AI%E1%84%8C%E1%85%A1%E1%84%83%E1%85%A9%E1%86%BC%E1%84%8B%E1%85%A7%E1%86%BC%E1%84%89%E1%85%A1%E1%86%BC%E1%84%91%E1%85%A7%E1%86%AB%E1%84%8C%E1%85%B5%E1%86%B8%E1%84%80%E1%85%B5.app.zip" download="AI자동영상편집기.app.zip"
-                   class="flex items-center gap-4 p-4 rounded-2xl bg-white/[0.03] border border-white/[0.07] hover:border-amber-400/40 hover:bg-amber-400/5 hover:shadow-[0_0_20px_rgba(251,191,36,0.10)] transition-all duration-200 group cursor-pointer">
-                    <div class="w-11 h-11 rounded-xl bg-amber-400/12 border border-amber-400/18 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+                   onclick="return false;" aria-disabled="true" tabindex="-1"
+                   class="flex items-center gap-4 p-4 rounded-2xl bg-white/[0.02] border border-white/[0.05] opacity-50 cursor-not-allowed select-none">
+                    <div class="w-11 h-11 rounded-xl bg-amber-400/8 border border-amber-400/12 flex items-center justify-center flex-shrink-0">
                         <!-- Apple icon -->
-                        <svg class="w-5 h-5 text-amber-300" viewBox="0 0 24 24" fill="currentColor">
+                        <svg class="w-5 h-5 text-amber-300/60" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
                         </svg>
                     </div>
                     <div class="flex-1 min-w-0">
-                        <p class="font-semibold text-white text-sm">AI 자동 영상 편집 시스템</p>
-                        <p class="text-xs text-gray-500 mt-0.5">macOS · .app.zip 압축 파일</p>
+                        <p class="font-semibold text-gray-400 text-sm">AI 자동 영상 편집 시스템</p>
+                        <p class="text-xs text-gray-600 mt-0.5">macOS · .app.zip 압축 파일</p>
                     </div>
-                    <div class="flex items-center gap-1.5 text-xs text-gray-500 group-hover:text-amber-300 transition-colors flex-shrink-0">
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                        <span class="font-mono">.app.zip</span>
+                    <div class="flex items-center gap-1.5 text-xs text-gray-600 flex-shrink-0">
+                        <span class="px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-medium tracking-wide">준비 중</span>
                     </div>
                 </a>
             </div>
-
-            <!-- Footnote -->
-            <p class="text-center text-xs text-gray-600 mt-5">Windows 버전은 준비 중입니다</p>
         </div>
     </div>
 
