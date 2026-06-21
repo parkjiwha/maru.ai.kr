@@ -26,9 +26,9 @@
                             800: '#232d6b',
                             900: '#202855',
                         },
-                        dark: '#0B0F19',
-                        darker: '#05070A',
-                        card: 'rgba(255, 255, 255, 0.03)',
+                        dark: '#0F172A',
+                        darker: '#020617',
+                        card: 'rgba(0, 0, 0, 0.02)',
                     },
                     animation: {
                         'float': 'float 6s ease-in-out infinite',
@@ -53,33 +53,33 @@
     </script>
     <style>
         body {
-            background-color: #05070A;
-            color: #ffffff;
+            background-color: #FFFFFF;
+            color: #1E293B;
             overflow-x: hidden;
         }
         
         .glass-nav {
-            background: rgba(11, 15, 25, 0.7);
+            background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .glass-card {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.06);
             transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         .glass-card:hover {
             transform: translateY(-5px);
-            border-color: rgba(99, 102, 241, 0.3);
-            box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.2);
+            border-color: rgba(63, 81, 181, 0.2);
+            box-shadow: 0 20px 40px -15px rgba(63, 81, 181, 0.1);
         }
 
         .text-gradient {
-            background: linear-gradient(135deg, #a4bdfd 0%, #d8b4fe 100%);
+            background: linear-gradient(135deg, #3f51b5 0%, #8b5cf6 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -95,8 +95,9 @@
             transform: translateY(0);
         }
 
-        .blob-1 { position: absolute; top: -10%; left: -10%; width: 400px; height: 400px; background: rgba(99, 102, 241, 0.15); filter: blur(60px); border-radius: 50%; z-index: -1; }
-        .blob-2 { position: absolute; top: 40%; right: -10%; width: 500px; height: 500px; background: rgba(168, 85, 247, 0.15); filter: blur(80px); border-radius: 50%; z-index: -1; }
+        /* 라이트 백그라운드를 위한 부드러운 엠비언트 블롭 */
+        .blob-1 { position: absolute; top: -10%; left: -10%; width: 400px; height: 400px; background: rgba(99, 102, 241, 0.07); filter: blur(60px); border-radius: 50%; z-index: -1; }
+        .blob-2 { position: absolute; top: 40%; right: -10%; width: 500px; height: 500px; background: rgba(168, 85, 247, 0.07); filter: blur(80px); border-radius: 50%; z-index: -1; }
 
         @keyframes scan {
             0% { top: -10%; }
@@ -109,29 +110,30 @@
 
         /* ── AI Video Editor 전용 스타일 ── */
         .video-card {
-            background: rgba(255,255,255,0.025);
-            border: 1px solid rgba(249,115,22,0.12);
+            background: #FFFFFF;
+            border: 1px solid rgba(234, 88, 12, 0.15);
+            box-shadow: 0 10px 30px -10px rgba(234, 88, 12, 0.05);
             transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
         }
         .video-card:hover {
             transform: translateY(-4px);
-            border-color: rgba(249,115,22,0.35);
-            box-shadow: 0 12px 32px -8px rgba(249,115,22,0.18);
+            border-color: rgba(234, 88, 12, 0.3);
+            box-shadow: 0 20px 40px -15px rgba(234, 88, 12, 0.12);
         }
         .text-gradient-video {
-            background: linear-gradient(135deg, #fb923c 0%, #fbbf24 100%);
+            background: linear-gradient(135deg, #ea580c 0%, #f59e0b 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
         .tech-badge {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.07);
+            background: rgba(0,0,0,0.02);
+            border: 1px solid rgba(0,0,0,0.05);
             transition: all 0.2s ease;
         }
         .tech-badge:hover {
-            background: rgba(249,115,22,0.07);
-            border-color: rgba(249,115,22,0.22);
+            background: rgba(234, 88, 12, 0.05);
+            border-color: rgba(234, 88, 12, 0.2);
         }
         @keyframes scan-video {
             0%   { width: 0%; opacity: 1; }
@@ -159,30 +161,24 @@
         <div class="blob-2 animate-blob" style="animation-delay: 2s;"></div>
     </div>
 
-    <!-- Toast Notification (브라우저 시스템 얼럿 대체용 토스트 모달) -->
-    <div id="toastNotification" class="fixed bottom-6 right-6 z-[200] transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300 flex items-center gap-3 bg-slate-900 border border-brand-500/30 text-white px-5 py-3.5 rounded-2xl shadow-2xl">
-        <span id="toastIcon" class="text-lg">✨</span>
-        <span id="toastMessage" class="text-sm font-medium">메시지 내용</span>
-    </div>
-
     <!-- Navigation -->
     <nav class="fixed w-full z-50 glass-nav transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 <div class="flex items-center gap-2 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-                    <svg class="w-8 h-8 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                    <span class="font-bold text-xl tracking-tight">MARU</span>
+                    <svg class="w-8 h-8 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    <span class="font-bold text-xl tracking-tight text-slate-900">MARU</span>
                 </div>
-                <div class="hidden md:flex space-x-8 text-sm font-medium text-gray-300">
-                    <a href="#features" class="hover:text-white transition-colors">Features</a>
-                    <a href="#smart-folder" class="hover:text-white transition-colors">Core AI</a>
-                    <a href="#gemma" class="hover:text-white transition-colors">On-Device AI</a>
-                    <a href="#safety" class="hover:text-white transition-colors">Safety</a>
-                    <a href="#creative" class="hover:text-white transition-colors">Creative</a>
-                    <a href="#video-editor" class="hover:text-white transition-colors">AI 영상 편집기</a>
+                <div class="hidden md:flex space-x-8 text-sm font-medium text-slate-600">
+                    <a href="#features" class="hover:text-brand-600 transition-colors">Features</a>
+                    <a href="#smart-folder" class="hover:text-brand-600 transition-colors">Core AI</a>
+                    <a href="#gemma" class="hover:text-brand-600 transition-colors">On-Device AI</a>
+                    <a href="#safety" class="hover:text-brand-600 transition-colors">Safety</a>
+                    <a href="#creative" class="hover:text-brand-600 transition-colors">Creative</a>
+                    <a href="#video-editor" class="hover:text-brand-600 transition-colors">AI 영상 편집기</a>
                 </div>
                 <div>
-                    <button onclick="openDownloadModal()" class="inline-flex items-center justify-center px-6 py-2.5 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-brand-600 hover:bg-brand-500 focus:outline-none transition-all">
+                    <button onclick="openDownloadModal()" class="inline-flex items-center justify-center px-6 py-2.5 border border-transparent rounded-full shadow-sm text-sm font-semibold text-white bg-brand-600 hover:bg-brand-500 focus:outline-none transition-all">
                         지금 다운로드
                     </button>
                 </div>
@@ -196,22 +192,22 @@
             
             <!-- 좌측 슬로건 설명 -->
             <div class="lg:col-span-5 text-center lg:text-left space-y-6 reveal active">
-                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-300 text-sm font-medium">
-                    <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-600 text-sm font-semibold">
+                    <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
                     Gemma-4 E2B LiteRT-LM 탑재
                 </div>
-                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight text-white">
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight text-slate-900">
                     당신의 일상을<br>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-300 to-purple-400">지능형으로 분류하다</span>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-purple-600">지능형으로 분류하다</span>
                 </h1>
-                <p class="text-base sm:text-lg text-gray-400 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                <p class="text-base sm:text-lg text-slate-600 max-w-xl mx-auto lg:mx-0 leading-relaxed">
                     무질서하게 흩어진 수많은 앱과 데이터, 이제 MARU 온디바이스 AI가 인터넷 연결 없이 알아서 직관적인 생태계 폴더 구조로 자동 정렬합니다. 우측 데모에서 직접 확인해보세요.
                 </p>
                 <div class="flex flex-wrap justify-center lg:justify-start gap-4 pt-2">
-                    <button onclick="openDownloadModal()" class="px-8 py-3.5 bg-brand-500 hover:bg-brand-600 font-medium rounded-full transition duration-200 shadow-lg shadow-brand-500/20">
+                    <button onclick="openDownloadModal()" class="px-8 py-3.5 bg-brand-600 hover:bg-brand-500 text-white font-semibold rounded-full transition duration-200 shadow-lg shadow-brand-500/20">
                         지금 다운로드
                     </button>
-                    <a href="#features" class="px-8 py-3.5 bg-slate-900 hover:bg-slate-800 font-medium border border-white/10 rounded-full transition duration-200 text-center">
+                    <a href="#features" class="px-8 py-3.5 bg-slate-100 hover:bg-slate-200 font-semibold border border-slate-200 text-slate-700 rounded-full transition duration-200 text-center">
                         기능 알아보기
                     </a>
                 </div>
@@ -219,6 +215,7 @@
 
             <!-- 우측: 스마트폰 목업 기반 인터랙티브 시뮬레이션 데모 -->
             <div class="lg:col-span-7 flex flex-col items-center justify-center relative">
+                <!-- 메탈 그레이 디바이스로 더 입체감 있게 구현 -->
                 <div class="w-[320px] h-[640px] bg-slate-950 border-[6px] border-slate-800 rounded-[40px] shadow-2xl relative overflow-hidden flex flex-col justify-between p-4 pb-6 select-none">
                     
                     <!-- 상단 노치 -->
@@ -235,7 +232,6 @@
                             <div id="scanLine" class="absolute left-0 w-full h-[3px] bg-gradient-to-r from-transparent via-brand-400 to-transparent shadow-[0_0_12px_#7692fc] opacity-0 z-30 pointer-events-none" style="top: 0%;"></div>
 
                             <!-- [상태 1] 분석 전: 업로드하신 실제 정리 안 된 사진 출력 -->
-                            <!-- relative 경로로 프로젝트 저장소 내의 원본 파일을 100% 온전하게 로드 -->
                             <div id="screenBefore" class="absolute inset-0 w-full h-full transition-all duration-700 ease-in-out opacity-100 z-10 flex items-center justify-center">
                                 <img id="mobileMainImage" src="Gemini_Generated_Image_kn5uoikn5uoikn5u-2.png" class="w-full h-full object-cover rounded-xl" alt="정리되지 않은 휴대폰 화면">
                             </div>
@@ -332,101 +328,100 @@
                         </div>
                     </div>
                 </div>
-                <p class="text-xs text-gray-500 mt-4 text-center">▲ 디바이스 하단의 "MARU로 분석" 버튼을 클릭해 보세요.</p>
+                <p class="text-xs text-slate-500 mt-4 text-center font-medium">▲ 디바이스 하단의 "MARU로 분석" 버튼을 클릭해 보세요.</p>
             </div>
         </div>
     </section>
 
     <!-- Features Grid Section -->
-    <section id="features" class="py-24 bg-darker relative z-10 border-t border-white/5">
+    <section id="features" class="py-24 bg-slate-50 relative z-10 border-t border-slate-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16 reveal">
-                <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">
+                <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl text-slate-900">
                     모든 것을 바꿀 <span class="text-gradient">6가지 혁신</span>
                 </h2>
-                <p class="mt-4 max-w-2xl text-xl text-gray-400 mx-auto">
+                <p class="mt-4 max-w-2xl text-xl text-slate-600 mx-auto">
                     단순한 런처를 넘어 스마트폰을 완벽하게 이해하고 통제하는 생태계
                 </p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <div class="glass-card rounded-2xl p-8 reveal">
-                    <div class="w-12 h-12 rounded-xl bg-brand-500/20 flex items-center justify-center mb-6 text-brand-400">
+                    <div class="w-12 h-12 rounded-xl bg-brand-500/10 flex items-center justify-center mb-6 text-brand-600">
                         <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                     </div>
-                    <h3 class="text-xl font-bold mb-3">Gemma-4 엔진 탑재</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">인터넷 연결 없이 기기 내부의 NPU와 CPU만으로 작동하는 초경량 자연어 추론 AI. 앱들을 분석해 직관적인 스마트 폴더 구조로 분류합니다.</p>
+                    <h3 class="text-xl font-bold mb-3 text-slate-900">Gemma-4 엔진 탑재</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">인터넷 연결 없이 기기 내부의 NPU와 CPU만으로 작동하는 초경량 자연어 추론 AI. 앱들을 분석해 직관적인 스마트 폴더 구조로 분류합니다.</p>
                 </div>
                 <div class="glass-card rounded-2xl p-8 reveal">
-                    <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center mb-6 text-purple-400">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center mb-6 text-purple-600">
                         <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     </div>
-                    <h3 class="text-xl font-bold mb-3">AI 통합 파일 탐색</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">"어제 받은 영수증 찾아줘", "강아지 동영상 어딨어?" 등 자연어 텍스트만으로 파일 형태와 확장자를 스스로 추론해 검색합니다.</p>
+                    <h3 class="text-xl font-bold mb-3 text-slate-900">AI 통합 파일 탐색</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">"어제 받은 영수증 찾아줘", "강아지 동영상 어딨어?" 등 자연어 텍스트만으로 파일 형태와 확장자를 스스로 추론해 검색합니다.</p>
                 </div>
                 <div class="glass-card rounded-2xl p-8 reveal">
-                    <div class="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center mb-6 text-green-400">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center mb-6 text-emerald-600">
                         <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
                     </div>
-                    <h3 class="text-xl font-bold mb-3">사용자 승인 기반 안전 제어</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">파일 관리나 임계 작업 시 시스템이 독단적으로 결정하지 않으며 명확한 이유를 화면에 띄우고 오직 승인 하에만 안전하게 실행됩니다.</p>
+                    <h3 class="text-xl font-bold mb-3 text-slate-900">사용자 승인 기반 안전 제어</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">파일 관리나 임계 작업 시 시스템이 독단적으로 결정하지 않으며 명확한 이유를 화면에 띄우고 오직 승인 하에만 안전하게 실행됩니다.</p>
                 </div>
                 <div class="glass-card rounded-2xl p-8 reveal">
-                    <div class="w-12 h-12 rounded-xl bg-yellow-500/20 flex items-center justify-center mb-6 text-yellow-400">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center mb-6 text-amber-600">
                         <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
                     </div>
-                    <h3 class="text-xl font-bold mb-3">하드웨어 제어 매직</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">"화면 밝기 조절해줘", "카카오톡 켜줘"와 같은 명령만으로 디바이스의 하드웨어 설정과 시스템 레벨 조작을 유연하게 제어합니다.</p>
+                    <h3 class="text-xl font-bold mb-3 text-slate-900">하드웨어 제어 매직</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">"화면 밝기 조절해줘", "카카오톡 켜줘"와 같은 명령만으로 디바이스의 하드웨어 설정과 시스템 레벨 조작을 유연하게 제어합니다.</p>
                 </div>
                 <div class="glass-card rounded-2xl p-8 reveal">
-                    <div class="w-12 h-12 rounded-xl bg-pink-500/20 flex items-center justify-center mb-6 text-pink-400">
+                    <div class="w-12 h-12 rounded-xl bg-pink-500/10 flex items-center justify-center mb-6 text-pink-600">
                         <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg>
                     </div>
-                    <h3 class="text-xl font-bold mb-3">AI 스티커 공방</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">MediaPipe 연동 기반 이미지 지능형 탐색 및 누끼(배경 분리) 기능으로 제작한 커스텀 스티커를 화면 어디에나 배치 가능합니다.</p>
+                    <h3 class="text-xl font-bold mb-3 text-slate-900">AI 스티커 공방</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">MediaPipe 연동 기반 이미지 지능형 탐색 및 누끼(배경 분리) 기능으로 제작한 커스텀 스티커를 화면 어디에나 배치 가능합니다.</p>
                 </div>
                 <div class="glass-card rounded-2xl p-8 reveal">
-                    <div class="w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center mb-6 text-cyan-400">
+                    <div class="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center mb-6 text-cyan-600">
                         <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     </div>
-                    <h3 class="text-xl font-bold mb-3">강력한 엣지 패널 시스템</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">사이드 엣지 스와이프 전용 위젯 인터페이스와 GitHub Gist 웹 통신 패키지를 결합하여 실시간 버전을 동기화합니다.</p>
+                    <h3 class="text-xl font-bold mb-3 text-slate-900">강력한 엣지 패널 시스템</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">사이드 엣지 스와이프 전용 위젯 인터페이스와 GitHub Gist 웹 통신 패키지를 결합하여 실시간 버전을 동기화합니다.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Smart Foldering 상세 섹션 -->
-    <section id="smart-folder" class="py-24 relative z-10 overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-b from-darker to-dark z-0"></div>
+    <section id="smart-folder" class="py-24 relative z-10 overflow-hidden bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="lg:grid lg:grid-cols-2 gap-16 items-center flex-col-reverse flex lg:flex-row-reverse">
                 <div class="relative reveal w-full mt-12 lg:mt-0">
-                    <div class="absolute inset-0 bg-gradient-to-tr from-brand-500/20 to-blue-500/20 rounded-3xl blur-2xl transform -rotate-3 scale-105"></div>
-                    <div class="relative bg-gray-900 border border-gray-800 rounded-3xl p-6 sm:p-8 shadow-2xl">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-brand-500/10 to-blue-500/10 rounded-3xl blur-2xl transform -rotate-3 scale-105"></div>
+                    <div class="relative bg-slate-50 border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-xl">
                         <div class="flex items-center justify-between mb-6">
-                            <span class="text-sm font-semibold text-white">MARU 지능형 분류 엔진</span>
-                            <span class="text-xs text-brand-400 bg-brand-400/10 border border-brand-400/20 px-3 py-1 rounded-full">Intelligent Folder Structure</span>
+                            <span class="text-sm font-bold text-slate-800">MARU 지능형 분류 엔진</span>
+                            <span class="text-xs text-brand-600 bg-brand-500/10 border border-brand-500/20 px-3 py-1 rounded-full font-medium">Intelligent Folder Structure</span>
                         </div>
                         <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                            <div class="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col items-center gap-3">
-                                <div class="w-10 h-10 bg-blue-500/20 rounded-xl flex justify-center items-center text-xl">💬</div>
-                                <span class="text-xs text-gray-300 font-medium">커뮤니케이션</span>
+                            <div class="bg-white border border-slate-100 rounded-2xl p-4 flex flex-col items-center gap-3 shadow-sm">
+                                <div class="w-10 h-10 bg-blue-500/10 rounded-xl flex justify-center items-center text-xl">💬</div>
+                                <span class="text-xs text-slate-700 font-semibold">커뮤니케이션</span>
                             </div>
-                            <div class="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col items-center gap-3">
-                                <div class="w-10 h-10 bg-red-500/20 rounded-xl flex justify-center items-center text-xl">🎬</div>
-                                <span class="text-xs text-gray-300 font-medium">영상/OTT</span>
+                            <div class="bg-white border border-slate-100 rounded-2xl p-4 flex flex-col items-center gap-3 shadow-sm">
+                                <div class="w-10 h-10 bg-red-500/10 rounded-xl flex justify-center items-center text-xl">🎬</div>
+                                <span class="text-xs text-slate-700 font-semibold">영상/OTT</span>
                             </div>
-                            <div class="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col items-center gap-3">
-                                <div class="w-10 h-10 bg-orange-500/20 rounded-xl flex justify-center items-center text-xl">🛍️</div>
-                                <span class="text-xs text-gray-300 font-medium">쇼핑/커머스</span>
+                            <div class="bg-white border border-slate-100 rounded-2xl p-4 flex flex-col items-center gap-3 shadow-sm">
+                                <div class="w-10 h-10 bg-orange-500/10 rounded-xl flex justify-center items-center text-xl">🛍️</div>
+                                <span class="text-xs text-slate-700 font-semibold">쇼핑/커머스</span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="space-y-6 text-center lg:text-left">
-                    <h2 class="text-3xl font-bold sm:text-4xl tracking-tight">온디바이스 카테고리화 기술</h2>
-                    <p class="text-gray-400 text-sm leading-relaxed max-w-xl mx-auto lg:mx-0">
+                    <h2 class="text-3xl font-bold sm:text-4xl tracking-tight text-slate-900">온디바이스 카테고리화 기술</h2>
+                    <p class="text-slate-600 text-sm leading-relaxed max-w-xl mx-auto lg:mx-0">
                         기기 내 백그라운드 환경에서 정밀 동작하는 고성능 추론 처리를 통하여 인터넷 상태에 구애받지 않고 수십 개의 모바일 프로그램을 단 몇 초 만에 식별하여 One UI 테마 카테고리로 자동 정렬 배정합니다.
                     </p>
                 </div>
@@ -435,27 +430,27 @@
     </section>
 
     <!-- Gemma-4 On-Device AI Architecture Section -->
-    <section id="gemma" class="py-24 bg-darker relative z-10">
+    <section id="gemma" class="py-24 bg-slate-50 relative z-10 border-t border-slate-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="lg:grid lg:grid-cols-2 gap-16 items-center">
                 <div class="space-y-6 text-center lg:text-left">
-                    <h2 class="text-3xl font-bold sm:text-4xl tracking-tight">Gemma-4 기반 초경량 모델의 기적</h2>
-                    <p class="text-gray-400 text-sm leading-relaxed max-w-xl mx-auto lg:mx-0">
+                    <h2 class="text-3xl font-bold sm:text-4xl tracking-tight text-slate-900">Gemma-4 기반 초경량 모델의 기적</h2>
+                    <p class="text-slate-600 text-sm leading-relaxed max-w-xl mx-auto lg:mx-0">
                         기존 거대 언어 모델과 달리 MARU는 스마트폰 기기 내부 리소스만을 활용하는 모바일 최적화 Gemma-4 임베디드 AI 커널을 내장하고 있습니다. 외부 서버 통신이 전혀 없어 대기 시간이 제로에 가깝습니다.
                     </p>
                 </div>
                 <div class="relative reveal w-full mt-12 lg:mt-0">
-                    <div class="bg-gradient-to-br from-brand-900/40 to-slate-900 border border-slate-800 rounded-3xl p-8">
-                        <h4 class="text-sm font-bold text-brand-400 mb-4 font-mono">> ON-DEVICE PERFORMANCE INFRA</h4>
+                    <div class="bg-white border border-slate-200 rounded-3xl p-8 shadow-xl">
+                        <h4 class="text-sm font-bold text-brand-600 mb-4 font-mono">> ON-DEVICE PERFORMANCE INFRA</h4>
                         <div class="space-y-4 text-xs font-mono">
-                            <div class="flex justify-between border-b border-white/5 pb-2">
-                                <span class="text-gray-500">Model Engine</span><span class="text-white">Gemma-4 E2B LiteRT-LM</span>
+                            <div class="flex justify-between border-b border-slate-100 pb-2">
+                                <span class="text-slate-500">Model Engine</span><span class="text-slate-900 font-bold">Gemma-4 E2B LiteRT-LM</span>
                             </div>
-                            <div class="flex justify-between border-b border-white/5 pb-2">
-                                <span class="text-gray-500">Inference Delay</span><span class="text-emerald-400">&lt; 14ms (Instant)</span>
+                            <div class="flex justify-between border-b border-slate-100 pb-2">
+                                <span class="text-slate-500">Inference Delay</span><span class="text-emerald-600 font-bold">&lt; 14ms (Instant)</span>
                             </div>
-                            <div class="flex justify-between border-b border-white/5 pb-2">
-                                <span class="text-gray-500">Data Security</span><span class="text-emerald-400">100% Localized (No Cloud)</span>
+                            <div class="flex justify-between border-b border-slate-100 pb-2">
+                                <span class="text-slate-500">Data Security</span><span class="text-emerald-600 font-bold">100% Localized (No Cloud)</span>
                             </div>
                         </div>
                     </div>
@@ -465,26 +460,26 @@
     </section>
 
     <!-- Safety / User Confirmation Section -->
-    <section id="safety" class="py-24 bg-dark relative z-10 border-t border-white/5">
+    <section id="safety" class="py-24 bg-white relative z-10 border-t border-slate-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="lg:grid lg:grid-cols-2 gap-16 items-center flex-col-reverse flex lg:flex-row-reverse">
                 <div class="relative reveal w-full mt-12 lg:mt-0">
-                    <div class="bg-slate-950 border border-red-500/20 rounded-3xl p-6 shadow-2xl">
-                        <div class="flex items-center gap-3 text-red-400 mb-4">
+                    <div class="bg-red-50/50 border border-red-200 rounded-3xl p-6 shadow-xl">
+                        <div class="flex items-center gap-3 text-red-600 mb-4">
                             <span class="text-xl">⚠️</span><span class="text-sm font-bold font-mono">CRITICAL ACTION CONFIRMATION</span>
                         </div>
-                        <p class="text-xs text-gray-300 mb-6 leading-relaxed">
+                        <p class="text-xs text-slate-700 mb-6 leading-relaxed">
                             AI가 파일 시스템 조작 또는 확장자 일괄 변환을 감지했습니다. 시스템 보안을 위해 사용자의 최종 명시적 수동 승인이 필요합니다.
                         </p>
                         <div class="flex gap-3 justify-end">
-                            <button class="px-4 py-2 bg-slate-900 hover:bg-slate-800 border border-white/10 rounded-xl text-xs font-medium">거부</button>
-                            <button class="px-4 py-2 bg-brand-600 hover:bg-brand-500 rounded-xl text-xs font-medium text-white shadow-lg">작업 승인 및 실행</button>
+                            <button class="px-4 py-2 bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold">거부</button>
+                            <button class="px-4 py-2 bg-red-600 hover:bg-red-500 rounded-xl text-xs font-semibold text-white shadow-lg">작업 승인 및 실행</button>
                         </div>
                     </div>
                 </div>
                 <div class="space-y-6 text-center lg:text-left">
-                    <h2 class="text-3xl font-bold sm:text-4xl tracking-tight text-white">안전이 담보된 AI 시스템 통제</h2>
-                    <p class="text-gray-400 text-sm leading-relaxed max-w-xl mx-auto lg:mx-0">
+                    <h2 class="text-3xl font-bold sm:text-4xl tracking-tight text-slate-900">안전이 담보된 AI 시스템 통제</h2>
+                    <p class="text-slate-600 text-sm leading-relaxed max-w-xl mx-auto lg:mx-0">
                         인공지능 모델이 기기의 중요한 파일 구조를 임의로 훼손하거나 변경하지 못하도록 설계된 상호 교차 보안 체계를 갖추고 있습니다. 민감한 데이터 영역 접근 시 안전 팝업 프로토콜이 반드시 실행됩니다.
                     </p>
                 </div>
@@ -493,20 +488,20 @@
     </section>
 
     <!-- Creative Module Section -->
-    <section id="creative" class="py-24 bg-darker relative z-10">
+    <section id="creative" class="py-24 bg-slate-50 relative z-10 border-t border-slate-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="lg:grid lg:grid-cols-2 gap-16 items-center">
                 <div class="space-y-6 text-center lg:text-left">
-                    <h2 class="text-3xl font-bold sm:text-4xl tracking-tight">MediaPipe 연동 스티커 공방</h2>
-                    <p class="text-gray-400 text-sm leading-relaxed max-w-xl mx-auto lg:mx-0">
+                    <h2 class="text-3xl font-bold sm:text-4xl tracking-tight text-slate-900">MediaPipe 연동 스티커 공방</h2>
+                    <p class="text-slate-600 text-sm leading-relaxed max-w-xl mx-auto lg:mx-0">
                         미디어 처리 파이프라인 엔진을 탑재하여, 디바이스 갤러리에 저장된 피사체의 외곽선을 정교하게 추적해 투명 배경 스티커 파일로 제작합니다. 완벽하게 커스텀화된 홈 화면을 직접 꾸며보세요.
                     </p>
                 </div>
                 <div class="relative reveal w-full mt-12 lg:mt-0 flex justify-center">
-                    <div class="w-64 h-64 border-2 border-dashed border-brand-500/30 rounded-full flex flex-col items-center justify-center p-4 relative group cursor-pointer hover:border-brand-400 transition-colors">
+                    <div class="w-64 h-64 border-2 border-dashed border-brand-400 rounded-full flex flex-col items-center justify-center p-4 relative group cursor-pointer hover:border-brand-500 transition-colors bg-white shadow-md">
                         <div class="absolute inset-0 bg-brand-500/5 rounded-full filter blur-xl opacity-50 group-hover:opacity-100 transition-opacity"></div>
                         <span class="text-4xl mb-2 group-hover:scale-110 transition-transform">✨</span>
-                        <span class="text-xs text-gray-400 text-center leading-relaxed">이미지를 이곳에 드롭하여<br><span class="text-brand-400 font-medium">자동 배경 제거 및 스티커화</span></span>
+                        <span class="text-xs text-slate-600 text-center leading-relaxed font-semibold">이미지를 이곳에 드롭하여<br><span class="text-brand-600 font-bold">자동 배경 제거 및 스티커화</span></span>
                     </div>
                 </div>
             </div>
@@ -514,69 +509,69 @@
     </section>
 
     <!-- AI Video Editor Utility Program Section -->
-    <section id="video-editor" class="py-24 bg-dark relative z-10 border-t border-orange-500/10">
+    <section id="video-editor" class="py-24 bg-white relative z-10 border-t border-orange-500/10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16 reveal">
-                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-xs font-medium mb-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-600 text-xs font-semibold mb-4">
                     보너스 유틸리티 프로그램
                 </div>
-                <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">
+                <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl text-slate-900">
                     MARU <span class="text-gradient-video">AI 영상 편집기</span>
                 </h2>
-                <p class="mt-4 max-w-2xl text-base text-gray-400 mx-auto">
+                <p class="mt-4 max-w-2xl text-base text-slate-600 mx-auto">
                     런처 생태계와 별도로 구동되는 강력한 클라이언트 데스크톱/웹 전용 멀티미디어 도구
                 </p>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 <div class="lg:col-span-5 space-y-6 reveal">
-                    <h3 class="text-2xl font-bold text-white">단 한 번의 드래그로 전문적인 편집을</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">
+                    <h3 class="text-2xl font-bold text-slate-900">단 한 번의 드래그로 전문적인 편집을</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
                         복잡한 타임라인 매핑이나 컷 편집 기술을 배울 필요가 전혀 없습니다. 영상 소스를 등록하면 내부 온디바이스 비전 모델이 컷 포인트, 하이라이트 구간, 그리고 사운드 싱크 지점을 스스로 판단하여 레이아웃을 생성합니다.
                     </p>
-                    <ul class="space-y-3 text-sm text-gray-300">
+                    <ul class="space-y-3 text-sm text-slate-700 font-medium">
                         <li class="flex items-center gap-2.5">
-                            <span class="text-orange-500 text-lg">✔</span> 인공지능 기반 오디오 무음 구간 자동 컷팅
+                            <span class="text-orange-600 text-lg">✔</span> 인공지능 기반 오디오 무음 구간 자동 컷팅
                         </li>
                         <li class="flex items-center gap-2.5">
-                            <span class="text-orange-500 text-lg">✔</span> 텍스트 명령어 입력을 통한 실시간 자막 생성 (STT 연동)
+                            <span class="text-orange-600 text-lg">✔</span> 텍스트 명령어 입력을 통한 실시간 자막 생성 (STT 연동)
                         </li>
                         <li class="flex items-center gap-2.5">
-                            <span class="text-orange-500 text-lg">✔</span> 영상 분위기에 맞는 시네마틱 컬러 그레이딩 자동 보정 필터
+                            <span class="text-orange-600 text-lg">✔</span> 영상 분위기에 맞는 시네마틱 컬러 그레이딩 자동 보정 필터
                         </li>
                     </ul>
                 </div>
 
                 <div class="lg:col-span-7 reveal">
-                    <div class="video-card rounded-2xl p-6 relative overflow-hidden">
-                        <div class="flex items-center justify-between border-b border-white/5 pb-4 mb-6">
+                    <div class="video-card rounded-2xl p-6 relative overflow-hidden border border-slate-200 shadow-xl bg-white">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-6">
                             <div class="flex items-center gap-2">
-                                <span class="w-3 h-3 rounded-full bg-red-500/70"></span>
-                                <span class="w-3 h-3 rounded-full bg-yellow-500/70"></span>
-                                <span class="w-3 h-3 rounded-full bg-green-500/70"></span>
-                                <span class="text-xs text-gray-400 ml-2 font-mono">maru-video-workspace.app</span>
+                                <span class="w-3 h-3 rounded-full bg-red-400"></span>
+                                <span class="w-3 h-3 rounded-full bg-yellow-400"></span>
+                                <span class="w-3 h-3 rounded-full bg-green-400"></span>
+                                <span class="text-xs text-slate-500 ml-2 font-mono">maru-video-workspace.app</span>
                             </div>
-                            <span class="text-xs font-semibold text-orange-400 bg-orange-400/10 px-2.5 py-0.5 rounded-md">RENDER READY</span>
+                            <span class="text-xs font-semibold text-orange-600 bg-orange-100 px-2.5 py-0.5 rounded-md">RENDER READY</span>
                         </div>
                         
-                        <!-- 가상 작업 타임라인 워크스페이스 구조 UI -->
-                        <div class="bg-black/40 border border-white/5 rounded-xl p-4 space-y-4">
-                            <div class="h-44 bg-slate-900/60 rounded-lg flex flex-col items-center justify-center relative overflow-hidden group border border-dashed border-white/10">
+                        <!-- 가상 작업 타임라인 워크스페이스 구조 UI (화이트 테마 매핑) -->
+                        <div class="bg-slate-50 border border-slate-150 rounded-xl p-4 space-y-4">
+                            <div class="h-44 bg-white rounded-lg flex flex-col items-center justify-center relative overflow-hidden group border border-dashed border-slate-300">
                                 <div class="absolute inset-0 bg-gradient-to-b from-transparent to-orange-500/5 opacity-50"></div>
                                 <div class="absolute top-0 bottom-0 w-0.5 bg-orange-500 z-10 animate-scan-video"></div>
-                                <div class="w-12 h-12 rounded-full bg-orange-500/10 flex items-center justify-center text-orange-400 mb-3 group-hover:scale-110 transition-transform">🎬</div>
-                                <span class="text-xs text-gray-400">이곳에 비디오 파일을 드래그하여 드롭하세요</span>
-                                <span class="text-[11px] text-gray-600 mt-1">MP4, MOV, WebM 지원 (최대 4K 레졸루션)</span>
+                                <div class="w-12 h-12 rounded-full bg-orange-500/10 flex items-center justify-center text-orange-600 mb-3 group-hover:scale-110 transition-transform">🎬</div>
+                                <span class="text-xs text-slate-700 font-bold">이곳에 비디오 파일을 드래그하여 드롭하세요</span>
+                                <span class="text-[11px] text-slate-500 mt-1">MP4, MOV, WebM 지원 (최대 4K 레졸루션)</span>
                             </div>
                             <div class="space-y-2">
-                                <div class="flex justify-between text-[11px] text-gray-500 font-mono"><span>Timeline Tracks (Audio / Video Sync)</span><span>00:02:14 / 00:05:00</span></div>
-                                <div class="h-6 bg-slate-950 rounded border border-white/5 relative flex p-0.5 gap-1 overflow-hidden">
-                                    <div class="w-1/3 bg-orange-500/20 border border-orange-500/40 rounded h-full text-[10px] text-orange-300 font-mono flex items-center px-2">clip_01_intro.mp4</div>
-                                    <div class="w-1/4 bg-amber-500/20 border border-amber-500/40 rounded h-full text-[10px] text-amber-300 font-mono flex items-center px-2">clip_02.mp4</div>
-                                    <div class="w-2/5 bg-orange-500/20 border border-orange-500/40 rounded h-full text-[10px] text-orange-300 font-mono flex items-center px-2">clip_03_main.mp4</div>
+                                <div class="flex justify-between text-[11px] text-slate-500 font-mono font-bold"><span>Timeline Tracks (Audio / Video Sync)</span><span>00:02:14 / 00:05:00</span></div>
+                                <div class="h-6 bg-white rounded border border-slate-200 relative flex p-0.5 gap-1 overflow-hidden">
+                                    <div class="w-1/3 bg-orange-100 border border-orange-200 rounded h-full text-[10px] text-orange-700 font-mono font-bold flex items-center px-2">clip_01_intro.mp4</div>
+                                    <div class="w-1/4 bg-amber-100 border border-amber-200 rounded h-full text-[10px] text-amber-700 font-mono font-bold flex items-center px-2">clip_02.mp4</div>
+                                    <div class="w-2/5 bg-orange-100 border border-orange-200 rounded h-full text-[10px] text-orange-700 font-mono font-bold flex items-center px-2">clip_03_main.mp4</div>
                                 </div>
-                                <div class="h-4 bg-slate-950 rounded border border-white/5 relative flex p-0.5 gap-0.5 overflow-hidden">
-                                    <div class="w-full bg-blue-500/20 border border-blue-500/30 rounded h-full flex items-center px-2">🔊 bgm_ambient_cinematic_vibe.wav</div>
+                                <div class="h-4 bg-white rounded border border-slate-200 relative flex p-0.5 gap-0.5 overflow-hidden">
+                                    <div class="w-full bg-blue-50 border border-blue-100 rounded h-full text-[9px] text-blue-700 font-bold flex items-center px-2">🔊 bgm_ambient_cinematic_vibe.wav</div>
                                 </div>
                             </div>
                         </div>
@@ -587,56 +582,43 @@
     </section>
 
     <!-- [선택 다운로드 지원] 모달 팝업 레이어 구성 -->
-    <div id="downloadModal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
-        <div class="bg-slate-900 border border-white/10 rounded-3xl p-6 max-w-md w-full mx-4 shadow-2xl relative transform scale-95 transition-transform duration-300" id="modalCard">
+    <div id="downloadModal" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-white border border-slate-200 rounded-3xl p-6 max-w-md w-full mx-4 shadow-2xl relative transform scale-95 transition-transform duration-300" id="modalCard">
             <!-- 닫기 버튼 -->
-            <button onclick="closeDownloadModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors">
+            <button onclick="closeDownloadModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-900 transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
             <div class="text-center space-y-5 pt-2">
-                <div class="w-12 h-12 rounded-2xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 mx-auto text-xl">💾</div>
+                <div class="w-12 h-12 rounded-2xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-600 mx-auto text-xl">💾</div>
                 <div>
-                    <h3 class="text-xl font-bold text-white tracking-tight">MARU 에코시스템 다운로드</h3>
-                    <p class="text-xs text-gray-400 mt-1">설치할 대상 프로그램이나 단일 실행 파일을 다운로드합니다.</p>
+                    <h3 class="text-xl font-bold text-slate-950 tracking-tight">MARU 에코시스템 다운로드</h3>
+                    <p class="text-xs text-slate-600 mt-1">설치할 대상 프로그램의 최신 설치 빌드 패키지를 제공합니다.</p>
                 </div>
                 
                 <!-- 개별 주소 지정 다운로드 선택 그리드 -->
                 <div class="grid grid-cols-1 gap-3 pt-2">
-                    <!-- 1. 휴대용 단일 독립 실행 HTML 빌더 (Base64 컴파일러) -->
-                    <!-- 사용자의 요구를 완벽 해결하기 위해, 현재 캔버스의 고화질 원본 사진을 1초 만에 Base64 텍스트로 인코딩하여 HTML 본문 안에 강제 주입 후, 단 하나의 독립 실행형 .html 파일로 묶어서 다운로드 시켜주는 매직 스크립트 기능 장착 -->
-                    <button onclick="compileAndDownloadStandaloneHTML()" class="flex items-center justify-between p-4 bg-gradient-to-r from-brand-600/30 to-purple-600/30 border border-brand-500/40 rounded-2xl hover:from-brand-600/50 hover:to-purple-600/50 transition-all text-left group">
+                    <!-- 1. MARU 앱 개별 다운로드 링크 -->
+                    <a href="https://huggingface.co/datasets/maruofficial/maru_ai/resolve/main/maru.apk" target="_blank" class="flex items-center justify-between p-4 bg-slate-50 border border-slate-200 rounded-2xl hover:bg-brand-500/5 hover:border-brand-500/30 transition-all text-left group">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-brand-500/20 rounded-xl flex items-center justify-center text-lg">📁</div>
+                            <div class="w-10 h-10 bg-brand-500/10 rounded-xl flex items-center justify-center text-lg">📱</div>
                             <div>
-                                <p class="text-sm font-semibold text-brand-200">휴대용 단일 HTML 다운로드</p>
-                                <p class="text-[11px] text-gray-300">지분한 화면을 Base64로 자동 인코딩 병합</p>
+                                <p class="text-sm font-bold text-slate-800">MARU 온디바이스 앱</p>
+                                <p class="text-[11px] text-slate-600 font-medium">모바일 AI 런처 패키지 (APK)</p>
                             </div>
                         </div>
-                        <span class="text-xs text-brand-300 font-medium group-hover:translate-x-1 transition-transform">컴파일 &rarr;</span>
-                    </button>
-
-                    <!-- 2. MARU 앱 개별 다운로드 링크 -->
-                    <a href="https://huggingface.co/datasets/maruofficial/maru_ai/resolve/main/maru.apk" target="_blank" class="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-brand-500/10 hover:border-brand-500/40 transition-all text-left group">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-brand-500/20 rounded-xl flex items-center justify-center text-lg">📱</div>
-                            <div>
-                                <p class="text-sm font-semibold text-white">MARU 온디바이스 앱</p>
-                                <p class="text-[11px] text-gray-400">모바일 AI 런처 패키지 (APK)</p>
-                            </div>
-                        </div>
-                        <span class="text-xs text-brand-400 font-medium group-hover:translate-x-1 transition-transform">받기 &rarr;</span>
+                        <span class="text-xs text-brand-600 font-bold group-hover:translate-x-1 transition-transform">받기 &rarr;</span>
                     </a>
                     
-                    <!-- 3. 영상자동편집기 개별 다운로드 링크 -->
-                    <a href="https://huggingface.co/datasets/maruofficial/maru_ai/resolve/main/AI%E1%84%8C%E1%85%A1%E1%84%83%E1%85%A9%E1%86%BC%E1%84%8B%E1%85%A7%E1%86%BC%E1%84%89%E1%85%A1%E1%86%BC%E1%84%91%E1%85%A7%E1%86%AB%E1%84%8C%E1%85%B5%E1%86%B8%E1%84%80%E1%85%B5.app.zip" target="_blank" class="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-orange-500/10 hover:border-orange-500/40 transition-all text-left group">
+                    <!-- 2. 영상자동편집기 개별 다운로드 링크 -->
+                    <a href="https://huggingface.co/datasets/maruofficial/maru_ai/resolve/main/AI%E1%84%8C%E1%85%A1%E1%84%83%E1%85%A9%E1%86%BC%E1%84%8B%E1%85%A7%E1%86%BC%E1%84%89%E1%85%A1%E1%86%BC%E1%84%91%E1%85%A7%E1%86%AB%E1%84%8C%E1%85%B5%E1%86%B8%E1%84%80%E1%85%B5.app.zip" target="_blank" class="flex items-center justify-between p-4 bg-slate-50 border border-slate-200 rounded-2xl hover:bg-orange-500/5 hover:border-orange-500/30 transition-all text-left group">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-orange-500/20 rounded-xl flex items-center justify-center text-lg">🎬</div>
+                            <div class="w-10 h-10 bg-orange-500/10 rounded-xl flex items-center justify-center text-lg">🎬</div>
                             <div>
-                                <p class="text-sm font-semibold text-white">AI 비디오 자동 편집기</p>
-                                <p class="text-[11px] text-gray-400">PC/맥 전용 자동화 편집 툴 (Zip)</p>
+                                <p class="text-sm font-bold text-slate-800">AI 비디오 자동 편집기</p>
+                                <p class="text-[11px] text-slate-600 font-medium">PC/맥 전용 자동화 편집 툴 (Zip)</p>
                             </div>
                         </div>
-                        <span class="text-xs text-orange-400 font-medium group-hover:translate-x-1 transition-transform">받기 &rarr;</span>
+                        <span class="text-xs text-orange-600 font-bold group-hover:translate-x-1 transition-transform">받기 &rarr;</span>
                     </a>
                 </div>
             </div>
@@ -645,22 +627,6 @@
 
     <!-- 인터랙션 스크립트 시스템 부착 -->
     <script>
-        // 알림 메시지 커스텀 토스트 (alert 대신 활용)
-        function showToast(message, icon = "✨") {
-            const toast = document.getElementById('toastNotification');
-            const toastIcon = document.getElementById('toastIcon');
-            const toastMsg = document.getElementById('toastMessage');
-
-            toastIcon.innerText = icon;
-            toastMsg.innerText = message;
-
-            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
-            
-            setTimeout(() => {
-                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
-            }, 3000);
-        }
-
         // 다운로드 팝업 모달 제어
         function openDownloadModal() {
             const modal = document.getElementById('downloadModal');
@@ -679,50 +645,6 @@
         document.getElementById('downloadModal').addEventListener('click', function(e) {
             if (e.target === this) closeDownloadModal();
         });
-
-        // 고화질 원본 이미지를 브라우저 자체에서 1초 만에 Base64로 자동 변환하여 단일 파일로 엮어 다운로드해 주는 혁신 로직
-        async function compileAndDownloadStandaloneHTML() {
-            showToast("자동 빌드 컴파일러 시작...", "⚙️");
-            
-            try {
-                // 1. 캔버스 로컬 공간 내 이미지를 가져옵니다.
-                const response = await fetch('Gemini_Generated_Image_kn5uoikn5uoikn5u-2.png');
-                if (!response.ok) throw new Error('파일을 찾을 수 없습니다.');
-                const blob = await response.blob();
-                
-                // 2. Base64 형식으로 기기단에서 직접 변환을 수행합니다.
-                const reader = new FileReader();
-                reader.onloadend = function() {
-                    const base64data = reader.result;
-                    
-                    // 3. 현재 브라우저가 실행 중인 원본 HTML 템플릿 코드를 가져옵니다.
-                    let standaloneHTML = document.documentElement.outerHTML;
-                    
-                    // 4. 소스 코드 안의 이미지 소스 경로를 방금 변환한 엄청난 길이의 Base64 데이터로 완벽 치환합니다.
-                    standaloneHTML = standaloneHTML.replace('src="Gemini_Generated_Image_kn5uoikn5uoikn5u-2.png"', `src="${base64data}"`);
-                    
-                    // 5. 다운로드용 가상 URL 객체 생성 후 트리거
-                    const compiledBlob = new Blob([`<!DOCTYPE html>\n` + standaloneHTML], {type: 'text/html;charset=utf-8'});
-                    const url = URL.createObjectURL(compiledBlob);
-                    
-                    const downloadAnchor = document.createElement('a');
-                    downloadAnchor.href = url;
-                    downloadAnchor.download = 'maru-landing-portable.html';
-                    document.body.appendChild(downloadAnchor);
-                    downloadAnchor.click();
-                    
-                    // 6. 리소스 해제 및 가상 오브젝트 클린업
-                    document.body.removeChild(downloadAnchor);
-                    URL.revokeObjectURL(url);
-                    
-                    showToast("빌드 완료! 단일 HTML 파일이 다운로드되었습니다.", "🚀");
-                };
-                reader.readAsDataURL(blob);
-            } catch (error) {
-                console.error(error);
-                showToast("빌드 중 에러가 발생했습니다. 로컬 크로스 도메인(CORS) 제한을 확인해주세요.", "❌");
-            }
-        }
 
         // 스마트폰 디바이스 목업 애니메이션 스크립트 로직 (스캔 라인 및 레이어 페이드 인/아웃)
         document.getElementById('btnMaruAnalyze').addEventListener('click', function() {
@@ -828,8 +750,8 @@
 
             const nav = document.querySelector('nav');
             window.addEventListener('scroll', () => {
-                if (window.scrollY > 10) { nav.classList.add('shadow-lg', 'bg-darker/90'); } 
-                else { nav.classList.remove('shadow-lg', 'bg-darker/90'); }
+                if (window.scrollY > 10) { nav.classList.add('shadow-md', 'bg-white/95'); } 
+                else { nav.classList.remove('shadow-md', 'bg-white/95'); }
             });
         });
     </script>
