@@ -99,12 +99,12 @@
         .blob-2 { position: absolute; top: 40%; right: -10%; width: 500px; height: 500px; background: rgba(168, 85, 247, 0.15); filter: blur(80px); border-radius: 50%; z-index: -1; }
 
         @keyframes scan {
-            0% { left: -10%; }
-            50% { left: 110%; }
-            100% { left: -10%; }
+            0% { top: -10%; }
+            50% { top: 110%; }
+            100% { top: -10%; }
         }
         .animate-scan {
-            animation: scan 3s ease-in-out infinite;
+            animation: scan 2.5s ease-in-out infinite;
         }
 
         /* ── AI Video Editor 전용 스타일 ── */
@@ -143,7 +143,7 @@
             animation: scan-video 2.8s ease-in-out infinite;
         }
 
-        /* 스마트폰 목업용 스크롤바 처리 및 앱 페이드인 애니메이션 */
+        /* 스마트폰 목업용 스크롤바 처리 및 앱 애니메이션 */
         @keyframes fadeInApp {
             to { opacity: 1; transform: scale(1); }
         }
@@ -153,15 +153,23 @@
 </head>
 <body class="antialiased selection:bg-brand-500 selection:text-white">
 
+    <!-- Ambient Background -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div class="blob-1 animate-blob"></div>
         <div class="blob-2 animate-blob" style="animation-delay: 2s;"></div>
     </div>
 
+    <!-- Toast Notification (브라우저 시스템 얼럿 대체용 토스트 모달) -->
+    <div id="toastNotification" class="fixed bottom-6 right-6 z-[200] transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300 flex items-center gap-3 bg-slate-900 border border-brand-500/30 text-white px-5 py-3.5 rounded-2xl shadow-2xl">
+        <span id="toastIcon" class="text-lg">✨</span>
+        <span id="toastMessage" class="text-sm font-medium">메시지 내용</span>
+    </div>
+
+    <!-- Navigation -->
     <nav class="fixed w-full z-50 glass-nav transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
-                <div class="flex items-center gap-2 cursor-pointer">
+                <div class="flex items-center gap-2 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
                     <svg class="w-8 h-8 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     <span class="font-bold text-xl tracking-tight">MARU</span>
                 </div>
@@ -182,9 +190,11 @@
         </div>
     </nav>
 
+    <!-- Hero Section -->
     <section id="hero" class="relative min-h-screen flex items-center justify-center pt-28 pb-16 overflow-hidden z-10">
         <div class="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10 max-w-7xl">
             
+            <!-- 좌측 슬로건 설명 -->
             <div class="lg:col-span-5 text-center lg:text-left space-y-6 reveal active">
                 <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-300 text-sm font-medium">
                     <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
@@ -207,103 +217,117 @@
                 </div>
             </div>
 
+            <!-- 우측: 스마트폰 목업 기반 인터랙티브 시뮬레이션 데모 -->
             <div class="lg:col-span-7 flex flex-col items-center justify-center relative">
                 <div class="w-[320px] h-[640px] bg-slate-950 border-[6px] border-slate-800 rounded-[40px] shadow-2xl relative overflow-hidden flex flex-col justify-between p-4 pb-6 select-none">
                     
+                    <!-- 상단 노치 -->
                     <div class="absolute top-2 left-1/2 -translate-x-1/2 w-32 h-4 bg-slate-800 rounded-full z-30 flex items-center justify-center">
                         <div class="w-1.5 h-1.5 rounded-full bg-slate-900"></div>
                     </div>
 
-                    <div class="w-full h-full relative overflow-y-auto mt-4 rounded-2xl p-2 hide-scrollbar flex flex-col justify-between">
-                        <div id="scanLine" class="absolute left-0 top-0 w-full h-1 bg-gradient-to-r from-transparent via-brand-400 to-transparent shadow-[0_0_15px_#7692fc] opacity-0 z-20"></div>
+                    <!-- 내부 스크린 영역 -->
+                    <div class="w-full h-full relative overflow-hidden mt-4 rounded-2xl p-2 flex flex-col justify-between bg-slate-950">
+                        
+                        <!-- 스크린 내부 컨텐츠 박스 (애니메이션 적용 공간) -->
+                        <div class="relative w-full flex-1 flex flex-col justify-start overflow-hidden rounded-xl">
+                            <!-- 가상 AI 스캔 바 -->
+                            <div id="scanLine" class="absolute left-0 w-full h-[3px] bg-gradient-to-r from-transparent via-brand-400 to-transparent shadow-[0_0_12px_#7692fc] opacity-0 z-30 pointer-events-none" style="top: 0%;"></div>
 
-                        <div id="appGridBefore" class="grid grid-cols-4 gap-x-2 gap-y-4 pt-4 transition-all duration-500">
-                            <div class="flex flex-col items-center gap-1"><div class="w-12 h-12 bg-[#2AC1BC] rounded-xl flex items-center justify-center font-bold text-white text-xs shadow-md">배민</div><span class="text-[10px] text-gray-400 text-center truncate w-full">배달의민족</span></div>
-                            <div class="flex flex-col items-center gap-1"><div class="w-12 h-12 bg-[#FF0000] rounded-xl flex items-center justify-center font-bold text-white text-xs shadow-md">YT</div><span class="text-[10px] text-gray-400 text-center truncate w-full">YouTube</span></div>
-                            <div class="flex flex-col items-center gap-1"><div class="w-12 h-12 bg-[#E67E22] rounded-xl flex items-center justify-center font-bold text-white text-xs shadow-md">쿠팡</div><span class="text-[10px] text-gray-400 text-center truncate w-full">쿠팡</span></div>
-                            <div class="flex flex-col items-center gap-1"><div class="w-12 h-12 bg-emerald-600 rounded-xl flex items-center justify-center font-bold text-white text-xs shadow-md">구글D</div><span class="text-[10px] text-gray-400 text-center truncate w-full">Drive</span></div>
-                            <div class="flex flex-col items-center gap-1"><div class="w-12 h-12 bg-[#FEE500] rounded-xl flex items-center justify-center font-bold text-slate-900 text-xs shadow-md">카톡</div><span class="text-[10px] text-gray-400 text-center truncate w-full">카카오톡</span></div>
-                            <div class="flex flex-col items-center gap-1"><div class="w-12 h-12 bg-sky-600 rounded-xl flex items-center justify-center font-bold text-white text-xs shadow-md">삼성H</div><span class="text-[10px] text-gray-400 text-center truncate w-full">Health</span></div>
-                            <div class="flex flex-col items-center gap-1"><div class="w-12 h-12 bg-[#03C75A] rounded-xl flex items-center justify-center font-bold text-white text-xs shadow-md">네이버</div><span class="text-[10px] text-gray-400 text-center truncate w-full">네이버</span></div>
-                            <div class="flex flex-col items-center gap-1"><div class="w-12 h-12 bg-blue-700 rounded-xl flex items-center justify-center font-bold text-white text-xs shadow-md">Word</div><span class="text-[10px] text-gray-400 text-center truncate w-full">Word</span></div>
-                            <div class="flex flex-col items-center gap-1"><div class="w-12 h-12 bg-green-600 rounded-xl flex items-center justify-center font-bold text-white text-xs shadow-md">전화</div><span class="text-[10px] text-gray-400 text-center truncate w-full">전화</span></div>
-                            <div class="flex flex-col items-center gap-1"><div class="w-12 h-12 bg-gradient-to-tr from-yellow-500 via-red-500 to-purple-600 rounded-xl flex items-center justify-center font-bold text-white text-xs shadow-md">인스타</div><span class="text-[10px] text-gray-400 text-center truncate w-full">Instagram</span></div>
-                            <div class="flex flex-col items-center gap-1"><div class="w-12 h-12 bg-black border border-red-600 rounded-xl flex items-center justify-center font-bold text-red-600 text-xs shadow-md">N</div><span class="text-[10px] text-gray-400 text-center truncate w-full">Netflix</span></div>
-                            <div class="flex flex-col items-center gap-1"><div class="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center font-bold text-white text-xs shadow-md">토스</div><span class="text-[10px] text-gray-400 text-center truncate w-full">토스</span></div>
+                            <!-- [상태 1] 분석 전: 업로드하신 실제 정리 안 된 사진 출력 -->
+                            <!-- relative 경로로 프로젝트 저장소 내의 원본 파일을 100% 온전하게 로드 -->
+                            <div id="screenBefore" class="absolute inset-0 w-full h-full transition-all duration-700 ease-in-out opacity-100 z-10 flex items-center justify-center">
+                                <img id="mobileMainImage" src="Gemini_Generated_Image_kn5uoikn5uoikn5u-2.png" class="w-full h-full object-cover rounded-xl" alt="정리되지 않은 휴대폰 화면">
+                            </div>
+
+                            <!-- [상태 2] 분석 후 정렬: 한 줄에 4개씩 폴더화 배치된 화면 -->
+                            <div id="screenAfter" class="absolute inset-0 w-full h-full transition-all duration-700 ease-in-out opacity-0 z-0 bg-slate-950 p-2 overflow-y-auto hide-scrollbar">
+                                <div class="grid grid-cols-4 gap-x-2 gap-y-5 pt-4">
+                                    <!-- 1. 구글 -->
+                                    <div class="flex flex-col items-center gap-1 scale-95 opacity-0 transition-all duration-500" data-delay="50">
+                                        <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 grid grid-cols-2 gap-1 shadow-inner">
+                                            <div class="bg-red-500 rounded-sm"></div><div class="bg-blue-500 rounded-sm"></div>
+                                            <div class="bg-yellow-500 rounded-sm"></div><div class="bg-green-500 rounded-sm"></div>
+                                        </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">구글</span>
+                                    </div>
+                                    <!-- 2. 삼성 -->
+                                    <div class="flex flex-col items-center gap-1 scale-95 opacity-0 transition-all duration-500" data-delay="100">
+                                        <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 grid grid-cols-2 gap-1 shadow-inner">
+                                            <div class="bg-sky-600 rounded-sm"></div><div class="bg-sky-800 rounded-sm"></div>
+                                            <div class="bg-slate-500 rounded-sm"></div><div class="bg-slate-600 rounded-sm"></div>
+                                        </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">삼성</span>
+                                    </div>
+                                    <!-- 3. MS -->
+                                    <div class="flex flex-col items-center gap-1 scale-95 opacity-0 transition-all duration-500" data-delay="150">
+                                        <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 grid grid-cols-2 gap-1 shadow-inner">
+                                            <div class="bg-blue-600 rounded-sm"></div><div class="bg-red-500 rounded-sm"></div>
+                                            <div class="bg-green-600 rounded-sm"></div><div class="bg-yellow-500 rounded-sm"></div>
+                                        </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">MS</span>
+                                    </div>
+                                    <!-- 4. 네이버 -->
+                                    <div class="flex flex-col items-center gap-1 scale-95 opacity-0 transition-all duration-500" data-delay="200">
+                                        <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 grid grid-cols-2 gap-1 shadow-inner">
+                                            <div class="bg-[#03C75A] rounded-sm"></div><div class="bg-emerald-400 rounded-sm"></div>
+                                            <div class="bg-teal-600 rounded-sm"></div><div class="bg-slate-700 rounded-sm"></div>
+                                        </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">네이버</span>
+                                    </div>
+                                    <!-- 5. 카카오 -->
+                                    <div class="flex flex-col items-center gap-1 scale-95 opacity-0 transition-all duration-500" data-delay="250">
+                                        <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 grid grid-cols-2 gap-1 shadow-inner">
+                                            <div class="bg-[#FEE500] rounded-sm"></div><div class="bg-yellow-600 rounded-sm"></div>
+                                            <div class="bg-amber-500 rounded-sm"></div><div class="bg-slate-700 rounded-sm"></div>
+                                        </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">카카오</span>
+                                    </div>
+                                    <!-- 6. 전화 -->
+                                    <div class="flex flex-col items-center gap-1 scale-95 opacity-0 transition-all duration-500" data-delay="300">
+                                        <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 flex items-center justify-center shadow-inner">
+                                            <div class="w-full h-full bg-green-600 rounded-lg flex items-center justify-center text-white text-[11px]">📞</div>
+                                        </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">전화</span>
+                                    </div>
+                                    <!-- 7. SNS -->
+                                    <div class="flex flex-col items-center gap-1 scale-95 opacity-0 transition-all duration-500" data-delay="350">
+                                        <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 grid grid-cols-2 gap-1 shadow-inner">
+                                            <div class="bg-purple-500 rounded-sm"></div><div class="bg-pink-500 rounded-sm"></div>
+                                            <div class="bg-blue-400 rounded-sm"></div><div class="bg-indigo-600 rounded-sm"></div>
+                                        </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">SNS</span>
+                                    </div>
+                                    <!-- 8. OTT -->
+                                    <div class="flex flex-col items-center gap-1 scale-95 opacity-0 transition-all duration-500" data-delay="400">
+                                        <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 grid grid-cols-2 gap-1 shadow-inner">
+                                            <div class="bg-red-600 rounded-sm"></div><div class="bg-black border border-gray-600 rounded-sm"></div>
+                                            <div class="bg-blue-900 rounded-sm"></div><div class="bg-gray-800 rounded-sm"></div>
+                                        </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">영상/OTT</span>
+                                    </div>
+                                    <!-- 9. 쇼핑 -->
+                                    <div class="flex flex-col items-center gap-1 scale-95 opacity-0 transition-all duration-500" data-delay="450">
+                                        <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 grid grid-cols-2 gap-1 shadow-inner">
+                                            <div class="bg-orange-500 rounded-sm"></div><div class="bg-yellow-500 rounded-sm"></div>
+                                            <div class="bg-red-400 rounded-sm"></div><div class="bg-amber-600 rounded-sm"></div>
+                                        </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">쇼핑</span>
+                                    </div>
+                                    <!-- 10. 배달 -->
+                                    <div class="flex flex-col items-center gap-1 scale-95 opacity-0 transition-all duration-500" data-delay="500">
+                                        <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 grid grid-cols-2 gap-1 shadow-inner">
+                                            <div class="bg-[#2AC1BC] rounded-sm"></div><div class="bg-orange-600 rounded-sm"></div>
+                                            <div class="bg-red-500 rounded-sm"></div><div class="bg-yellow-400 rounded-sm"></div>
+                                        </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">배달</span>
+                                    </div>
+                                    <!-- 11. 금융 -->
+                                    <div class="flex flex-col items-center gap-1 scale-95 opacity-0 transition-all duration-500" data-delay="550">
+                                        <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 grid grid-cols-2 gap-1 shadow-inner">
+                                            <div class="bg-blue-500 rounded-sm"></div><div class="bg-purple-600 rounded-sm"></div>
+                                            <div class="bg-emerald-500 rounded-sm"></div><div class="bg-slate-600 rounded-sm"></div>
+                                        </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">금융/AI</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div id="appGridAfter" class="hidden grid grid-cols-4 gap-x-2 gap-y-5 pt-4 transition-all duration-500">
-                            <div class="flex flex-col items-center gap-1 scale-95 opacity-0 animate-[fadeInApp_0.3s_ease-out_forwards_30ms]">
-                                <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 grid grid-cols-2 gap-1 shadow-inner">
-                                    <div class="bg-red-500 rounded-sm"></div><div class="bg-blue-500 rounded-sm"></div>
-                                    <div class="bg-yellow-500 rounded-sm"></div><div class="bg-green-500 rounded-sm"></div>
-                                </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">구글</span>
-                            </div>
-                            <div class="flex flex-col items-center gap-1 scale-95 opacity-0 animate-[fadeInApp_0.3s_ease-out_forwards_60ms]">
-                                <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 grid grid-cols-2 gap-1 shadow-inner">
-                                    <div class="bg-sky-600 rounded-sm"></div><div class="bg-sky-800 rounded-sm"></div>
-                                    <div class="bg-slate-500 rounded-sm"></div><div class="bg-slate-600 rounded-sm"></div>
-                                </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">삼성</span>
-                            </div>
-                            <div class="flex flex-col items-center gap-1 scale-95 opacity-0 animate-[fadeInApp_0.3s_ease-out_forwards_90ms]">
-                                <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 grid grid-cols-2 gap-1 shadow-inner">
-                                    <div class="bg-blue-600 rounded-sm"></div><div class="bg-red-500 rounded-sm"></div>
-                                    <div class="bg-green-600 rounded-sm"></div><div class="bg-yellow-500 rounded-sm"></div>
-                                </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">마이크로소프트</span>
-                            </div>
-                            <div class="flex flex-col items-center gap-1 scale-95 opacity-0 animate-[fadeInApp_0.3s_ease-out_forwards_120ms]">
-                                <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 grid grid-cols-2 gap-1 shadow-inner">
-                                    <div class="bg-[#03C75A] rounded-sm"></div><div class="bg-emerald-400 rounded-sm"></div>
-                                    <div class="bg-teal-600 rounded-sm"></div><div class="bg-slate-700 rounded-sm"></div>
-                                </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">네이버</span>
-                            </div>
-                            <div class="flex flex-col items-center gap-1 scale-95 opacity-0 animate-[fadeInApp_0.3s_ease-out_forwards_150ms]">
-                                <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 grid grid-cols-2 gap-1 shadow-inner">
-                                    <div class="bg-[#FEE500] rounded-sm"></div><div class="bg-yellow-600 rounded-sm"></div>
-                                    <div class="bg-amber-500 rounded-sm"></div><div class="bg-slate-700 rounded-sm"></div>
-                                </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">카카오</span>
-                            </div>
-                            <div class="flex flex-col items-center gap-1 scale-95 opacity-0 animate-[fadeInApp_0.3s_ease-out_forwards_180ms]">
-                                <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 flex items-center justify-center shadow-inner">
-                                    <div class="w-full h-full bg-green-600 rounded-lg flex items-center justify-center text-white text-[11px]">📞</div>
-                                </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">전화</span>
-                            </div>
-                            <div class="flex flex-col items-center gap-1 scale-95 opacity-0 animate-[fadeInApp_0.3s_ease-out_forwards_210ms]">
-                                <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 grid grid-cols-2 gap-1 shadow-inner">
-                                    <div class="bg-purple-500 rounded-sm"></div><div class="bg-pink-500 rounded-sm"></div>
-                                    <div class="bg-blue-400 rounded-sm"></div><div class="bg-indigo-600 rounded-sm"></div>
-                                </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">커뮤니케이션/SNS</span>
-                            </div>
-                            <div class="flex flex-col items-center gap-1 scale-95 opacity-0 animate-[fadeInApp_0.3s_ease-out_forwards_240ms]">
-                                <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 grid grid-cols-2 gap-1 shadow-inner">
-                                    <div class="bg-red-600 rounded-sm"></div><div class="bg-black border border-gray-600 rounded-sm"></div>
-                                    <div class="bg-blue-900 rounded-sm"></div><div class="bg-gray-800 rounded-sm"></div>
-                                </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">영상/OTT</span>
-                            </div>
-                            <div class="flex flex-col items-center gap-1 scale-95 opacity-0 animate-[fadeInApp_0.3s_ease-out_forwards_270ms]">
-                                <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 grid grid-cols-2 gap-1 shadow-inner">
-                                    <div class="bg-orange-500 rounded-sm"></div><div class="bg-yellow-500 rounded-sm"></div>
-                                    <div class="bg-red-400 rounded-sm"></div><div class="bg-amber-600 rounded-sm"></div>
-                                </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">쇼핑/커머스</span>
-                            </div>
-                            <div class="flex flex-col items-center gap-1 scale-95 opacity-0 animate-[fadeInApp_0.3s_ease-out_forwards_300ms]">
-                                <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 grid grid-cols-2 gap-1 shadow-inner">
-                                    <div class="bg-[#2AC1BC] rounded-sm"></div><div class="bg-orange-600 rounded-sm"></div>
-                                    <div class="bg-red-500 rounded-sm"></div><div class="bg-yellow-400 rounded-sm"></div>
-                                </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">배달/외식</span>
-                            </div>
-                            <div class="flex flex-col items-center gap-1 scale-95 opacity-0 animate-[fadeInApp_0.3s_ease-out_forwards_330ms]">
-                                <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 grid grid-cols-2 gap-1 shadow-inner">
-                                    <div class="bg-blue-500 rounded-sm"></div><div class="bg-purple-600 rounded-sm"></div>
-                                    <div class="bg-emerald-500 rounded-sm"></div><div class="bg-slate-600 rounded-sm"></div>
-                                </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">금융/AI/생산성</span>
-                            </div>
-                        </div>
-
-                        <div class="w-full pt-4 mt-auto">
+                        <!-- 하단 트리거 스마트 버튼 -->
+                        <div class="w-full pt-4 mt-auto z-20 bg-slate-950">
                             <button id="btnMaruAnalyze" class="w-full py-3 bg-gradient-to-r from-brand-500 to-purple-600 hover:from-brand-600 hover:to-purple-700 font-bold text-sm text-white rounded-xl shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-2 relative overflow-hidden">
                                 <span id="btnText">MARU로 분석</span>
-                                <svg id="btnIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                                <svg id="btnIcon" class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                             </button>
                         </div>
                     </div>
@@ -313,6 +337,7 @@
         </div>
     </section>
 
+    <!-- Features Grid Section -->
     <section id="features" class="py-24 bg-darker relative z-10 border-t border-white/5">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16 reveal">
@@ -371,6 +396,7 @@
         </div>
     </section>
 
+    <!-- Smart Foldering 상세 섹션 -->
     <section id="smart-folder" class="py-24 relative z-10 overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-b from-darker to-dark z-0"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -408,6 +434,7 @@
         </div>
     </section>
 
+    <!-- Gemma-4 On-Device AI Architecture Section -->
     <section id="gemma" class="py-24 bg-darker relative z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="lg:grid lg:grid-cols-2 gap-16 items-center">
@@ -437,6 +464,7 @@
         </div>
     </section>
 
+    <!-- Safety / User Confirmation Section -->
     <section id="safety" class="py-24 bg-dark relative z-10 border-t border-white/5">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="lg:grid lg:grid-cols-2 gap-16 items-center flex-col-reverse flex lg:flex-row-reverse">
@@ -464,6 +492,7 @@
         </div>
     </section>
 
+    <!-- Creative Module Section -->
     <section id="creative" class="py-24 bg-darker relative z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="lg:grid lg:grid-cols-2 gap-16 items-center">
@@ -484,6 +513,7 @@
         </div>
     </section>
 
+    <!-- AI Video Editor Utility Program Section -->
     <section id="video-editor" class="py-24 bg-dark relative z-10 border-t border-orange-500/10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16 reveal">
@@ -529,6 +559,7 @@
                             <span class="text-xs font-semibold text-orange-400 bg-orange-400/10 px-2.5 py-0.5 rounded-md">RENDER READY</span>
                         </div>
                         
+                        <!-- 가상 작업 타임라인 워크스페이스 구조 UI -->
                         <div class="bg-black/40 border border-white/5 rounded-xl p-4 space-y-4">
                             <div class="h-44 bg-slate-900/60 rounded-lg flex flex-col items-center justify-center relative overflow-hidden group border border-dashed border-white/10">
                                 <div class="absolute inset-0 bg-gradient-to-b from-transparent to-orange-500/5 opacity-50"></div>
@@ -555,8 +586,10 @@
         </div>
     </section>
 
+    <!-- [선택 다운로드 지원] 모달 팝업 레이어 구성 -->
     <div id="downloadModal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="bg-slate-900 border border-white/10 rounded-3xl p-6 max-w-md w-full mx-4 shadow-2xl relative transform scale-95 transition-transform duration-300" id="modalCard">
+            <!-- 닫기 버튼 -->
             <button onclick="closeDownloadModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
@@ -564,10 +597,25 @@
                 <div class="w-12 h-12 rounded-2xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400 mx-auto text-xl">💾</div>
                 <div>
                     <h3 class="text-xl font-bold text-white tracking-tight">MARU 에코시스템 다운로드</h3>
-                    <p class="text-xs text-gray-400 mt-1">설치할 대상 프로그램을 선택하여 받아보세요.</p>
+                    <p class="text-xs text-gray-400 mt-1">설치할 대상 프로그램이나 단일 실행 파일을 다운로드합니다.</p>
                 </div>
                 
+                <!-- 개별 주소 지정 다운로드 선택 그리드 -->
                 <div class="grid grid-cols-1 gap-3 pt-2">
+                    <!-- 1. 휴대용 단일 독립 실행 HTML 빌더 (Base64 컴파일러) -->
+                    <!-- 사용자의 요구를 완벽 해결하기 위해, 현재 캔버스의 고화질 원본 사진을 1초 만에 Base64 텍스트로 인코딩하여 HTML 본문 안에 강제 주입 후, 단 하나의 독립 실행형 .html 파일로 묶어서 다운로드 시켜주는 매직 스크립트 기능 장착 -->
+                    <button onclick="compileAndDownloadStandaloneHTML()" class="flex items-center justify-between p-4 bg-gradient-to-r from-brand-600/30 to-purple-600/30 border border-brand-500/40 rounded-2xl hover:from-brand-600/50 hover:to-purple-600/50 transition-all text-left group">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-brand-500/20 rounded-xl flex items-center justify-center text-lg">📁</div>
+                            <div>
+                                <p class="text-sm font-semibold text-brand-200">휴대용 단일 HTML 다운로드</p>
+                                <p class="text-[11px] text-gray-300">지분한 화면을 Base64로 자동 인코딩 병합</p>
+                            </div>
+                        </div>
+                        <span class="text-xs text-brand-300 font-medium group-hover:translate-x-1 transition-transform">컴파일 &rarr;</span>
+                    </button>
+
+                    <!-- 2. MARU 앱 개별 다운로드 링크 -->
                     <a href="https://huggingface.co/datasets/maruofficial/maru_ai/resolve/main/maru.apk" target="_blank" class="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-brand-500/10 hover:border-brand-500/40 transition-all text-left group">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 bg-brand-500/20 rounded-xl flex items-center justify-center text-lg">📱</div>
@@ -579,6 +627,7 @@
                         <span class="text-xs text-brand-400 font-medium group-hover:translate-x-1 transition-transform">받기 &rarr;</span>
                     </a>
                     
+                    <!-- 3. 영상자동편집기 개별 다운로드 링크 -->
                     <a href="https://huggingface.co/datasets/maruofficial/maru_ai/resolve/main/AI%E1%84%8C%E1%85%A1%E1%84%83%E1%85%A9%E1%86%BC%E1%84%8B%E1%85%A7%E1%86%BC%E1%84%89%E1%85%A1%E1%86%BC%E1%84%91%E1%85%A7%E1%86%AB%E1%84%8C%E1%85%B5%E1%86%B8%E1%84%80%E1%85%B5.app.zip" target="_blank" class="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-orange-500/10 hover:border-orange-500/40 transition-all text-left group">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 bg-orange-500/20 rounded-xl flex items-center justify-center text-lg">🎬</div>
@@ -594,8 +643,25 @@
         </div>
     </div>
 
+    <!-- 인터랙션 스크립트 시스템 부착 -->
     <script>
-        // 다운로드 팝업 모달 제어 전용 함수 구현
+        // 알림 메시지 커스텀 토스트 (alert 대신 활용)
+        function showToast(message, icon = "✨") {
+            const toast = document.getElementById('toastNotification');
+            const toastIcon = document.getElementById('toastIcon');
+            const toastMsg = document.getElementById('toastMessage');
+
+            toastIcon.innerText = icon;
+            toastMsg.innerText = message;
+
+            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+            }, 3000);
+        }
+
+        // 다운로드 팝업 모달 제어
         function openDownloadModal() {
             const modal = document.getElementById('downloadModal');
             const card = document.getElementById('modalCard');
@@ -610,51 +676,131 @@
             card.classList.add('scale-95');
         }
 
-        // 바깥 어두운 배경 클릭 시 닫히도록 설정
         document.getElementById('downloadModal').addEventListener('click', function(e) {
             if (e.target === this) closeDownloadModal();
         });
 
-        // 스마트폰 디바이스 목업 애니메이션 스크립트 로직
+        // 고화질 원본 이미지를 브라우저 자체에서 1초 만에 Base64로 자동 변환하여 단일 파일로 엮어 다운로드해 주는 혁신 로직
+        async function compileAndDownloadStandaloneHTML() {
+            showToast("자동 빌드 컴파일러 시작...", "⚙️");
+            
+            try {
+                // 1. 캔버스 로컬 공간 내 이미지를 가져옵니다.
+                const response = await fetch('Gemini_Generated_Image_kn5uoikn5uoikn5u-2.png');
+                if (!response.ok) throw new Error('파일을 찾을 수 없습니다.');
+                const blob = await response.blob();
+                
+                // 2. Base64 형식으로 기기단에서 직접 변환을 수행합니다.
+                const reader = new FileReader();
+                reader.onloadend = function() {
+                    const base64data = reader.result;
+                    
+                    // 3. 현재 브라우저가 실행 중인 원본 HTML 템플릿 코드를 가져옵니다.
+                    let standaloneHTML = document.documentElement.outerHTML;
+                    
+                    // 4. 소스 코드 안의 이미지 소스 경로를 방금 변환한 엄청난 길이의 Base64 데이터로 완벽 치환합니다.
+                    standaloneHTML = standaloneHTML.replace('src="Gemini_Generated_Image_kn5uoikn5uoikn5u-2.png"', `src="${base64data}"`);
+                    
+                    // 5. 다운로드용 가상 URL 객체 생성 후 트리거
+                    const compiledBlob = new Blob([`<!DOCTYPE html>\n` + standaloneHTML], {type: 'text/html;charset=utf-8'});
+                    const url = URL.createObjectURL(compiledBlob);
+                    
+                    const downloadAnchor = document.createElement('a');
+                    downloadAnchor.href = url;
+                    downloadAnchor.download = 'maru-landing-portable.html';
+                    document.body.appendChild(downloadAnchor);
+                    downloadAnchor.click();
+                    
+                    // 6. 리소스 해제 및 가상 오브젝트 클린업
+                    document.body.removeChild(downloadAnchor);
+                    URL.revokeObjectURL(url);
+                    
+                    showToast("빌드 완료! 단일 HTML 파일이 다운로드되었습니다.", "🚀");
+                };
+                reader.readAsDataURL(blob);
+            } catch (error) {
+                console.error(error);
+                showToast("빌드 중 에러가 발생했습니다. 로컬 크로스 도메인(CORS) 제한을 확인해주세요.", "❌");
+            }
+        }
+
+        // 스마트폰 디바이스 목업 애니메이션 스크립트 로직 (스캔 라인 및 레이어 페이드 인/아웃)
         document.getElementById('btnMaruAnalyze').addEventListener('click', function() {
             const btn = this;
             const btnText = document.getElementById('btnText');
-            const beforeGrid = document.getElementById('appGridBefore');
-            const afterGrid = document.getElementById('appGridAfter');
+            const btnIcon = document.getElementById('btnIcon');
+            const beforeScreen = document.getElementById('screenBefore');
+            const afterScreen = document.getElementById('screenAfter');
             const scanLine = document.getElementById('scanLine');
+            const folders = afterScreen.querySelectorAll('[data-delay]');
 
-            if(btnText.innerText === "MARU로 분석") {
+            if (btnText.innerText === "MARU로 분석") {
                 btn.disabled = true;
                 btnText.innerText = "분석하는 중...";
+                btnIcon.style.transform = "rotate(180deg)";
                 
+                // 스캔 바 활성화 및 슬라이드 애니메이션 실행
                 scanLine.style.opacity = '1';
-                scanLine.style.transition = 'top 1.2s cubic-bezier(0.4, 0, 0.2, 1)';
-                setTimeout(() => { scanLine.style.top = '80%'; }, 50);
+                scanLine.style.transition = 'top 1.4s cubic-bezier(0.4, 0, 0.2, 1)';
+                setTimeout(() => { scanLine.style.top = '100%'; }, 50);
 
                 setTimeout(() => {
-                    beforeGrid.classList.add('hidden');
-                    afterGrid.classList.remove('hidden');
-                    
+                    // Before 상태 페이드 아웃
+                    beforeScreen.style.opacity = '0';
+                    beforeScreen.classList.add('z-0');
+                    beforeScreen.classList.remove('z-10');
+
+                    // After 상태 페이드 인
+                    afterScreen.style.opacity = '1';
+                    afterScreen.classList.add('z-10');
+                    afterScreen.classList.remove('z-0');
+
+                    // 스캔 바 원위치 초기화
                     scanLine.style.opacity = '0';
                     scanLine.style.transition = 'none';
                     scanLine.style.top = '0%';
 
-                    btn.disabled = false;
-                    btnText.innerText = "초기화 하기";
-                    btn.classList.remove('from-brand-500', 'to-purple-600');
-                    btn.classList.add('from-slate-700', 'to-slate-800');
-                }, 1250);
+                    // 폴더 아이콘들 차례대로 페이드 인 (Staggered Animation)
+                    folders.forEach(folder => {
+                        const delay = folder.getAttribute('data-delay');
+                        setTimeout(() => {
+                            folder.style.opacity = '1';
+                            folder.style.transform = 'scale(1)';
+                        }, delay);
+                    });
+
+                    setTimeout(() => {
+                        btn.disabled = false;
+                        btnText.innerText = "초기화 하기";
+                        btn.classList.remove('from-brand-500', 'to-purple-600');
+                        btn.classList.add('from-slate-700', 'to-slate-800');
+                    }, 600);
+
+                }, 1400);
 
             } else {
-                beforeGrid.classList.remove('hidden');
-                afterGrid.classList.add('hidden');
+                // 초기화 상태 복구
+                folders.forEach(folder => {
+                    folder.style.opacity = '0';
+                    folder.style.transform = 'scale(0.95)';
+                });
+
+                beforeScreen.style.opacity = '1';
+                beforeScreen.classList.add('z-10');
+                beforeScreen.classList.remove('z-0');
+
+                afterScreen.style.opacity = '0';
+                afterScreen.classList.add('z-0');
+                afterScreen.classList.remove('z-10');
+
                 btnText.innerText = "MARU로 분석";
+                btnIcon.style.transform = "rotate(0deg)";
                 btn.classList.remove('from-slate-700', 'to-slate-800');
                 btn.classList.add('from-brand-500', 'to-purple-600');
             }
         });
 
-        // 원본 스크롤 링크 부드러운 이동 애니메이션 복구 매핑
+        // 네비게이션 부드러운 스크롤 이동
         document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 const targetId = this.getAttribute('href');
@@ -668,18 +814,18 @@
             });
         });
 
-        // Intersection Observer 기반 화면 스크롤 등장 애니메이션(reveal) 처리 모듈
+        // Intersection Observer 기반 등장 애니메이션
         document.addEventListener('DOMContentLoaded', () => {
             const reveals = document.querySelectorAll('.reveal');
             if (window.IntersectionObserver) {
                 const observer = new IntersectionObserver((entries) => {
                     entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
-                }, { threshold: 0.05, rootMargin: "0px 0px -20px 0px" });
+                }, { threshold: 0.08, rootMargin: "0px 0px -40px 0px" });
                 reveals.forEach(el => observer.observe(el));
             } else {
                 reveals.forEach(el => el.classList.add('active'));
             }
-            
+
             const nav = document.querySelector('nav');
             window.addEventListener('scroll', () => {
                 if (window.scrollY > 10) { nav.classList.add('shadow-lg', 'bg-darker/90'); } 
