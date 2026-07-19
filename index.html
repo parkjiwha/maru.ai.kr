@@ -15,16 +15,16 @@
                     },
                     colors: {
                         brand: {
-                            50: '#f0f5ff',
-                            100: '#e5edff',
-                            200: '#cddbfe',
-                            300: '#a4bdfd',
-                            400: '#7692fc',
-                            500: '#3f51b5',
-                            600: '#3144a5',
-                            700: '#283583',
-                            800: '#232d6b',
-                            900: '#202855',
+                            50: '#f9f8f3',
+                            100: '#f0edd6',
+                            200: '#e1daae',
+                            300: '#cec17f',
+                            400: '#b8a556',
+                            500: '#5f4e19',
+                            600: '#524215',
+                            700: '#403311',
+                            800: '#2e250c',
+                            900: '#1b1607',
                         },
                         dark: '#0F172A',
                         darker: '#020617',
@@ -74,12 +74,12 @@
 
         .glass-card:hover {
             transform: translateY(-5px);
-            border-color: rgba(63, 81, 181, 0.2);
-            box-shadow: 0 20px 40px -15px rgba(63, 81, 181, 0.1);
+            border-color: rgba(95, 78, 25, 0.2);
+            box-shadow: 0 20px 40px -15px rgba(95, 78, 25, 0.1);
         }
 
         .text-gradient {
-            background: linear-gradient(135deg, #3f51b5 0%, #8b5cf6 100%);
+            background: linear-gradient(135deg, #5f4e19 0%, #b8a556 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -95,9 +95,8 @@
             transform: translateY(0);
         }
 
-        /* 라이트 백그라운드를 위한 부드러운 엠비언트 블롭 */
-        .blob-1 { position: absolute; top: -10%; left: -10%; width: 400px; height: 400px; background: rgba(99, 102, 241, 0.07); filter: blur(60px); border-radius: 50%; z-index: -1; }
-        .blob-2 { position: absolute; top: 40%; right: -10%; width: 500px; height: 500px; background: rgba(168, 85, 247, 0.07); filter: blur(80px); border-radius: 50%; z-index: -1; }
+        .blob-1 { position: absolute; top: -10%; left: -10%; width: 400px; height: 400px; background: rgba(95, 78, 25, 0.05); filter: blur(60px); border-radius: 50%; z-index: -1; }
+        .blob-2 { position: absolute; top: 40%; right: -10%; width: 500px; height: 500px; background: rgba(184, 165, 86, 0.05); filter: blur(80px); border-radius: 50%; z-index: -1; }
 
         @keyframes scan {
             0% { top: -10%; }
@@ -108,7 +107,6 @@
             animation: scan 2.5s ease-in-out infinite;
         }
 
-        /* ── AI Video Editor 전용 스타일 ── */
         .video-card {
             background: #FFFFFF;
             border: 1px solid rgba(234, 88, 12, 0.15);
@@ -126,15 +124,6 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .tech-badge {
-            background: rgba(0,0,0,0.02);
-            border: 1px solid rgba(0,0,0,0.05);
-            transition: all 0.2s ease;
-        }
-        .tech-badge:hover {
-            background: rgba(234, 88, 12, 0.05);
-            border-color: rgba(234, 88, 12, 0.2);
-        }
         @keyframes scan-video {
             0%   { width: 0%; opacity: 1; }
             70%  { width: 88%; opacity: 1; }
@@ -145,15 +134,33 @@
             animation: scan-video 2.8s ease-in-out infinite;
         }
 
-        /* 스마트폰 목업용 스크롤바 처리 및 앱 애니메이션 */
-        @keyframes fadeInApp {
-            to { opacity: 1; transform: scale(1); }
-        }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body class="antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- 7월 20일 00시 오픈 제한 타이머 오버레이 레이어 -->
+    <div id="comingSoonOverlay" class="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-slate-950 text-white transition-opacity duration-700 pointer-events-auto">
+        <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+            <div class="blob-1 animate-blob" style="background: rgba(95, 78, 25, 0.15);"></div>
+        </div>
+        <div class="text-center space-y-6 max-w-md px-4 z-10 select-none">
+            <div class="w-16 h-16 rounded-3xl bg-brand-500/10 border border-brand-500/30 flex items-center justify-center text-brand-300 mx-auto text-2xl animate-bounce">⏳</div>
+            <div class="space-y-2">
+                <h2 class="text-2xl sm:text-3xl font-black tracking-tight text-brand-100">MARU Ecosystem</h2>
+                <p class="text-sm text-slate-400">서비스 오픈 준비 중입니다. 잠시만 기다려주세요.</p>
+            </div>
+            <!-- 카운트다운 타이머 박스 -->
+            <div class="grid grid-cols-4 gap-2 bg-slate-900/60 border border-slate-800 rounded-2xl p-4 font-mono">
+                <div class="bg-slate-950 p-2 rounded-xl border border-slate-800/50"><span id="timer-days" class="text-2xl font-bold text-brand-300">00</span><p class="text-[9px] text-slate-500 mt-1 uppercase tracking-wider">Days</p></div>
+                <div class="bg-slate-950 p-2 rounded-xl border border-slate-800/50"><span id="timer-hours" class="text-2xl font-bold text-brand-300">00</span><p class="text-[9px] text-slate-500 mt-1 uppercase tracking-wider">Hours</p></div>
+                <div class="bg-slate-950 p-2 rounded-xl border border-slate-800/50"><span id="timer-mins" class="text-2xl font-bold text-brand-300">00</span><p class="text-[9px] text-slate-500 mt-1 uppercase tracking-wider">Mins</p></div>
+                <div class="bg-slate-950 p-2 rounded-xl border border-slate-800/50"><span id="timer-secs" class="text-2xl font-bold text-brand-400 animate-pulse">00</span><p class="text-[9px] text-slate-500 mt-1 uppercase tracking-wider">Secs</p></div>
+            </div>
+            <p class="text-xs text-slate-500 font-medium font-mono">오픈 일시: 2026년 7월 20일 00:00 (KST)</p>
+        </div>
+    </div>
 
     <!-- Ambient Background -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
@@ -190,7 +197,6 @@
     <section id="hero" class="relative min-h-screen flex items-center justify-center pt-28 pb-16 overflow-hidden z-10">
         <div class="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10 max-w-7xl">
             
-            <!-- 좌측 슬로건 설명 -->
             <div class="lg:col-span-5 text-center lg:text-left space-y-6 reveal active">
                 <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-600 text-sm font-semibold">
                     <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
@@ -198,7 +204,7 @@
                 </div>
                 <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight text-slate-900">
                     당신의 일상을<br>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-purple-600">지능형으로 분류하다</span>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-brand-300">지능형으로 분류하다</span>
                 </h1>
                 <p class="text-base sm:text-lg text-slate-600 max-w-xl mx-auto lg:mx-0 leading-relaxed">
                     무질서하게 흩어진 수많은 앱과 데이터, 이제 MARU 온디바이스 AI가 인터넷 연결 없이 알아서 직관적인 생태계 폴더 구조로 자동 정렬합니다. 우측 데모에서 직접 확인해보세요.
@@ -215,100 +221,82 @@
 
             <!-- 우측: 스마트폰 목업 기반 인터랙티브 시뮬레이션 데모 -->
             <div class="lg:col-span-7 flex flex-col items-center justify-center relative">
-                <!-- 메탈 그레이 디바이스로 더 입체감 있게 구현 -->
                 <div class="w-[320px] h-[640px] bg-slate-950 border-[6px] border-slate-800 rounded-[40px] shadow-2xl relative overflow-hidden flex flex-col justify-between p-4 pb-6 select-none">
                     
-                    <!-- 상단 노치 -->
                     <div class="absolute top-2 left-1/2 -translate-x-1/2 w-32 h-4 bg-slate-800 rounded-full z-30 flex items-center justify-center">
                         <div class="w-1.5 h-1.5 rounded-full bg-slate-900"></div>
                     </div>
 
-                    <!-- 내부 스크린 영역 -->
                     <div class="w-full h-full relative overflow-hidden mt-4 rounded-2xl p-2 flex flex-col justify-between bg-slate-950">
                         
-                        <!-- 스크린 내부 컨텐츠 박스 (애니메이션 적용 공간) -->
                         <div class="relative w-full flex-1 flex flex-col justify-start overflow-hidden rounded-xl">
-                            <!-- 가상 AI 스캔 바 -->
-                            <div id="scanLine" class="absolute left-0 w-full h-[3px] bg-gradient-to-r from-transparent via-brand-400 to-transparent shadow-[0_0_12px_#7692fc] opacity-0 z-30 pointer-events-none" style="top: 0%;"></div>
+                            <div id="scanLine" class="absolute left-0 w-full h-[3px] bg-gradient-to-r from-transparent via-brand-400 to-transparent shadow-[0_0_12px_#b8a556] opacity-0 z-30 pointer-events-none" style="top: 0%;"></div>
 
-                            <!-- [상태 1] 분석 전: 업로드하신 실제 정리 안 된 사진 출력 -->
                             <div id="screenBefore" class="absolute inset-0 w-full h-full transition-all duration-700 ease-in-out opacity-100 z-10 flex items-center justify-center">
                                 <img id="mobileMainImage" src="Gemini_Generated_Image_kn5uoikn5uoikn5u-2.png" class="w-full h-full object-cover rounded-xl" alt="정리되지 않은 휴대폰 화면">
                             </div>
 
-                            <!-- [상태 2] 분석 후 정렬: 한 줄에 4개씩 폴더화 배치된 화면 -->
                             <div id="screenAfter" class="absolute inset-0 w-full h-full transition-all duration-700 ease-in-out opacity-0 z-0 bg-slate-950 p-2 overflow-y-auto hide-scrollbar">
                                 <div class="grid grid-cols-4 gap-x-2 gap-y-5 pt-4">
-                                    <!-- 1. 구글 -->
                                     <div class="flex flex-col items-center gap-1 scale-95 opacity-0 transition-all duration-500" data-delay="50">
                                         <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 grid grid-cols-2 gap-1 shadow-inner">
                                             <div class="bg-red-500 rounded-sm"></div><div class="bg-blue-500 rounded-sm"></div>
                                             <div class="bg-yellow-500 rounded-sm"></div><div class="bg-green-500 rounded-sm"></div>
                                         </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">구글</span>
                                     </div>
-                                    <!-- 2. 삼성 -->
                                     <div class="flex flex-col items-center gap-1 scale-95 opacity-0 transition-all duration-500" data-delay="100">
                                         <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 grid grid-cols-2 gap-1 shadow-inner">
                                             <div class="bg-sky-600 rounded-sm"></div><div class="bg-sky-800 rounded-sm"></div>
                                             <div class="bg-slate-500 rounded-sm"></div><div class="bg-slate-600 rounded-sm"></div>
                                         </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">삼성</span>
                                     </div>
-                                    <!-- 3. MS -->
                                     <div class="flex flex-col items-center gap-1 scale-95 opacity-0 transition-all duration-500" data-delay="150">
                                         <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 grid grid-cols-2 gap-1 shadow-inner">
                                             <div class="bg-blue-600 rounded-sm"></div><div class="bg-red-500 rounded-sm"></div>
                                             <div class="bg-green-600 rounded-sm"></div><div class="bg-yellow-500 rounded-sm"></div>
                                         </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">MS</span>
                                     </div>
-                                    <!-- 4. 네이버 -->
                                     <div class="flex flex-col items-center gap-1 scale-95 opacity-0 transition-all duration-500" data-delay="200">
                                         <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 grid grid-cols-2 gap-1 shadow-inner">
                                             <div class="bg-[#03C75A] rounded-sm"></div><div class="bg-emerald-400 rounded-sm"></div>
                                             <div class="bg-teal-600 rounded-sm"></div><div class="bg-slate-700 rounded-sm"></div>
                                         </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">네이버</span>
                                     </div>
-                                    <!-- 5. 카카오 -->
                                     <div class="flex flex-col items-center gap-1 scale-95 opacity-0 transition-all duration-500" data-delay="250">
                                         <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 grid grid-cols-2 gap-1 shadow-inner">
                                             <div class="bg-[#FEE500] rounded-sm"></div><div class="bg-yellow-600 rounded-sm"></div>
                                             <div class="bg-amber-500 rounded-sm"></div><div class="bg-slate-700 rounded-sm"></div>
                                         </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">카카오</span>
                                     </div>
-                                    <!-- 6. 전화 -->
                                     <div class="flex flex-col items-center gap-1 scale-95 opacity-0 transition-all duration-500" data-delay="300">
                                         <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 flex items-center justify-center shadow-inner">
                                             <div class="w-full h-full bg-green-600 rounded-lg flex items-center justify-center text-white text-[11px]">📞</div>
                                         </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">전화</span>
                                     </div>
-                                    <!-- 7. SNS -->
                                     <div class="flex flex-col items-center gap-1 scale-95 opacity-0 transition-all duration-500" data-delay="350">
                                         <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 grid grid-cols-2 gap-1 shadow-inner">
                                             <div class="bg-purple-500 rounded-sm"></div><div class="bg-pink-500 rounded-sm"></div>
                                             <div class="bg-blue-400 rounded-sm"></div><div class="bg-indigo-600 rounded-sm"></div>
                                         </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">SNS</span>
                                     </div>
-                                    <!-- 8. OTT -->
                                     <div class="flex flex-col items-center gap-1 scale-95 opacity-0 transition-all duration-500" data-delay="400">
                                         <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 grid grid-cols-2 gap-1 shadow-inner">
                                             <div class="bg-red-600 rounded-sm"></div><div class="bg-black border border-gray-600 rounded-sm"></div>
                                             <div class="bg-blue-900 rounded-sm"></div><div class="bg-gray-800 rounded-sm"></div>
                                         </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">영상/OTT</span>
                                     </div>
-                                    <!-- 9. 쇼핑 -->
                                     <div class="flex flex-col items-center gap-1 scale-95 opacity-0 transition-all duration-500" data-delay="450">
                                         <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 grid grid-cols-2 gap-1 shadow-inner">
                                             <div class="bg-orange-500 rounded-sm"></div><div class="bg-yellow-500 rounded-sm"></div>
                                             <div class="bg-red-400 rounded-sm"></div><div class="bg-amber-600 rounded-sm"></div>
                                         </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">쇼핑</span>
                                     </div>
-                                    <!-- 10. 배달 -->
                                     <div class="flex flex-col items-center gap-1 scale-95 opacity-0 transition-all duration-500" data-delay="500">
                                         <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 grid grid-cols-2 gap-1 shadow-inner">
                                             <div class="bg-[#2AC1BC] rounded-sm"></div><div class="bg-orange-600 rounded-sm"></div>
                                             <div class="bg-red-500 rounded-sm"></div><div class="bg-yellow-400 rounded-sm"></div>
                                         </div><span class="text-[9px] text-brand-300 font-medium text-center truncate w-full">배달</span>
                                     </div>
-                                    <!-- 11. 금융 -->
                                     <div class="flex flex-col items-center gap-1 scale-95 opacity-0 transition-all duration-500" data-delay="550">
                                         <div class="w-12 h-12 bg-slate-900 border border-slate-700 rounded-2xl p-1.5 grid grid-cols-2 gap-1 shadow-inner">
                                             <div class="bg-blue-500 rounded-sm"></div><div class="bg-purple-600 rounded-sm"></div>
@@ -319,9 +307,8 @@
                             </div>
                         </div>
 
-                        <!-- 하단 트리거 스마트 버튼 -->
                         <div class="w-full pt-4 mt-auto z-20 bg-slate-950">
-                            <button id="btnMaruAnalyze" class="w-full py-3 bg-gradient-to-r from-brand-500 to-purple-600 hover:from-brand-600 hover:to-purple-700 font-bold text-sm text-white rounded-xl shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-2 relative overflow-hidden">
+                            <button id="btnMaruAnalyze" class="w-full py-3 bg-gradient-to-r from-brand-500 to-brand-700 hover:from-brand-600 hover:to-brand-800 font-bold text-sm text-white rounded-xl shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-2 relative overflow-hidden">
                                 <span id="btnText">MARU로 분석</span>
                                 <svg id="btnIcon" class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                             </button>
@@ -354,7 +341,7 @@
                     <p class="text-slate-600 text-sm leading-relaxed">인터넷 연결 없이 기기 내부의 NPU와 CPU만으로 작동하는 초경량 자연어 추론 AI. 앱들을 분석해 직관적인 스마트 폴더 구조로 분류합니다.</p>
                 </div>
                 <div class="glass-card rounded-2xl p-8 reveal">
-                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center mb-6 text-purple-600">
+                    <div class="w-12 h-12 rounded-xl bg-brand-500/10 flex items-center justify-center mb-6 text-brand-600">
                         <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     </div>
                     <h3 class="text-xl font-bold mb-3 text-slate-900">AI 통합 파일 탐색</h3>
@@ -375,7 +362,7 @@
                     <p class="text-slate-600 text-sm leading-relaxed">"화면 밝기 조절해줘", "카카오톡 켜줘"와 같은 명령만으로 디바이스의 하드웨어 설정과 시스템 레벨 조작을 유연하게 제어합니다.</p>
                 </div>
                 <div class="glass-card rounded-2xl p-8 reveal">
-                    <div class="w-12 h-12 rounded-xl bg-pink-500/10 flex items-center justify-center mb-6 text-pink-600">
+                    <div class="w-12 h-12 rounded-xl bg-brand-100 flex items-center justify-center mb-6 text-brand-700">
                         <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg>
                     </div>
                     <h3 class="text-xl font-bold mb-3 text-slate-900">AI 스티커 공방</h3>
@@ -397,7 +384,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="lg:grid lg:grid-cols-2 gap-16 items-center flex-col-reverse flex lg:flex-row-reverse">
                 <div class="relative reveal w-full mt-12 lg:mt-0">
-                    <div class="absolute inset-0 bg-gradient-to-tr from-brand-500/10 to-blue-500/10 rounded-3xl blur-2xl transform -rotate-3 scale-105"></div>
+                    <div class="absolute inset-0 bg-gradient-to-tr from-brand-500/10 to-brand-300/10 rounded-3xl blur-2xl transform -rotate-3 scale-105"></div>
                     <div class="relative bg-slate-50 border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-xl">
                         <div class="flex items-center justify-between mb-6">
                             <span class="text-sm font-bold text-slate-800">MARU 지능형 분류 엔진</span>
@@ -405,7 +392,7 @@
                         </div>
                         <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
                             <div class="bg-white border border-slate-100 rounded-2xl p-4 flex flex-col items-center gap-3 shadow-sm">
-                                <div class="w-10 h-10 bg-blue-500/10 rounded-xl flex justify-center items-center text-xl">💬</div>
+                                <div class="w-10 h-10 bg-brand-100 rounded-xl flex justify-center items-center text-xl">💬</div>
                                 <span class="text-xs text-slate-700 font-semibold">커뮤니케이션</span>
                             </div>
                             <div class="bg-white border border-slate-100 rounded-2xl p-4 flex flex-col items-center gap-3 shadow-sm">
@@ -554,7 +541,6 @@
                             <span class="text-xs font-semibold text-orange-600 bg-orange-100 px-2.5 py-0.5 rounded-md">RENDER READY</span>
                         </div>
                         
-                        <!-- 가상 작업 타임라인 워크스페이스 구조 UI (화이트 테마 매핑) -->
                         <div class="bg-slate-50 border border-slate-150 rounded-xl p-4 space-y-4">
                             <div class="h-44 bg-white rounded-lg flex flex-col items-center justify-center relative overflow-hidden group border border-dashed border-slate-300">
                                 <div class="absolute inset-0 bg-gradient-to-b from-transparent to-orange-500/5 opacity-50"></div>
@@ -584,7 +570,6 @@
     <!-- [선택 다운로드 지원] 모달 팝업 레이어 구성 -->
     <div id="downloadModal" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="bg-white border border-slate-200 rounded-3xl p-6 max-w-md w-full mx-4 shadow-2xl relative transform scale-95 transition-transform duration-300" id="modalCard">
-            <!-- 닫기 버튼 -->
             <button onclick="closeDownloadModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-900 transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
@@ -595,9 +580,7 @@
                     <p class="text-xs text-slate-600 mt-1">설치할 대상 프로그램의 최신 설치 빌드 패키지를 제공합니다.</p>
                 </div>
                 
-                <!-- 개별 주소 지정 다운로드 선택 그리드 -->
                 <div class="grid grid-cols-1 gap-3 pt-2">
-                    <!-- 1. MARU 앱 개별 다운로드 링크 -->
                     <a href="https://huggingface.co/datasets/maruofficial/maru_ai/resolve/main/maru.apk" target="_blank" class="flex items-center justify-between p-4 bg-slate-50 border border-slate-200 rounded-2xl hover:bg-brand-500/5 hover:border-brand-500/30 transition-all text-left group">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 bg-brand-500/10 rounded-xl flex items-center justify-center text-lg">📱</div>
@@ -609,7 +592,6 @@
                         <span class="text-xs text-brand-600 font-bold group-hover:translate-x-1 transition-transform">받기 &rarr;</span>
                     </a>
                     
-                    <!-- 2. 영상자동편집기 개별 다운로드 링크 -->
                     <a href="https://huggingface.co/datasets/maruofficial/maru_ai/resolve/main/AI%E1%84%8C%E1%85%A1%E1%84%83%E1%85%A9%E1%86%BC%E1%84%8B%E1%85%A7%E1%86%BC%E1%84%89%E1%85%A1%E1%86%BC%E1%84%91%E1%85%A7%E1%86%AB%E1%84%8C%E1%85%B5%E1%86%B8%E1%84%80%E1%85%B5.app.zip" target="_blank" class="flex items-center justify-between p-4 bg-slate-50 border border-slate-200 rounded-2xl hover:bg-orange-500/5 hover:border-orange-500/30 transition-all text-left group">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 bg-orange-500/10 rounded-xl flex items-center justify-center text-lg">🎬</div>
@@ -625,104 +607,150 @@
         </div>
     </div>
 
-    <!-- 인터랙션 스크립트 시스템 부착 -->
+    <!-- 인터랙션 및 타이머 스크립트 -->
     <script>
+        // 타겟 오픈 일시 설정 (2026년 7월 20일 00:00:00 KST)
+        const TARGET_DATE = new Date("2026-07-20T00:00:00+09:00").getTime();
+
+        function updateTimer() {
+            const now = new Date().getTime();
+            const difference = TARGET_DATE - now;
+
+            const overlay = document.getElementById('comingSoonOverlay');
+            if (!overlay) return;
+
+            // 오픈 시간이 도래했거나 지난 경우 레이어 제거
+            if (difference <= 0) {
+                overlay.style.opacity = '0';
+                overlay.style.pointerEvents = 'none';
+                setTimeout(() => overlay.remove(), 700); // 애니메이션 종료 후 DOM에서 완전히 제거
+                return true;
+            }
+
+            // 시간 계산 및 패딩 처리
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+            document.getElementById('timer-days').innerText = String(days).padStart(2, '0');
+            document.getElementById('timer-hours').innerText = String(hours).padStart(2, '0');
+            document.getElementById('timer-mins').innerText = String(minutes).padStart(2, '0');
+            document.getElementById('timer-secs').innerText = String(seconds).padStart(2, '0');
+            return false;
+        }
+
+        // 초기 실행 및 1초 주기 타이머 등록
+        const isOpened = updateTimer();
+        if (!isOpened) {
+            const timerInterval = setInterval(() => {
+                if (updateTimer()) clearInterval(timerInterval);
+            }, 1000);
+        }
+
         // 다운로드 팝업 모달 제어
         function openDownloadModal() {
             const modal = document.getElementById('downloadModal');
             const card = document.getElementById('modalCard');
-            modal.classList.remove('pointer-events-none', 'opacity-0');
-            card.classList.remove('scale-95');
+            if (modal && card) {
+                modal.classList.remove('pointer-events-none', 'opacity-0');
+                card.classList.remove('scale-95');
+            }
         }
 
         function closeDownloadModal() {
             const modal = document.getElementById('downloadModal');
             const card = document.getElementById('modalCard');
-            modal.classList.add('pointer-events-none', 'opacity-0');
-            card.classList.add('scale-95');
+            if (modal && card) {
+                modal.classList.add('pointer-events-none', 'opacity-0');
+                card.classList.add('scale-95');
+            }
         }
 
-        document.getElementById('downloadModal').addEventListener('click', function(e) {
-            if (e.target === this) closeDownloadModal();
-        });
+        const downloadModal = document.getElementById('downloadModal');
+        if (downloadModal) {
+            downloadModal.addEventListener('click', function(e) {
+                if (e.target === this) closeDownloadModal();
+            });
+        }
 
-        // 스마트폰 디바이스 목업 애니메이션 스크립트 로직 (스캔 라인 및 레이어 페이드 인/아웃)
-        document.getElementById('btnMaruAnalyze').addEventListener('click', function() {
-            const btn = this;
-            const btnText = document.getElementById('btnText');
-            const btnIcon = document.getElementById('btnIcon');
-            const beforeScreen = document.getElementById('screenBefore');
-            const afterScreen = document.getElementById('screenAfter');
-            const scanLine = document.getElementById('scanLine');
-            const folders = afterScreen.querySelectorAll('[data-delay]');
-
-            if (btnText.innerText === "MARU로 분석") {
-                btn.disabled = true;
-                btnText.innerText = "분석하는 중...";
-                btnIcon.style.transform = "rotate(180deg)";
+        // 스마트폰 디바이스 목업 시뮬레이션
+        const btnMaruAnalyze = document.getElementById('btnMaruAnalyze');
+        if (btnMaruAnalyze) {
+            btnMaruAnalyze.addEventListener('click', function() {
+                const btn = this;
+                const btnText = document.getElementById('btnText');
+                const btnIcon = document.getElementById('btnIcon');
+                const beforeScreen = document.getElementById('screenBefore');
+                const afterScreen = document.getElementById('screenAfter');
+                const scanLine = document.getElementById('scanLine');
                 
-                // 스캔 바 활성화 및 슬라이드 애니메이션 실행
-                scanLine.style.opacity = '1';
-                scanLine.style.transition = 'top 1.4s cubic-bezier(0.4, 0, 0.2, 1)';
-                setTimeout(() => { scanLine.style.top = '100%'; }, 50);
+                if (!btnText || !beforeScreen || !afterScreen || !scanLine) return;
+                
+                const folders = afterScreen.querySelectorAll('[data-delay]');
 
-                setTimeout(() => {
-                    // Before 상태 페이드 아웃
-                    beforeScreen.style.opacity = '0';
-                    beforeScreen.classList.add('z-0');
-                    beforeScreen.classList.remove('z-10');
-
-                    // After 상태 페이드 인
-                    afterScreen.style.opacity = '1';
-                    afterScreen.classList.add('z-10');
-                    afterScreen.classList.remove('z-0');
-
-                    // 스캔 바 원위치 초기화
-                    scanLine.style.opacity = '0';
-                    scanLine.style.transition = 'none';
-                    scanLine.style.top = '0%';
-
-                    // 폴더 아이콘들 차례대로 페이드 인 (Staggered Animation)
-                    folders.forEach(folder => {
-                        const delay = folder.getAttribute('data-delay');
-                        setTimeout(() => {
-                            folder.style.opacity = '1';
-                            folder.style.transform = 'scale(1)';
-                        }, delay);
-                    });
+                if (btnText.innerText === "MARU로 분석") {
+                    btn.disabled = true;
+                    btnText.innerText = "분석하는 중...";
+                    if (btnIcon) btnIcon.style.transform = "rotate(180deg)";
+                    
+                    scanLine.style.opacity = '1';
+                    scanLine.style.transition = 'top 1.4s cubic-bezier(0.4, 0, 0.2, 1)';
+                    setTimeout(() => { scanLine.style.top = '100%'; }, 50);
 
                     setTimeout(() => {
-                        btn.disabled = false;
-                        btnText.innerText = "초기화 하기";
-                        btn.classList.remove('from-brand-500', 'to-purple-600');
-                        btn.classList.add('from-slate-700', 'to-slate-800');
-                    }, 600);
+                        beforeScreen.style.opacity = '0';
+                        beforeScreen.classList.add('z-0');
+                        beforeScreen.classList.remove('z-10');
 
-                }, 1400);
+                        afterScreen.style.opacity = '1';
+                        afterScreen.classList.add('z-10');
+                        afterScreen.classList.remove('z-0');
 
-            } else {
-                // 초기화 상태 복구
-                folders.forEach(folder => {
-                    folder.style.opacity = '0';
-                    folder.style.transform = 'scale(0.95)';
-                });
+                        scanLine.style.opacity = '0';
+                        scanLine.style.transition = 'none';
+                        scanLine.style.top = '0%';
 
-                beforeScreen.style.opacity = '1';
-                beforeScreen.classList.add('z-10');
-                beforeScreen.classList.remove('z-0');
+                        folders.forEach(folder => {
+                            const delay = folder.getAttribute('data-delay');
+                            setTimeout(() => {
+                                folder.style.opacity = '1';
+                                folder.style.transform = 'scale(1)';
+                            }, delay || 0);
+                        });
 
-                afterScreen.style.opacity = '0';
-                afterScreen.classList.add('z-0');
-                afterScreen.classList.remove('z-10');
+                        setTimeout(() => {
+                            btn.disabled = false;
+                            btnText.innerText = "초기화 하기";
+                            btn.classList.remove('from-brand-500', 'to-brand-700');
+                            btn.classList.add('from-slate-700', 'to-slate-800');
+                        }, 600);
 
-                btnText.innerText = "MARU로 분석";
-                btnIcon.style.transform = "rotate(0deg)";
-                btn.classList.remove('from-slate-700', 'to-slate-800');
-                btn.classList.add('from-brand-500', 'to-purple-600');
-            }
-        });
+                    }, 1400);
 
-        // 네비게이션 부드러운 스크롤 이동
+                } else {
+                    folders.forEach(folder => {
+                        folder.style.opacity = '0';
+                        folder.style.transform = 'scale(0.95)';
+                    });
+
+                    beforeScreen.style.opacity = '1';
+                    beforeScreen.classList.add('z-10');
+                    beforeScreen.classList.remove('z-0');
+
+                    afterScreen.style.opacity = '0';
+                    afterScreen.classList.add('z-0');
+                    afterScreen.classList.remove('z-10');
+
+                    btnText.innerText = "MARU로 분석";
+                    if (btnIcon) btnIcon.style.transform = "rotate(0deg)";
+                    btn.classList.remove('from-slate-700', 'to-slate-800');
+                    btn.classList.add('from-brand-500', 'to-brand-700');
+                }
+            });
+        }
+
+        // 네비게이션 부드러운 스크롤
         document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 const targetId = this.getAttribute('href');
@@ -736,7 +764,7 @@
             });
         });
 
-        // Intersection Observer 기반 등장 애니메이션
+        // 등장 애니메이션 인터랙션 설정
         document.addEventListener('DOMContentLoaded', () => {
             const reveals = document.querySelectorAll('.reveal');
             if (window.IntersectionObserver) {
@@ -750,6 +778,7 @@
 
             const nav = document.querySelector('nav');
             window.addEventListener('scroll', () => {
+                if (!nav) return;
                 if (window.scrollY > 10) { nav.classList.add('shadow-md', 'bg-white/95'); } 
                 else { nav.classList.remove('shadow-md', 'bg-white/95'); }
             });
