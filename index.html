@@ -233,7 +233,6 @@
                             <div id="scanLine" class="absolute left-0 w-full h-[3px] bg-gradient-to-r from-transparent via-brand-400 to-transparent shadow-[0_0_12px_#b8a556] opacity-0 z-30 pointer-events-none" style="top: 0%;"></div>
 
                             <div id="screenBefore" class="absolute inset-0 w-full h-full transition-all duration-700 ease-in-out opacity-100 z-10 flex items-center justify-center">
-                                <!-- 수정 완료: maru_screen.jpg 로 연결 -->
                                 <img id="mobileMainImage" src="maru_screen.jpg" class="w-full h-full object-cover rounded-xl" alt="정리되지 않은 휴대폰 화면">
                             </div>
 
@@ -607,6 +606,31 @@
             </div>
         </div>
     </div>
+
+    <!-- 하단 푸터 (사업자등록증 PDF 정밀 정보 반영) -->
+    <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800 relative z-10 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-800 pb-6">
+                <div class="flex items-center gap-2">
+                    <svg class="w-6 h-6 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    <span class="font-bold text-lg text-white tracking-tight">MARU</span>
+                </div>
+                <p class="text-slate-500">© 2026 마루어플리케이션즈. All rights reserved.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-slate-400 leading-relaxed font-mono">
+                <div class="space-y-1">
+                    <p><strong class="text-slate-300">상호명:</strong> 마루어플리케이션즈 | <strong class="text-slate-300">대표자:</strong> 박지환</p>
+                    <p><strong class="text-slate-300">사업자 등록번호:</strong> 194-73-00712</p>
+                    <p><strong class="text-slate-300">개업연월일:</strong> 2026년 07월 17일</p>
+                </div>
+                <div class="space-y-1">
+                    <p><strong class="text-slate-300">사업장 소재지:</strong> 서울특별시 서대문구 수색로 100, 307동 402호(북가좌동, DMC래미안e편한세상아파트)</p>
+                    <p><strong class="text-slate-300">업태/종목:</strong> 정보통신업 / 응용 소프트웨어 개발 및 공급업, 포털 및 기타 인터넷 정보 매개 서비스</p>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <!-- 인터랙션 및 타이머 스크립트 -->
     <script>
