@@ -140,28 +140,6 @@
 </head>
 <body class="antialiased selection:bg-brand-500 selection:text-white">
 
-    <!-- 7월 20일 00시 오픈 제한 타이머 오버레이 레이어 -->
-    <div id="comingSoonOverlay" class="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-slate-950 text-white transition-opacity duration-700 pointer-events-auto">
-        <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-            <div class="blob-1 animate-blob" style="background: rgba(95, 78, 25, 0.15);"></div>
-        </div>
-        <div class="text-center space-y-6 max-w-md px-4 z-10 select-none">
-            <div class="w-16 h-16 rounded-3xl bg-brand-500/10 border border-brand-500/30 flex items-center justify-center text-brand-300 mx-auto text-2xl animate-bounce">⏳</div>
-            <div class="space-y-2">
-                <h2 class="text-2xl sm:text-3xl font-black tracking-tight text-brand-100">MARU Ecosystem</h2>
-                <p class="text-sm text-slate-400">서비스 오픈 준비 중입니다. 잠시만 기다려주세요.</p>
-            </div>
-            <!-- 카운트다운 타이머 박스 -->
-            <div class="grid grid-cols-4 gap-2 bg-slate-900/60 border border-slate-800 rounded-2xl p-4 font-mono">
-                <div class="bg-slate-950 p-2 rounded-xl border border-slate-800/50"><span id="timer-days" class="text-2xl font-bold text-brand-300">00</span><p class="text-[9px] text-slate-500 mt-1 uppercase tracking-wider">Days</p></div>
-                <div class="bg-slate-950 p-2 rounded-xl border border-slate-800/50"><span id="timer-hours" class="text-2xl font-bold text-brand-300">00</span><p class="text-[9px] text-slate-500 mt-1 uppercase tracking-wider">Hours</p></div>
-                <div class="bg-slate-950 p-2 rounded-xl border border-slate-800/50"><span id="timer-mins" class="text-2xl font-bold text-brand-300">00</span><p class="text-[9px] text-slate-500 mt-1 uppercase tracking-wider">Mins</p></div>
-                <div class="bg-slate-950 p-2 rounded-xl border border-slate-800/50"><span id="timer-secs" class="text-2xl font-bold text-brand-400 animate-pulse">00</span><p class="text-[9px] text-slate-500 mt-1 uppercase tracking-wider">Secs</p></div>
-            </div>
-            <p class="text-xs text-slate-500 font-medium font-mono">오픈 일시: 2026년 7월 20일 00:00 (KST)</p>
-        </div>
-    </div>
-
     <!-- Ambient Background -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div class="blob-1 animate-blob"></div>
@@ -581,6 +559,7 @@
                 </div>
                 
                 <div class="grid grid-cols-1 gap-3 pt-2">
+                    <!-- 기본 온디바이스 앱 다운로드 -->
                     <a href="https://huggingface.co/datasets/maruofficial/maru_ai/resolve/main/maru.apk" target="_blank" class="flex items-center justify-between p-4 bg-slate-50 border border-slate-200 rounded-2xl hover:bg-brand-500/5 hover:border-brand-500/30 transition-all text-left group">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 bg-brand-500/10 rounded-xl flex items-center justify-center text-lg">📱</div>
@@ -591,7 +570,23 @@
                         </div>
                         <span class="text-xs text-brand-600 font-bold group-hover:translate-x-1 transition-transform">받기 &rarr;</span>
                     </a>
+
+                    <!-- [7월 23일 자정부터 자동 노출] 디자인 개선 버전 온디바이스 앱 다운로드 -->
+                    <a id="designAppDownloadLink" href="https://huggingface.co/datasets/maruofficial/maru_ai/resolve/main/maru.apk" target="_blank" class="hidden flex items-center justify-between p-4 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/30 rounded-2xl hover:border-purple-500/60 transition-all text-left group relative overflow-hidden">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-purple-500/20 rounded-xl flex items-center justify-center text-lg">✨</div>
+                            <div>
+                                <div class="flex items-center gap-1.5">
+                                    <p class="text-sm font-bold text-slate-900">MARU 앱 (디자인 개선판)</p>
+                                    <span class="bg-purple-600 text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold">NEW</span>
+                                </div>
+                                <p class="text-[11px] text-purple-700 font-medium">차세대 UX/UI 디자인 적용 패키지 (APK)</p>
+                            </div>
+                        </div>
+                        <span class="text-xs text-purple-600 font-bold group-hover:translate-x-1 transition-transform">받기 &rarr;</span>
+                    </a>
                     
+                    <!-- AI 비디오 자동 편집기 -->
                     <a href="https://huggingface.co/datasets/maruofficial/maru_ai/resolve/main/dist.zip" target="_blank" class="flex items-center justify-between p-4 bg-slate-50 border border-slate-200 rounded-2xl hover:bg-orange-500/5 hover:border-orange-500/30 transition-all text-left group">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 bg-orange-500/10 rounded-xl flex items-center justify-center text-lg">🎬</div>
@@ -607,7 +602,7 @@
         </div>
     </div>
 
-    <!-- 하단 푸터 (사업자등록증 PDF 정밀 정보 반영) -->
+    <!-- 하단 푸터 (사업자 정보 반영) -->
     <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800 relative z-10 text-xs">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-800 pb-6">
@@ -632,49 +627,23 @@
         </div>
     </footer>
 
-    <!-- 인터랙션 및 타이머 스크립트 -->
+    <!-- 인터랙션 스크립트 -->
     <script>
-        // 타겟 오픈 일시 설정 (2026년 7월 20일 00:00:00 KST)
-        const TARGET_DATE = new Date("2026-07-20T00:00:00+09:00").getTime();
+        // 내일 (2026년 7월 23일 00:00:00 KST) 기준 시각 설정
+        const TOMORROW_DATE = new Date("2026-07-23T00:00:00+09:00").getTime();
 
-        function updateTimer() {
+        // 디자인 개선 버전 다운로드 링크 스위칭 체크 함수 (내일부터 표시)
+        function checkDesignAppVisibility() {
             const now = new Date().getTime();
-            const difference = TARGET_DATE - now;
-
-            const overlay = document.getElementById('comingSoonOverlay');
-            if (!overlay) return;
-
-            // 오픈 시간이 도래했거나 지난 경우 레이어 제거
-            if (difference <= 0) {
-                overlay.style.opacity = '0';
-                overlay.style.pointerEvents = 'none';
-                setTimeout(() => overlay.remove(), 700); // 애니메이션 종료 후 DOM에서 완전히 제거
-                return true;
+            const designLink = document.getElementById('designAppDownloadLink');
+            if (designLink && now >= TOMORROW_DATE) {
+                designLink.classList.remove('hidden');
             }
-
-            // 시간 계산 및 패딩 처리
-            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-            document.getElementById('timer-days').innerText = String(days).padStart(2, '0');
-            document.getElementById('timer-hours').innerText = String(hours).padStart(2, '0');
-            document.getElementById('timer-mins').innerText = String(minutes).padStart(2, '0');
-            document.getElementById('timer-secs').innerText = String(seconds).padStart(2, '0');
-            return false;
-        }
-
-        // 초기 실행 및 1초 주기 타이머 등록
-        const isOpened = updateTimer();
-        if (!isOpened) {
-            const timerInterval = setInterval(() => {
-                if (updateTimer()) clearInterval(timerInterval);
-            }, 1000);
         }
 
         // 다운로드 팝업 모달 제어
         function openDownloadModal() {
+            checkDesignAppVisibility();
             const modal = document.getElementById('downloadModal');
             const card = document.getElementById('modalCard');
             if (modal && card) {
@@ -791,6 +760,7 @@
 
         // 등장 애니메이션 인터랙션 설정
         document.addEventListener('DOMContentLoaded', () => {
+            checkDesignAppVisibility();
             const reveals = document.querySelectorAll('.reveal');
             if (window.IntersectionObserver) {
                 const observer = new IntersectionObserver((entries) => {
