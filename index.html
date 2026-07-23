@@ -545,6 +545,59 @@
         </div>
     </section>
 
+    <!-- [NEW] 긴급 공지사항 팝업 모달 (7월 24일 자정부터 자동 오픈) -->
+    <div id="noticeModal" class="fixed inset-0 z-[150] flex items-center justify-center bg-slate-950/70 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
+        <div class="bg-white border border-slate-200 rounded-3xl max-w-lg w-full mx-4 shadow-2xl overflow-hidden relative transform scale-95 transition-all duration-300" id="noticeCard">
+            <!-- 상단 헤더 배너 (이미지 디자인 모티브) -->
+            <div class="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 px-6 py-4 text-center relative shadow-md">
+                <span class="text-xs uppercase tracking-widest text-amber-100 font-mono font-bold">EMERGENCY NOTICE</span>
+                <h3 class="text-xl sm:text-2xl font-black text-white tracking-tight mt-0.5">🚨 긴급 공지사항</h3>
+            </div>
+            
+            <div class="p-6 space-y-5 text-center">
+                <!-- 아이콘 & 앱 플레이스토어 모티브 아이콘 -->
+                <div class="flex items-center justify-center gap-2 py-1">
+                    <div class="w-12 h-12 rounded-2xl bg-slate-900 border border-slate-700 flex items-center justify-center shadow-md">
+                        <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center shadow-md text-emerald-600 font-bold text-lg">
+                        🛡️
+                    </div>
+                </div>
+
+                <!-- 핵심 공지 내용 -->
+                <div class="bg-amber-50/70 border border-amber-200/80 rounded-2xl p-4 text-slate-900 space-y-2">
+                    <p class="font-extrabold text-sm sm:text-base text-slate-900 leading-snug">
+                        앱 설치 중 구글 플레이스토어에서 <span class="text-red-600 underline decoration-red-300 font-black">미승인 경고</span>가 표시될 수 있습니다.
+                    </p>
+                    <p class="text-xs sm:text-sm text-slate-700 font-medium leading-relaxed">
+                        이 경고는 안전하므로 무시하고 설치를 진행하셔도 됩니다.
+                    </p>
+                </div>
+
+                <!-- 보증 서약 및 사업자 책임 안내 -->
+                <div class="pt-2 space-y-1">
+                    <p class="text-xs font-bold text-slate-800">
+                        모든 문제 발생 시 <span class="text-brand-600 font-extrabold">마루어플리케이션즈</span>가 전적으로 책임집니다.
+                    </p>
+                    <p class="text-[11px] text-slate-600 font-mono font-medium">
+                        마루어플리케이션즈 (Maru Applications)
+                    </p>
+                </div>
+            </div>
+
+            <!-- 하단 버튼 영역 -->
+            <div class="bg-slate-50 border-t border-slate-100 px-6 py-3.5 flex justify-between items-center text-xs">
+                <button onclick="closeNoticeModalToday()" class="text-slate-500 hover:text-slate-800 font-medium underline transition-colors">
+                    오늘 하루 보지 않기
+                </button>
+                <button onclick="closeNoticeModal()" class="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-xl transition-all shadow-sm">
+                    확인 및 닫기
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- [선택 다운로드 지원] 모달 팝업 레이어 구성 -->
     <div id="downloadModal" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="bg-white border border-slate-200 rounded-3xl p-6 max-w-md w-full mx-4 shadow-2xl relative transform scale-95 transition-transform duration-300" id="modalCard">
@@ -629,16 +682,54 @@
 
     <!-- 인터랙션 스크립트 -->
     <script>
-        // 공개일 하루 연기 (2026년 7월 24일 00:00:00 KST) 기준 시각 설정
-        const TOMORROW_DATE = new Date("2026-07-24T00:00:00+09:00").getTime();
+        // Target 시각 (2026년 7월 24일 00:00:00 KST)
+        const TARGET_LAUNCH_DATE = new Date("2026-07-24T00:00:00+09:00").getTime();
 
         // 디자인 개선 버전 다운로드 링크 스위칭 체크 함수 (7월 24일부터 표시)
         function checkDesignAppVisibility() {
             const now = new Date().getTime();
             const designLink = document.getElementById('designAppDownloadLink');
-            if (designLink && now >= TOMORROW_DATE) {
+            if (designLink && now >= TARGET_LAUNCH_DATE) {
                 designLink.classList.remove('hidden');
             }
+        }
+
+        // 긴급 공지사항 팝업 자동 오픈 제어 (7월 24일 00시부터 활성화)
+        function checkEmergencyNotice() {
+            const now = new Date().getTime();
+            const hideUntil = localStorage.getItem('maru_hide_notice_until');
+            
+            // 7월 24일 자정 이후이며, '오늘 하루 보지 않기'가 설정되지 않은 경우
+            if (now >= TARGET_LAUNCH_DATE) {
+                if (!hideUntil || now > parseInt(hideUntil, 10)) {
+                    openNoticeModal();
+                }
+            }
+        }
+
+        function openNoticeModal() {
+            const modal = document.getElementById('noticeModal');
+            const card = document.getElementById('noticeCard');
+            if (modal && card) {
+                modal.classList.remove('pointer-events-none', 'opacity-0');
+                card.classList.remove('scale-95');
+            }
+        }
+
+        function closeNoticeModal() {
+            const modal = document.getElementById('noticeModal');
+            const card = document.getElementById('noticeCard');
+            if (modal && card) {
+                modal.classList.add('pointer-events-none', 'opacity-0');
+                card.classList.add('scale-95');
+            }
+        }
+
+        function closeNoticeModalToday() {
+            // 현재 시점부터 24시간 후까지 팝업 노출 억제
+            const expireTime = new Date().getTime() + (24 * 60 * 60 * 1000);
+            localStorage.setItem('maru_hide_notice_until', expireTime.toString());
+            closeNoticeModal();
         }
 
         // 다운로드 팝업 모달 제어
@@ -665,6 +756,13 @@
         if (downloadModal) {
             downloadModal.addEventListener('click', function(e) {
                 if (e.target === this) closeDownloadModal();
+            });
+        }
+
+        const noticeModal = document.getElementById('noticeModal');
+        if (noticeModal) {
+            noticeModal.addEventListener('click', function(e) {
+                if (e.target === this) closeNoticeModal();
             });
         }
 
@@ -758,9 +856,11 @@
             });
         });
 
-        // 등장 애니메이션 인터랙션 설정
+        // 페이지 로드 시 스크립트 실행
         document.addEventListener('DOMContentLoaded', () => {
             checkDesignAppVisibility();
+            checkEmergencyNotice(); // 공지사항 날짜 및 팝업 여부 판별
+
             const reveals = document.querySelectorAll('.reveal');
             if (window.IntersectionObserver) {
                 const observer = new IntersectionObserver((entries) => {
