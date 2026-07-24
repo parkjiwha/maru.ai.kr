@@ -545,10 +545,10 @@
         </div>
     </section>
 
-    <!-- [NEW] 긴급 공지사항 팝업 모달 (7월 24일 자정부터 자동 오픈) -->
+    <!-- 긴급 공지사항 팝업 모달 (즉시 표출) -->
     <div id="noticeModal" class="fixed inset-0 z-[150] flex items-center justify-center bg-slate-950/70 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
         <div class="bg-white border border-slate-200 rounded-3xl max-w-lg w-full mx-4 shadow-2xl overflow-hidden relative transform scale-95 transition-all duration-300" id="noticeCard">
-            <!-- 상단 헤더 배너 (이미지 디자인 모티브) -->
+            <!-- 상단 헤더 배너 -->
             <div class="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 px-6 py-4 text-center relative shadow-md">
                 <span class="text-xs uppercase tracking-widest text-amber-100 font-mono font-bold">EMERGENCY NOTICE</span>
                 <h3 class="text-xl sm:text-2xl font-black text-white tracking-tight mt-0.5">🚨 긴급 공지사항</h3>
@@ -598,6 +598,52 @@
         </div>
     </div>
 
+    <!-- [2] 설치 방법 안내 공지사항 팝업 모달 (신규 추가) -->
+    <div id="installGuideModal" class="fixed inset-0 z-[140] flex items-center justify-center bg-slate-950/70 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
+        <div class="bg-white border border-slate-200 rounded-3xl max-w-lg w-full mx-4 shadow-2xl overflow-hidden relative transform scale-95 transition-all duration-300" id="installGuideCard">
+            <!-- 상단 헤더 배너 -->
+            <div class="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 px-6 py-4 text-center relative shadow-md">
+                <span class="text-xs uppercase tracking-widest text-blue-100 font-mono font-bold">INSTALLATION GUIDE</span>
+                <h3 class="text-xl sm:text-2xl font-black text-white tracking-tight mt-0.5">📖 MARU 설치 방법 안내</h3>
+            </div>
+            
+            <div class="p-6 space-y-5 text-center">
+                <!-- 아이콘 -->
+                <div class="w-14 h-14 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center shadow-md mx-auto text-blue-600 text-2xl">
+                    📲
+                </div>
+
+                <!-- 안내 메시지 -->
+                <div class="bg-blue-50/60 border border-blue-100 rounded-2xl p-4 text-slate-900 space-y-2">
+                    <p class="font-bold text-sm sm:text-base text-slate-900 leading-snug">
+                        MARU 온디바이스 앱을 손쉽게 설치해보세요!
+                    </p>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                        상세한 설치 순서 및 권한 설정 가이드를 간편하게 웹 페이지 형태로 확인하실 수 있습니다.
+                    </p>
+                </div>
+
+                <!-- 설치 가이드 바로가기 버튼 -->
+                <div class="pt-1">
+                    <a href="https://share.gemini.google/PvGtiptexZUr" target="_blank" class="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-sm rounded-2xl shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all">
+                        <span>설치 방법 안내 페이지 보기</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 하단 버튼 영역 -->
+            <div class="bg-slate-50 border-t border-slate-100 px-6 py-3.5 flex justify-between items-center text-xs">
+                <button onclick="closeInstallGuideModalToday()" class="text-slate-500 hover:text-slate-800 font-medium underline transition-colors">
+                    오늘 하루 보지 않기
+                </button>
+                <button onclick="closeInstallGuideModal()" class="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-xl transition-all shadow-sm">
+                    닫기
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- [선택 다운로드 지원] 모달 팝업 레이어 구성 -->
     <div id="downloadModal" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="bg-white border border-slate-200 rounded-3xl p-6 max-w-md w-full mx-4 shadow-2xl relative transform scale-95 transition-transform duration-300" id="modalCard">
@@ -624,8 +670,8 @@
                         <span class="text-xs text-brand-600 font-bold group-hover:translate-x-1 transition-transform">받기 &rarr;</span>
                     </a>
 
-                    <!-- [7월 24일 자정부터 자동 노출] 디자인 개선 버전 온디바이스 앱 다운로드 -->
-                    <a id="designAppDownloadLink" href="https://huggingface.co/datasets/maruofficial/maru_ai/resolve/main/maru_designed.apk" target="_blank" class="hidden flex items-center justify-between p-4 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/30 rounded-2xl hover:border-purple-500/60 transition-all text-left group relative overflow-hidden">
+                    <!-- 디자인 개선 버전 온디바이스 앱 다운로드 (즉시 노출) -->
+                    <a href="https://huggingface.co/datasets/maruofficial/maru_ai/resolve/main/maru_designed.apk" target="_blank" class="flex items-center justify-between p-4 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/30 rounded-2xl hover:border-purple-500/60 transition-all text-left group relative overflow-hidden">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 bg-purple-500/20 rounded-xl flex items-center justify-center text-lg">✨</div>
                             <div>
@@ -633,7 +679,7 @@
                                     <p class="text-sm font-bold text-slate-900">MARU 앱 (디자인 개선판)</p>
                                     <span class="bg-purple-600 text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold">NEW</span>
                                 </div>
-                                <p class="text-[11px] text-purple-700 font-medium">기존 앱 사용자께서도 업데이트 파일로 사용하실 수 있습니다 (APK)</p>
+                                <p class="text-[11px] text-purple-700 font-medium">차세대 UX/UI 디자인 적용 패키지 (APK)</p>
                             </div>
                         </div>
                         <span class="text-xs text-purple-600 font-bold group-hover:translate-x-1 transition-transform">받기 &rarr;</span>
@@ -682,31 +728,23 @@
 
     <!-- 인터랙션 스크립트 -->
     <script>
-        // Target 시각 (2026년 7월 24일 00:00:00 KST)
-        const TARGET_LAUNCH_DATE = new Date("2026-07-24T00:00:00+09:00").getTime();
-
-        // 디자인 개선 버전 다운로드 링크 스위칭 체크 함수 (7월 24일부터 표시)
-        function checkDesignAppVisibility() {
-            const now = new Date().getTime();
-            const designLink = document.getElementById('designAppDownloadLink');
-            if (designLink && now >= TARGET_LAUNCH_DATE) {
-                designLink.classList.remove('hidden');
-            }
-        }
-
-        // 긴급 공지사항 팝업 자동 오픈 제어 (7월 24일 00시부터 활성화)
+        // 팝업 순차적 노출 제어 (긴급공지 -> 설치안내)
         function checkEmergencyNotice() {
             const now = new Date().getTime();
-            const hideUntil = localStorage.getItem('maru_hide_notice_until');
+            const hideNoticeUntil = localStorage.getItem('maru_hide_notice_until');
+            const hideGuideUntil = localStorage.getItem('maru_hide_guide_until');
             
-            // 7월 24일 자정 이후이며, '오늘 하루 보지 않기'가 설정되지 않은 경우
-            if (now >= TARGET_LAUNCH_DATE) {
-                if (!hideUntil || now > parseInt(hideUntil, 10)) {
-                    openNoticeModal();
-                }
+            // 1. 긴급 공지 팝업
+            if (!hideNoticeUntil || now > parseInt(hideNoticeUntil, 10)) {
+                openNoticeModal();
+            } 
+            // 2. 긴급 공지가 닫혀있으면 설치 방법 안내 팝업 노출
+            else if (!hideGuideUntil || now > parseInt(hideGuideUntil, 10)) {
+                openInstallGuideModal();
             }
         }
 
+        // 긴급 공지 팝업
         function openNoticeModal() {
             const modal = document.getElementById('noticeModal');
             const card = document.getElementById('noticeCard');
@@ -723,18 +761,47 @@
                 modal.classList.add('pointer-events-none', 'opacity-0');
                 card.classList.add('scale-95');
             }
+            // 첫 번째 공지를 닫을 때 두 번째 설치가이드 팝업이 유효하면 열기
+            const now = new Date().getTime();
+            const hideGuideUntil = localStorage.getItem('maru_hide_guide_until');
+            if (!hideGuideUntil || now > parseInt(hideGuideUntil, 10)) {
+                setTimeout(openInstallGuideModal, 200);
+            }
         }
 
         function closeNoticeModalToday() {
-            // 현재 시점부터 24시간 후까지 팝업 노출 억제
             const expireTime = new Date().getTime() + (24 * 60 * 60 * 1000);
             localStorage.setItem('maru_hide_notice_until', expireTime.toString());
             closeNoticeModal();
         }
 
+        // 설치 방법 안내 팝업
+        function openInstallGuideModal() {
+            const modal = document.getElementById('installGuideModal');
+            const card = document.getElementById('installGuideCard');
+            if (modal && card) {
+                modal.classList.remove('pointer-events-none', 'opacity-0');
+                card.classList.remove('scale-95');
+            }
+        }
+
+        function closeInstallGuideModal() {
+            const modal = document.getElementById('installGuideModal');
+            const card = document.getElementById('installGuideCard');
+            if (modal && card) {
+                modal.classList.add('pointer-events-none', 'opacity-0');
+                card.classList.add('scale-95');
+            }
+        }
+
+        function closeInstallGuideModalToday() {
+            const expireTime = new Date().getTime() + (24 * 60 * 60 * 1000);
+            localStorage.setItem('maru_hide_guide_until', expireTime.toString());
+            closeInstallGuideModal();
+        }
+
         // 다운로드 팝업 모달 제어
         function openDownloadModal() {
-            checkDesignAppVisibility();
             const modal = document.getElementById('downloadModal');
             const card = document.getElementById('modalCard');
             if (modal && card) {
@@ -763,6 +830,13 @@
         if (noticeModal) {
             noticeModal.addEventListener('click', function(e) {
                 if (e.target === this) closeNoticeModal();
+            });
+        }
+
+        const installGuideModal = document.getElementById('installGuideModal');
+        if (installGuideModal) {
+            installGuideModal.addEventListener('click', function(e) {
+                if (e.target === this) closeInstallGuideModal();
             });
         }
 
@@ -858,8 +932,7 @@
 
         // 페이지 로드 시 스크립트 실행
         document.addEventListener('DOMContentLoaded', () => {
-            checkDesignAppVisibility();
-            checkEmergencyNotice(); // 공지사항 날짜 및 팝업 여부 판별
+            checkEmergencyNotice(); // 접속 직후 공지사항 팝업 표출
 
             const reveals = document.querySelectorAll('.reveal');
             if (window.IntersectionObserver) {
