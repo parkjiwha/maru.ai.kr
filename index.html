@@ -65,7 +65,7 @@
                     <p class="text-stone-600 text-sm mb-8 leading-relaxed">응용 소프트웨어 개발 및 서비스 기획 총괄. 플랫폼 아키텍처 및 기술 개발을 담당하고 있습니다.</p>
                     
                     <div class="w-full space-y-3 mt-auto">
-                        <button onclick="window.location.href='maru.html'" class="w-full bg-[#5f4219] hover:bg-[#432e11] text-white py-3 rounded-xl font-semibold text-sm transition shadow">박지환 페이지 방문</button>
+                        <button onclick="showPage('founderA')" class="w-full bg-[#5f4219] hover:bg-[#432e11] text-white py-3 rounded-xl font-semibold text-sm transition shadow">박지환 페이지 방문</button>
                         <button onclick="openInquiryModal('A')" class="w-full bg-stone-100 hover:bg-stone-200 text-[#5f4219] py-2.5 rounded-xl font-medium text-sm transition">이메일 문의하기</button>
                     </div>
                 </div>
@@ -80,7 +80,7 @@
                     <p class="text-stone-600 text-sm mb-8 leading-relaxed">비즈니스 전략 수립, 서비스 디자인 및 포털 정보 매개 서비스 운영을 총괄하고 있습니다.</p>
                     
                     <div class="w-full space-y-3 mt-auto">
-                        <button onclick="window.location.href='kimhyunseung.html'" class="w-full bg-[#5f4219] hover:bg-[#432e11] text-white py-3 rounded-xl font-semibold text-sm transition shadow">김현승 페이지 방문</button>
+                        <button onclick="showPage('founderB')" class="w-full bg-[#5f4219] hover:bg-[#432e11] text-white py-3 rounded-xl font-semibold text-sm transition shadow">김현승 페이지 방문</button>
                         <button onclick="openInquiryModal('B')" class="w-full bg-stone-100 hover:bg-stone-200 text-[#5f4219] py-2.5 rounded-xl font-medium text-sm transition">이메일 문의하기</button>
                     </div>
                 </div>
@@ -240,6 +240,11 @@
             'B': 'hy@gmail.com'
         };
 
+        // -------------------------------------------------------------
+        // 디스코드 채널 웹훅 URL
+        // -------------------------------------------------------------
+        const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1536597565984870500/crIGWygzeO43aoX5RO9kUO1i0kAXcZIkImAZj8XMbJ2KZbdMVQ5quIEIEePmPRK_EaU0";
+
         function showPage(pageId) {
             document.getElementById('page-home').classList.add('hidden');
             document.getElementById('page-founderA').classList.add('hidden');
@@ -317,6 +322,48 @@
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> 전송 중...';
 
+            const name = form.querySelector('input[name="name"]').value;
+            const email = form.querySelector('input[name="email"]').value;
+            const message = form.querySelector('textarea[name="message"]').value;
+            const targetFounderName = currentFounder === 'A' ? '박지환 대표 (A)' : '김현승 동업자 (B)';
+
+            // 1. 디스코드 웹훅 URL이 입력되어 있으면 디스코드로 즉시 전송
+            if (DISCORD_WEBHOOK_URL && DISCORD_WEBHOOK_URL.trim() !== "") {
+                try {
+                    const discordPayload = {
+                        username: "마루어플리케이션즈 문의 알림",
+                        embeds: [{
+                            title: `📥 [신규 문의 접수] ${targetFounderName}`,
+                            color: 6242841, // #5f4219 (브랜드 컬러)
+                            fields: [
+                                { name: "👤 수신 대상", value: targetFounderName, inline: true },
+                                { name: "📝 보낸 사람", value: name, inline: true },
+                                { name: "✉️ 답장 이메일", value: email, inline: true },
+                                { name: "💬 문의 내용", value: message }
+                            ],
+                            footer: { text: "MARU Applications Web Inquiry System" },
+                            timestamp: new Date().toISOString()
+                        }]
+                    };
+
+                    const response = await fetch(DISCORD_WEBHOOK_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(discordPayload)
+                    });
+
+                    if (response.ok || response.status === 204) {
+                        showToast('디스코드 채널로 성공적으로 문의가 전송되었습니다!');
+                        form.reset();
+                        closeInquiryModal();
+                        return;
+                    }
+                } catch (error) {
+                    console.error('디스코드 웹훅 전송 실패:', error);
+                }
+            }
+
+            // 2. 디스코드 웹훅 URL이 없거나 실패 시 기존 Web3Forms 이메일 전송 처리
             const messageInput = form.querySelector('textarea[name="message"]');
             const originalMsg = messageInput.value;
             messageInput.value = `[수신 지정: 창업자 ${currentFounder} (${founderEmails[currentFounder]})]\n\n` + originalMsg;
@@ -328,7 +375,7 @@
                 });
                 const data = await response.json();
 
-                messageInput.value = originalMsg; // restore
+                messageInput.value = originalMsg;
 
                 if (data.success) {
                     showToast('성공적으로 문의가 전송되었습니다.');
