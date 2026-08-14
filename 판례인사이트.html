@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>판례인사이트</title>
+<style>
+  :root {
+    --navy-dark: #0D1F35;
+    --navy-medium: #1A3A5C;
+    --gold: #C8A84B;
+    --bg: #F0F4F8;
+    --white: #FFFFFF;
+    --text-primary: #1A2A3A;
+    --text-secondary: #555555;
+    --text-hint: #999999;
+    --divider: #EAECF0;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+  }
+  header {
+    background: var(--navy-dark);
+    padding: 16px 16px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  header h1 {
+    margin: 0 0 12px;
+    color: var(--white);
+    font-size: 20px;
+    font-weight: bold;
+  }
+  .search-row {
+    display: flex;
+    gap: 8px;
+  }
+  .search-row input {
+    flex: 1;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.1);
+    color: var(--white);
+    font-size: 14px;
+    outline: none;
+  }
+  .search-row input::placeholder { color: rgba(255,255,255,0.55); }
+  .search-row button {
+    padding: 0 18px;
+    border-radius: 10px;
+    border: none;
+    background: var(--gold);
+    color: var(--navy-dark);
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  main {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 16px;
+  }
+  .card {
+    background: var(--white);
+    border: 1px solid var(--divider);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+  .card:active { opacity: 0.85; }
+  .card .case-name {
+    font-weight: bold;
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+  .card .meta {
+    color: var(--text-secondary);
+    font-size: 12.5px;
+    line-height: 1.6;
+  }
+  .card .badge {
+    display: inline-block;
+    background: var(--navy-medium);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin-right: 6px;
+  }
+  #loadMoreBtn, .btn-primary {
+    display: block;
+    width: 100%;
+    padding: 13px;
+    border-radius: 12px;
+    border: none;
+    background: var(--navy-dark);
+    color: var(--white);
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 6px;
+  }
+  #loadMoreBtn:disabled { opacity: 0.5; cursor: default; }
+  .empty, .hint {
+    text-align: center;
+    color: var(--text-hint);
+    font-size: 13px;
+    padding: 40px 10px;
+  }
+
+  /* 상세 화면 */
+  #detailView { display: none; }
+  #detailView.active { display: block; }
+  #listView.hidden { display: none; }
+
+  .back-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .back-row button {
+    background: none;
+    border: none;
+    color: var(--white);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px 8px 4px 0;
+  }
+  .back-row .title {
+    color: var(--white);
+    font-size: 15px;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .detail-card {
+    background: var(--white);
+    border: 1px solid var(--divider);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  .detail-card .case-name { font-size: 16px; font-weight: bold; margin-bottom: 8px; }
+  .detail-card .meta { color: var(--text-secondary); font-size: 13px; line-height: 1.8; }
+
+  .section-title {
+    font-size: 15px;
+    font-weight: bold;
+    margin: 0 0 10px;
+  }
+
+  .stars { font-size: 26px; letter-spacing: 4px; cursor: pointer; user-select: none; margin-bottom: 12px; }
+  .stars span { color: var(--divider); }
+  .stars span.on { color: var(--gold); }
+
+  textarea, input[type=text].plain {
+    width: 100%;
+    border: 1px solid var(--divider);
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 14px;
+    font-family: inherit;
+    margin-bottom: 10px;
+    resize: vertical;
+    background: var(--white);
+    color: var(--text-primary);
+  }
+  textarea { min-height: 80px; }
+
+  .divider-line { border: none; border-top: 1px solid var(--divider); margin: 14px 0; }
+
+  .review-summary { font-weight: bold; font-size: 14px; margin-bottom: 10px; }
+
+  .review-item {
+    background: var(--white);
+    border: 1px solid var(--divider);
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+  }
+  .review-item .row1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  .review-item .rating { color: var(--gold); font-size: 13px; letter-spacing: 1px; }
+  .review-item .author { font-size: 12px; color: var(--text-secondary); }
+  .review-item .date { font-size: 11px; color: var(--text-hint); }
+  .review-item .opinion { font-size: 13.5px; line-height: 1.5; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+
+<header id="listHeader">
+  <h1>⚖️ 판례인사이트</h1>
+  <div class="search-row">
+    <input id="searchInput" type="text" placeholder="🔍  사건명, 사건번호, 법원명 검색..." />
+    <button id="searchBtn">검색</button>
+  </div>
+</header>
+
+<header id="detailHeader" style="display:none;">
+  <div class="back-row">
+    <button id="backBtn">←</button>
+    <div class="title" id="detailTitle">사건명</div>
+  </div>
+</header>
+
+<main>
+  <div id="listView">
+    <div id="results"></div>
+    <button id="loadMoreBtn" style="display:none;">더 보기</button>
+    <div id="emptyMsg" class="empty" style="display:none;">검색 결과가 없습니다.</div>
+    <div id="initialHint" class="hint">검색어를 입력해 판례를 찾아보세요.</div>
+  </div>
+
+  <div id="detailView">
+    <div class="detail-card" id="detailInfo"></div>
+
+    <button class="btn-primary" id="viewOriginalBtn">원문 보기 ↗</button>
+
+    <hr class="divider-line"/>
+
+    <div class="section-title">리뷰 작성</div>
+    <div class="stars" id="ratingStars">
+      <span data-v="1">★</span><span data-v="2">★</span><span data-v="3">★</span><span data-v="4">★</span><span data-v="5">★</span>
+    </div>
+    <textarea id="opinionInput" placeholder="의견을 입력하세요"></textarea>
+    <input class="plain" id="authorInput" type="text" placeholder="작성자 (선택, 비우면 익명)" />
+    <button class="btn-primary" id="submitReviewBtn">리뷰 등록</button>
+
+    <hr class="divider-line"/>
+
+    <div class="review-summary" id="reviewSummary">리뷰 0건</div>
+    <div id="reviewList"></div>
+  </div>
+</main>
+
+<script>
+  const API = "http://judiciary-api.ap-northeast-2.elasticbeanstalk.com";
+  let page = 1;
+  let currentQuery = "";
+  let currentRating = 0;
+  let currentDocId = null;
+  let currentLink = null;
+
+  const el = (id) => document.getElementById(id);
+
+  function escapeHtml(s) {
+    return (s || "").replace(/[&<>"']/g, (c) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    }[c]));
+  }
+
+  // ── 검색/목록 ────────────────────────────────────────────────
+  async function search(reset) {
+    if (reset) { page = 1; el("results").innerHTML = ""; }
+    el("initialHint").style.display = "none";
+    el("emptyMsg").style.display = "none";
+
+    const params = new URLSearchParams({ page, size: 20 });
+    if (currentQuery) params.set("q", currentQuery);
+
+    const res = await fetch(`${API}/precedents?${params}`);
+    if (!res.ok) return;
+    const data = await res.json();
+
+    if (reset && data.items.length === 0) {
+      el("emptyMsg").style.display = "block";
+    }
+
+    for (const item of data.items) {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <div class="case-name">${escapeHtml(item.case_name)}</div>
+        <div class="meta">
+          <span class="badge">${escapeHtml(item.case_type || "")}</span>
+          ${escapeHtml(item.case_number)}<br/>
+          ${escapeHtml(item.court)} · ${escapeHtml(item.date)}
+        </div>`;
+      card.addEventListener("click", () => openDetail(item));
+      el("results").appendChild(card);
+    }
+
+    el("loadMoreBtn").style.display = data.has_more ? "block" : "none";
+    page = data.page + 1;
+  }
+
+  el("searchBtn").addEventListener("click", () => {
+    currentQuery = el("searchInput").value.trim();
+    search(true);
+  });
+  el("searchInput").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") { currentQuery = el("searchInput").value.trim(); search(true); }
+  });
+  el("loadMoreBtn").addEventListener("click", () => search(false));
+
+  // 안드로이드 앱과 동일하게, 검색어 없이 열자마자 최신 판례 목록을 바로 보여준다.
+  search(true);
+
+  // ── 상세 화면 ────────────────────────────────────────────────
+  function openDetail(item) {
+    currentDocId = item.doc_id;
+    currentLink = item.link;
+    currentRating = 0;
+
+    el("listHeader").style.display = "none";
+    el("detailHeader").style.display = "block";
+    el("listView").classList.add("hidden");
+    el("detailView").classList.add("active");
+
+    el("detailTitle").textContent = item.case_name;
+    el("detailInfo").innerHTML = `
+      <div class="case-name">${escapeHtml(item.case_name)}</div>
+      <div class="meta">
+        사건번호: ${escapeHtml(item.case_number)}<br/>
+        법원: ${escapeHtml(item.court)}<br/>
+        선고일자: ${escapeHtml(item.date)}<br/>
+        사건종류: ${escapeHtml(item.case_type)}
+      </div>`;
+
+    el("opinionInput").value = "";
+    el("authorInput").value = "";
+    setStars(0);
+
+    loadReviews();
+  }
+
+  el("backBtn").addEventListener("click", () => {
+    el("listHeader").style.display = "block";
+    el("detailHeader").style.display = "none";
+    el("listView").classList.remove("hidden");
+    el("detailView").classList.remove("active");
+  });
+
+  el("viewOriginalBtn").addEventListener("click", () => {
+    if (currentLink) window.open(currentLink, "_blank", "noopener,noreferrer");
+  });
+
+  function setStars(v) {
+    currentRating = v;
+    document.querySelectorAll("#ratingStars span").forEach((s) => {
+      s.classList.toggle("on", Number(s.dataset.v) <= v);
+    });
+  }
+  document.querySelectorAll("#ratingStars span").forEach((s) => {
+    s.addEventListener("click", () => setStars(Number(s.dataset.v)));
+  });
+
+  async function loadReviews() {
+    const res = await fetch(`${API}/precedents/${encodeURIComponent(currentDocId)}/reviews`);
+    if (!res.ok) return;
+    const data = await res.json();
+
+    el("reviewSummary").textContent = data.average_rating != null
+      ? `리뷰 ${data.count}건 · 평균 ★${data.average_rating.toFixed(1)}`
+      : `리뷰 ${data.count}건`;
+
+    el("reviewList").innerHTML = data.items.map((r) => `
+      <div class="review-item">
+        <div class="row1">
+          <div><span class="rating">${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}</span> <span class="author">${escapeHtml(r.author_name)}</span></div>
+          <div class="date">${escapeHtml((r.created_at || "").slice(0, 10).replace(/-/g, "."))}</div>
+        </div>
+        <div class="opinion">${escapeHtml(r.opinion)}</div>
+      </div>
+    `).join("") || `<div class="empty">아직 등록된 리뷰가 없습니다</div>`;
+  }
+
+  el("submitReviewBtn").addEventListener("click", async () => {
+    const opinion = el("opinionInput").value.trim();
+    if (currentRating < 1) { alert("별점을 선택해주세요."); return; }
+    if (!opinion) { alert("의견을 입력해주세요."); return; }
+
+    const btn = el("submitReviewBtn");
+    btn.disabled = true;
+    btn.textContent = "등록 중...";
+
+    try {
+      const res = await fetch(`${API}/precedents/${encodeURIComponent(currentDocId)}/reviews`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          rating: currentRating,
+          opinion,
+          author_name: el("authorInput").value.trim() || null,
+        }),
+      });
+      if (!res.ok) throw new Error();
+
+      el("opinionInput").value = "";
+      el("authorInput").value = "";
+      setStars(0);
+      await loadReviews();
+    } catch {
+      alert("리뷰 등록에 실패했습니다.");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "리뷰 등록";
+    }
+  });
+</script>
+</body>
+</html>
