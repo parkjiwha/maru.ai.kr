@@ -1222,7 +1222,10 @@ contactForm.addEventListener('submit', async (e) => {
   try {
     const res = await fetch(DISCORD_WEBHOOK_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      // Content-Type을 text/plain으로 보내면 브라우저가 "simple request"로 취급해
+      // 프리플라이트(OPTIONS) 단계를 건너뜁니다. 바디는 그대로 JSON 문자열이고,
+      // Discord 쪽은 내용으로 JSON을 파싱하기 때문에 정상 처리됩니다.
+      headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify(payload)
     });
     if(!res.ok) throw new Error('webhook error ' + res.status);
