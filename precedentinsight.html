@@ -154,6 +154,42 @@
   .detail-card .case-name { font-size: 16px; font-weight: bold; margin-bottom: 8px; }
   .detail-card .meta { color: var(--text-secondary); font-size: 13px; line-height: 1.8; }
 
+  .summary-body { font-size: 13.5px; line-height: 1.7; color: var(--text-primary); white-space: pre-wrap; }
+  .summary-body.error { color: var(--text-hint); }
+
+  /* AI 요약 생성 중 로딩 연출 (Gemini 느낌의 그라데이션 스파클) */
+  .gemini-loading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 0;
+  }
+  .gemini-spark {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    animation: gemini-pulse 1.6s ease-in-out infinite;
+    transform-origin: center;
+  }
+  @keyframes gemini-pulse {
+    0%, 100% { transform: scale(0.85) rotate(0deg); opacity: 0.65; }
+    50%      { transform: scale(1.15) rotate(90deg); opacity: 1; }
+  }
+  .gemini-shimmer-text {
+    font-size: 13.5px;
+    font-weight: bold;
+    background: linear-gradient(90deg, #4285F4, #9C27B0, #E91E63, #4285F4);
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gemini-shimmer 2.2s linear infinite;
+  }
+  @keyframes gemini-shimmer {
+    0%   { background-position: 0% 50%; }
+    100% { background-position: 300% 50%; }
+  }
+
   .section-title {
     font-size: 15px;
     font-weight: bold;
@@ -228,6 +264,11 @@
 
   <div id="detailView">
     <div class="detail-card" id="detailInfo"></div>
+
+    <div class="detail-card" id="summaryCard">
+      <div class="section-title" style="margin-bottom:8px;">⚖️ AI 요약</div>
+      <div id="summaryBody" class="summary-body">요약을 불러오는 중...</div>
+    </div>
 
     <button class="btn-primary" id="viewOriginalBtn">원문 보기 ↗</button>
 
@@ -337,6 +378,42 @@
     setStars(0);
 
     loadReviews();
+    loadSummary(item.doc_id);
+  }
+
+  const _GEMINI_SPARK_SVG = `
+    <svg class="gemini-spark" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="geminiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#4285F4"/>
+          <stop offset="50%" stop-color="#9C27B0"/>
+          <stop offset="100%" stop-color="#E91E63"/>
+        </linearGradient>
+      </defs>
+      <path fill="url(#geminiGrad)" d="M12 1 C13 8 16 11 23 12 C16 13 13 16 12 23 C11 16 8 13 1 12 C8 11 11 8 12 1 Z"/>
+    </svg>`;
+
+  async function loadSummary(docId) {
+    const body = el("summaryBody");
+    body.className = "summary-body";
+    body.innerHTML = `
+      <div class="gemini-loading">
+        ${_GEMINI_SPARK_SVG}
+        <span class="gemini-shimmer-text">AI가 판례 원문을 분석하고 있어요...</span>
+      </div>`;
+
+    try {
+      const res = await fetch(`${API}/precedents/${encodeURIComponent(docId)}/summary`);
+      if (docId !== currentDocId) return; // 그 사이 다른 판례로 넘어갔으면 무시
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      body.className = "summary-body";
+      body.textContent = data.summary;
+    } catch {
+      if (docId !== currentDocId) return;
+      body.className = "summary-body error";
+      body.textContent = "AI 요약을 불러오지 못했습니다.";
+    }
   }
 
   el("backBtn").addEventListener("click", () => {
