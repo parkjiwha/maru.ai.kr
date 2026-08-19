@@ -95,6 +95,119 @@
     border-radius: 6px;
     margin-right: 6px;
   }
+
+  /* 최저 평점 판례 섹션 (전체 판례 DB 기준, 리뷰 있는 것만) — 시상식 스타일 */
+  #lowRatedSection { margin-bottom: 18px; }
+  #lowRatedSection .award-card {
+    background: var(--white);
+    border: 1px solid var(--divider);
+    border-radius: 14px;
+    padding: 18px 12px 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  #lowRatedSection .award-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--gold), var(--navy-medium), var(--gold));
+  }
+  #lowRatedSection .award-title {
+    font-size: 19px;
+    font-weight: 800;
+    color: var(--navy-dark);
+    text-align: center;
+    margin: 2px 0 2px;
+  }
+  #lowRatedSection .award-sub {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    text-align: center;
+    margin: 0 0 14px;
+  }
+  #lowRatedSection .award-sub b { color: var(--navy-dark); }
+  #lowRatedSection .caption {
+    color: var(--text-hint);
+    font-size: 10.5px;
+    line-height: 1.5;
+    text-align: center;
+    margin: 14px 4px 0;
+    padding-top: 10px;
+    border-top: 1px solid var(--divider);
+  }
+  .podium {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 8px;
+  }
+  .podium-item {
+    flex: 0 1 92px;
+    max-width: 92px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+  }
+  .podium-item:active { opacity: 0.85; }
+  .podium-item .medal { font-size: 22px; line-height: 1; margin-bottom: 4px; }
+  .podium-item .p-name {
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--text-primary);
+    line-height: 1.35;
+    height: 2.7em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    padding: 0 2px;
+    margin-bottom: 4px;
+  }
+  .podium-item .p-rating {
+    font-size: 11px;
+    font-weight: bold;
+    color: var(--gold);
+    margin-bottom: 6px;
+    white-space: nowrap;
+  }
+  .podium-item .p-block {
+    width: 100%;
+    border-radius: 8px 8px 0 0;
+    background: var(--navy-medium);
+    color: var(--white);
+    font-weight: bold;
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    padding-top: 6px;
+  }
+  .podium-item.rank-1 .p-block { height: 64px; background: var(--navy-dark); font-size: 17px; }
+  .podium-item.rank-2 .p-block { height: 46px; }
+  .podium-item.rank-3 .p-block { height: 34px; }
+
+  /* 폭죽 효과 */
+  #confettiLayer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 9999;
+  }
+  .confetti-piece {
+    position: absolute;
+    top: -14px;
+    opacity: 0.95;
+    animation: confetti-fall linear forwards;
+  }
+  @keyframes confetti-fall {
+    0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(115vh) rotate(560deg); opacity: 0.85; }
+  }
+
   #loadMoreBtn, .btn-primary {
     display: block;
     width: 100%;
@@ -239,6 +352,8 @@
 </head>
 <body>
 
+<div id="confettiLayer"></div>
+
 <header id="listHeader">
   <h1>⚖️ 판례인사이트</h1>
   <div class="search-row">
@@ -256,6 +371,14 @@
 
 <main>
   <div id="listView">
+    <div id="lowRatedSection" style="display:none;">
+      <div class="award-card">
+        <div class="award-title" id="lowRatedTitle">🎉 Congratulations!</div>
+        <div class="award-sub" id="lowRatedSub">국민이 뽑은 <b>최악의 판례 TOP 3</b>에 선정되셨습니다!</div>
+        <div id="lowRatedResults" class="podium"></div>
+        <div class="caption" id="lowRatedCaption">판결서는 확정 후 누구나 열람할 수 있는 공개 기록입니다(형사소송법 제59조의3, 민사소송법 제163조의2).</div>
+      </div>
+    </div>
     <div id="results"></div>
     <button id="loadMoreBtn" style="display:none;">더 보기</button>
     <div id="emptyMsg" class="empty" style="display:none;">검색 결과가 없습니다.</div>
@@ -297,6 +420,9 @@
   let currentDocId = null;
   let currentLink = null;
 
+  let searchGen = 0;         // 검색이 바뀔 때마다 증가 (오래된 응답 무시용)
+  let lastPodiumIds = null;  // 마지막으로 보여준 TOP3 조합 (동일하면 폭죽 재발사 안 함)
+
   const el = (id) => document.getElementById(id);
 
   function escapeHtml(s) {
@@ -307,7 +433,13 @@
 
   // ── 검색/목록 ────────────────────────────────────────────────
   async function search(reset) {
-    if (reset) { page = 1; el("results").innerHTML = ""; }
+    if (reset) {
+      page = 1;
+      el("results").innerHTML = "";
+      searchGen++;
+    }
+    const myGen = searchGen;
+
     el("initialHint").style.display = "none";
     el("emptyMsg").style.display = "none";
 
@@ -317,6 +449,7 @@
     const res = await fetch(`${API}/precedents?${params}`);
     if (!res.ok) return;
     const data = await res.json();
+    if (myGen !== searchGen) return; // 그 사이 다른 검색이 시작됐으면 무시
 
     if (reset && data.items.length === 0) {
       el("emptyMsg").style.display = "block";
@@ -340,6 +473,103 @@
     page = data.page + 1;
   }
 
+  // 전체 판례 DB(16만여 건) 중 리뷰가 1건 이상 있는 판례를 대상으로
+  // 평균 평점이 가장 낮은 3개를 백엔드 집계 쿼리로 받아와 상단 위젯에 표시한다.
+  async function loadWorstRated() {
+    try {
+      const res = await fetch(`${API}/precedents/worst-reviewed?limit=3`);
+      if (!res.ok) throw new Error();
+      const items = await res.json();
+      renderWorstRated(items);
+    } catch {
+      hideLowRated();
+    }
+  }
+
+  function renderWorstRated(items) {
+    // 엔드포인트가 응답은 했지만(=배포됨) 순위를 매길 데이터가 없는 경우
+    // (리뷰가 아예 없거나, 리뷰가 달린 판례가 전부 만점이라 대상이 없는 경우) —
+    // 위젯을 숨기지 않고 리뷰 작성을 유도하는 문구로 대체한다.
+    if (!items || items.length === 0) { renderReviewPrompt(); return; }
+
+    el("lowRatedSection").style.display = "block";
+    el("lowRatedTitle").textContent = "🎉 Congratulations!";
+    el("lowRatedSub").innerHTML = "국민이 뽑은 <b>최악의 판례 TOP 3</b>에 선정되셨습니다!";
+    el("lowRatedCaption").textContent = "판결서는 확정 후 누구나 열람할 수 있는 공개 기록입니다(형사소송법 제59조의3, 민사소송법 제163조의2).";
+
+    const box = el("lowRatedResults");
+    box.className = "podium";
+    box.innerHTML = "";
+
+    // 시상대 배치: 가운데(가장 낮은 평점) - 왼쪽(2위) - 오른쪽(3위)
+    const MEDAL = ["🥇", "🥈", "🥉"];
+    const order =
+      items.length === 1 ? [0] :
+      items.length === 2 ? [1, 0] :
+      [1, 0, 2];
+
+    order.forEach((idx) => {
+      const item = items[idx];
+      const rank = idx + 1; // 1 = 평점이 가장 낮은 판례
+      const slot = document.createElement("div");
+      slot.className = `podium-item rank-${rank}`;
+      slot.innerHTML = `
+        <div class="medal">${MEDAL[rank - 1]}</div>
+        <div class="p-name">${escapeHtml(item.case_name)}</div>
+        <div class="p-rating">★${item.average_rating.toFixed(1)} · ${item.review_count}건</div>
+        <div class="p-block">${rank}</div>`;
+      slot.addEventListener("click", () => openDetail(item));
+      box.appendChild(slot);
+    });
+
+    // TOP3 구성이 이전과 달라졌을 때만 폭죽을 새로 터뜨림 (동일 목록 재표시 시 중복 방지)
+    const idsKey = items.map((x) => x.doc_id).join(",");
+    if (idsKey !== lastPodiumIds) {
+      lastPodiumIds = idsKey;
+      fireConfetti();
+    }
+  }
+
+  function renderReviewPrompt() {
+    el("lowRatedSection").style.display = "block";
+    el("lowRatedTitle").textContent = "✍️ 첫 리뷰를 남겨주세요";
+    el("lowRatedSub").innerHTML = "아직 순위를 매길 만큼 리뷰가 쌓이지 않았어요.<br/>판례에 별점과 의견을 남겨보세요!";
+    el("lowRatedCaption").textContent = "리뷰가 쌓이면 국민이 뽑은 최악의 판례 TOP 3가 이 자리에 나타납니다.";
+    el("lowRatedResults").className = "";
+    el("lowRatedResults").innerHTML = "";
+    lastPodiumIds = null;
+  }
+
+  function hideLowRated() {
+    el("lowRatedSection").style.display = "none";
+    el("lowRatedResults").innerHTML = "";
+    lastPodiumIds = null;
+  }
+
+  // 시상대 등장 시 터지는 폭죽 효과
+  const CONFETTI_COLORS = ["#C8A84B", "#E85D75", "#4C9F70", "#4A90D9", "#F2B807", "#8E5FD4"];
+  function fireConfetti() {
+    const layer = el("confettiLayer");
+    if (!layer) return;
+    const count = 60;
+    for (let i = 0; i < count; i++) {
+      const piece = document.createElement("div");
+      piece.className = "confetti-piece";
+      const size = 6 + Math.random() * 6;
+      const duration = 2.2 + Math.random() * 1.4;
+      const delay = Math.random() * 0.35;
+      piece.style.left = `${Math.random() * 100}vw`;
+      piece.style.width = `${size}px`;
+      piece.style.height = `${size * 1.6}px`;
+      piece.style.background = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
+      piece.style.borderRadius = Math.random() < 0.5 ? "50%" : "2px";
+      piece.style.animationDuration = `${duration}s`;
+      piece.style.animationDelay = `${delay}s`;
+      layer.appendChild(piece);
+      setTimeout(() => piece.remove(), (duration + delay) * 1000 + 150);
+    }
+  }
+
   el("searchBtn").addEventListener("click", () => {
     currentQuery = el("searchInput").value.trim();
     search(true);
@@ -351,6 +581,7 @@
 
   // 안드로이드 앱과 동일하게, 검색어 없이 열자마자 최신 판례 목록을 바로 보여준다.
   search(true);
+  loadWorstRated();
 
   // ── 상세 화면 ────────────────────────────────────────────────
   function openDetail(item) {
@@ -421,6 +652,7 @@
     el("detailHeader").style.display = "none";
     el("listView").classList.remove("hidden");
     el("detailView").classList.remove("active");
+    loadWorstRated(); // 상세에서 평점을 남겼을 수 있으니 위젯 갱신
   });
 
   el("viewOriginalBtn").addEventListener("click", () => {
