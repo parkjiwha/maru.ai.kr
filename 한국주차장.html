@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>한국주차장</title>
+  <link rel="stylesheet" href="/한국주차장.css" />
+</head>
+<body>
+  <div id="app">
+    <header id="topbar">
+      <h1>한국주차장</h1>
+      <form id="search-form">
+        <input
+          id="address-input"
+          type="text"
+          placeholder="건물 주소를 입력하세요 (예: 서울특별시 서대문구 북가좌동 306-18)"
+          autocomplete="off"
+        />
+        <button type="submit">건축물대장 조회</button>
+      </form>
+    </header>
+
+    <div class="ad-slot ad-slot-top-banner" data-ad-key="top_banner">
+      <p class="ad-label">광고</p>
+      <div class="ad-container"></div>
+    </div>
+
+    <div id="layout">
+      <aside id="sidebar">
+        <div class="ad-slot ad-slot-sidebar" data-ad-key="sidebar_top">
+          <p class="ad-label">광고</p>
+          <div class="ad-container"></div>
+        </div>
+
+        <section id="layer-toggles">
+          <h2>지도에 표시할 주차장</h2>
+          <label class="layer-item" data-layer="노상">
+            <input type="checkbox" value="노상" checked />
+            <span class="dot dot-onstreet"></span>노상 주차장
+          </label>
+          <label class="layer-item" data-layer="노외">
+            <input type="checkbox" value="노외" checked />
+            <span class="dot dot-offstreet"></span>노외 주차장
+          </label>
+          <label class="layer-item" data-layer="부설">
+            <input type="checkbox" value="부설" checked />
+            <span class="dot dot-attached"></span>부설 주차장
+          </label>
+          <label class="layer-item" data-layer="거주자우선">
+            <input type="checkbox" value="거주자우선" checked />
+            <span class="dot dot-resident"></span>거주자 우선 주차장
+          </label>
+          <label class="layer-item" data-layer="전기차충전소">
+            <input type="checkbox" value="전기차충전소" checked />
+            <span class="dot dot-ev"></span>전기차 충전소
+          </label>
+          <label class="layer-item" data-layer="건축물주차장">
+            <input type="checkbox" value="건축물주차장" />
+            <span class="dot dot-building"></span>건축물대장 부설주차장
+          </label>
+          <p class="hint layer-note">⚠️ 이 레이어는 서울특별시 25개 구만 지원합니다. 다른 지역은 표시되지 않습니다.</p>
+          <p class="hint">지도를 우클릭하면 그 위치 주소로 바로 조회합니다.</p>
+          <p id="viewport-note" class="hint"></p>
+        </section>
+
+        <section id="result-panel" class="empty">
+          <p class="hint">주소를 입력하고 조회하면 건축물대장 기준 주차대수가 여기에 표시됩니다.</p>
+        </section>
+
+        <div class="ad-slot ad-slot-sidebar" data-ad-key="sidebar_bottom">
+          <p class="ad-label">광고</p>
+          <div class="ad-container"></div>
+        </div>
+      </aside>
+
+      <main id="map-wrap">
+        <div id="map"></div>
+        <div id="kakao-key-banner" class="hidden">
+          카카오맵 API 키가 설정되지 않았습니다.<br />
+          <code>app/config.local.json</code> 파일의 <code>kakao_js_key</code> /
+          <code>kakao_rest_api_key</code> 값을 채운 뒤 서버를 재시작해주세요.
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div id="roadview-modal" class="hidden">
+    <div id="roadview-modal-inner">
+      <button id="roadview-close" type="button">✕ 닫기</button>
+      <div id="roadview-container"></div>
+      <p id="roadview-empty" class="hidden">이 위치 근처에는 로드뷰가 없습니다.</p>
+    </div>
+  </div>
+
+  <script src="/한국주차장.js"></script>
+</body>
+</html>
