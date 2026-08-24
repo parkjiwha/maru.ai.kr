@@ -66,6 +66,10 @@
     margin: 0 auto;
     padding: 16px;
   }
+  /* 상세화면(PDF 원문 + AI 요약 사이드바)일 때는 더 넓게 */
+  main:has(#detailView.active) {
+    max-width: 1180px;
+  }
   .card {
     background: var(--white);
     border: 1px solid var(--divider);
@@ -267,6 +271,49 @@
   .detail-card .case-name { font-size: 16px; font-weight: bold; margin-bottom: 8px; }
   .detail-card .meta { color: var(--text-secondary); font-size: 13px; line-height: 1.8; }
 
+  /* 상세화면 2단 배치: 왼쪽 원문(PDF/HTML) + 리뷰, 오른쪽 AI 요약 */
+  .detail-layout {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .detail-main { flex: 1; min-width: 0; }
+  .detail-side {
+    width: 340px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 76px;
+  }
+  @media (max-width: 900px) {
+    .detail-layout { flex-direction: column; }
+    .detail-side { width: 100%; position: static; }
+  }
+
+  .pdf-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .pdf-card-header .section-title { margin: 0; }
+  .ext-link {
+    font-size: 12.5px;
+    font-weight: bold;
+    color: var(--navy-medium);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .ext-link:hover { text-decoration: underline; }
+  .pdf-frame {
+    display: block;
+    width: 100%;
+    height: 78vh;
+    min-height: 480px;
+    border: none;
+    border-radius: 8px;
+    background: var(--white);
+  }
+
   .summary-body { font-size: 13.5px; line-height: 1.7; color: var(--text-primary); white-space: pre-wrap; }
   .summary-body.error { color: var(--text-hint); }
 
@@ -386,29 +433,43 @@
   </div>
 
   <div id="detailView">
-    <div class="detail-card" id="detailInfo"></div>
+    <div class="detail-layout">
+      <div class="detail-main">
+        <div class="detail-card" id="detailInfo"></div>
 
-    <div class="detail-card" id="summaryCard">
-      <div class="section-title" style="margin-bottom:8px;">⚖️ AI 요약</div>
-      <div id="summaryBody" class="summary-body">요약을 불러오는 중...</div>
+        <div class="detail-card">
+          <div class="pdf-card-header">
+            <div class="section-title">📄 상세내용</div>
+            <a href="#" id="viewOriginalLink" class="ext-link" target="_blank" rel="noopener noreferrer">새 탭에서 열기 ↗</a>
+          </div>
+          <div id="originalViewContainer">
+            <div class="hint">원문을 불러오는 중...</div>
+          </div>
+        </div>
+
+        <hr class="divider-line"/>
+
+        <div class="section-title">리뷰 작성</div>
+        <div class="stars" id="ratingStars">
+          <span data-v="1">★</span><span data-v="2">★</span><span data-v="3">★</span><span data-v="4">★</span><span data-v="5">★</span>
+        </div>
+        <textarea id="opinionInput" placeholder="의견을 입력하세요"></textarea>
+        <input class="plain" id="authorInput" type="text" placeholder="작성자 (선택, 비우면 익명)" />
+        <button class="btn-primary" id="submitReviewBtn">리뷰 등록</button>
+
+        <hr class="divider-line"/>
+
+        <div class="review-summary" id="reviewSummary">리뷰 0건</div>
+        <div id="reviewList"></div>
+      </div>
+
+      <div class="detail-side">
+        <div class="detail-card" id="summaryCard">
+          <div class="section-title" style="margin-bottom:8px;">⚖️ AI 요약</div>
+          <div id="summaryBody" class="summary-body">요약을 불러오는 중...</div>
+        </div>
+      </div>
     </div>
-
-    <button class="btn-primary" id="viewOriginalBtn">원문 보기 ↗</button>
-
-    <hr class="divider-line"/>
-
-    <div class="section-title">리뷰 작성</div>
-    <div class="stars" id="ratingStars">
-      <span data-v="1">★</span><span data-v="2">★</span><span data-v="3">★</span><span data-v="4">★</span><span data-v="5">★</span>
-    </div>
-    <textarea id="opinionInput" placeholder="의견을 입력하세요"></textarea>
-    <input class="plain" id="authorInput" type="text" placeholder="작성자 (선택, 비우면 익명)" />
-    <button class="btn-primary" id="submitReviewBtn">리뷰 등록</button>
-
-    <hr class="divider-line"/>
-
-    <div class="review-summary" id="reviewSummary">리뷰 0건</div>
-    <div id="reviewList"></div>
   </div>
 </main>
 
@@ -603,6 +664,7 @@
         선고일자: ${escapeHtml(item.date)}<br/>
         사건종류: ${escapeHtml(item.case_type)}
       </div>`;
+    el("viewOriginalLink").href = item.link || "#";
 
     el("opinionInput").value = "";
     el("authorInput").value = "";
@@ -610,6 +672,29 @@
 
     loadReviews();
     loadSummary(item.doc_id);
+    loadOriginalView(item.doc_id);
+  }
+
+  // 상세화면 중앙에 띄울 원문(세무 판례는 국세청 PDF 뷰어, 일반 판례는
+  // law.go.kr 페이지)을 백엔드에 물어봐서 iframe으로 임베드한다.
+  async function loadOriginalView(docId) {
+    const container = el("originalViewContainer");
+    container.innerHTML = `<div class="hint">원문을 불러오는 중...</div>`;
+
+    try {
+      const res = await fetch(`${API}/precedents/${encodeURIComponent(docId)}/original-view`);
+      if (docId !== currentDocId) return; // 그 사이 다른 판례로 넘어갔으면 무시
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      if (docId !== currentDocId) return;
+      container.innerHTML = `<iframe class="pdf-frame" src="${escapeHtml(data.embed_url)}"></iframe>`;
+    } catch {
+      if (docId !== currentDocId) return;
+      container.innerHTML = `
+        <div class="hint">원문을 불러오지 못했습니다.<br/>
+          <a href="${escapeHtml(currentLink || "")}" target="_blank" rel="noopener noreferrer">새 탭에서 열기 ↗</a>
+        </div>`;
+    }
   }
 
   const _GEMINI_SPARK_SVG = `
@@ -653,10 +738,6 @@
     el("listView").classList.remove("hidden");
     el("detailView").classList.remove("active");
     loadWorstRated(); // 상세에서 평점을 남겼을 수 있으니 위젯 갱신
-  });
-
-  el("viewOriginalBtn").addEventListener("click", () => {
-    if (currentLink) window.open(currentLink, "_blank", "noopener,noreferrer");
   });
 
   function setStars(v) {
