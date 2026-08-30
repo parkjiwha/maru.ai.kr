@@ -5,195 +5,261 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>판례인사이트</title>
 <style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
   :root {
-    --navy-dark: #0D1F35;
-    --navy-medium: #1A3A5C;
-    --gold: #C8A84B;
-    --bg: #F0F4F8;
-    --white: #FFFFFF;
-    --text-primary: #1A2A3A;
-    --text-secondary: #555555;
-    --text-hint: #999999;
-    --divider: #EAECF0;
+    --navy-dark: #0f172a;
+    --navy-medium: #1e293b;
+    --gold: #d4af37;
+    --gold-hover: #b8962e;
+    --bg: #f4f7f9;
+    --white: #ffffff;
+    --text-primary: #1e293b;
+    --text-secondary: #475569;
+    --text-hint: #94a3b8;
+    --divider: #e2e8f0;
+    
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-gold: 0 4px 14px 0 rgba(212, 175, 55, 0.39);
+    --radius-md: 12px;
+    --radius-lg: 16px;
   }
+  
   * { box-sizing: border-box; }
+  
   body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif;
     background: var(--bg);
     color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
   }
+
+  /* Header (Glassmorphism) */
   header {
-    background: var(--navy-dark);
-    padding: 16px 16px 14px;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 16px 20px;
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 100;
+    box-shadow: var(--shadow-sm);
   }
-  header h1 {
-    margin: 0 0 12px;
-    color: var(--white);
-    font-size: 20px;
-    font-weight: bold;
+
+  /* SVG Logo Style */
+  .header-logo-svg {
+    height: 38px;
+    width: auto;
+    margin-bottom: 16px;
+    cursor: pointer;
+    display: block;
+    transition: opacity 0.2s;
   }
+  .header-logo-svg:hover {
+    opacity: 0.9;
+  }
+  
+  /* Search Input */
   .search-row {
     display: flex;
-    gap: 8px;
+    gap: 10px;
   }
   .search-row input {
     flex: 1;
-    padding: 12px 14px;
-    border-radius: 10px;
-    border: 1px solid rgba(255,255,255,0.2);
-    background: rgba(255,255,255,0.1);
+    padding: 14px 16px;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.08);
     color: var(--white);
-    font-size: 14px;
+    font-size: 15px;
     outline: none;
+    transition: all 0.2s ease;
   }
-  .search-row input::placeholder { color: rgba(255,255,255,0.55); }
+  .search-row input:focus {
+    border-color: var(--gold);
+    background: rgba(255,255,255,0.12);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+  }
+  .search-row input::placeholder { color: rgba(255,255,255,0.4); }
   .search-row button {
-    padding: 0 18px;
-    border-radius: 10px;
+    padding: 0 24px;
+    border-radius: var(--radius-md);
     border: none;
     background: var(--gold);
     color: var(--navy-dark);
-    font-weight: bold;
-    font-size: 14px;
+    font-weight: 700;
+    font-size: 15px;
     cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-sm);
   }
+  .search-row button:hover {
+    background: var(--gold-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-gold);
+  }
+  .search-row button:active {
+    transform: translateY(1px);
+  }
+
   main {
-    max-width: 640px;
+    max-width: 680px;
     margin: 0 auto;
-    padding: 16px;
+    padding: 24px 16px;
   }
-  /* 상세화면(PDF 원문 + AI 요약 사이드바)일 때는 더 넓게 */
   main:has(#detailView.active) {
-    max-width: 1180px;
+    max-width: 1200px;
   }
+
+  /* List Cards */
   .card {
     background: var(--white);
     border: 1px solid var(--divider);
-    border-radius: 12px;
-    padding: 14px 16px;
-    margin-bottom: 10px;
+    border-radius: var(--radius-md);
+    padding: 20px;
+    margin-bottom: 12px;
     cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-sm);
   }
-  .card:active { opacity: 0.85; }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: #cbd5e1;
+  }
+  .card:active { transform: translateY(0); opacity: 0.9; }
   .card .case-name {
-    font-weight: bold;
-    font-size: 15px;
-    margin-bottom: 6px;
+    font-weight: 700;
+    font-size: 17px;
+    margin-bottom: 8px;
+    line-height: 1.4;
+    color: var(--navy-dark);
   }
   .card .meta {
     color: var(--text-secondary);
-    font-size: 12.5px;
+    font-size: 13.5px;
     line-height: 1.6;
   }
   .card .badge {
     display: inline-block;
-    background: var(--navy-medium);
-    color: var(--white);
-    font-size: 11px;
-    font-weight: bold;
-    padding: 2px 8px;
-    border-radius: 6px;
-    margin-right: 6px;
+    background: #f1f5f9;
+    color: var(--navy-medium);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-right: 8px;
+    border: 1px solid #e2e8f0;
   }
 
-  /* 최저 평점 판례 섹션 (전체 판례 DB 기준, 리뷰 있는 것만) — 시상식 스타일 */
-  #lowRatedSection { margin-bottom: 18px; }
+  /* Podium / Award Section */
+  #lowRatedSection { margin-bottom: 32px; }
   #lowRatedSection .award-card {
     background: var(--white);
-    border: 1px solid var(--divider);
-    border-radius: 14px;
-    padding: 18px 12px 14px;
+    border: none;
+    border-radius: var(--radius-lg);
+    padding: 30px 20px 24px;
     position: relative;
     overflow: hidden;
+    box-shadow: var(--shadow-lg);
   }
   #lowRatedSection .award-card::before {
     content: "";
     position: absolute;
     top: 0; left: 0; right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--gold), var(--navy-medium), var(--gold));
+    height: 6px;
+    background: linear-gradient(90deg, var(--gold), #fef08a, var(--gold));
   }
   #lowRatedSection .award-title {
-    font-size: 19px;
-    font-weight: 800;
+    font-size: 22px;
+    font-weight: 900;
     color: var(--navy-dark);
     text-align: center;
-    margin: 2px 0 2px;
+    margin: 0 0 8px;
+    letter-spacing: -0.5px;
   }
   #lowRatedSection .award-sub {
-    font-size: 12.5px;
+    font-size: 14px;
     color: var(--text-secondary);
     text-align: center;
-    margin: 0 0 14px;
+    margin: 0 0 24px;
   }
-  #lowRatedSection .award-sub b { color: var(--navy-dark); }
+  #lowRatedSection .award-sub b { color: var(--navy-dark); font-weight: 800; }
   #lowRatedSection .caption {
     color: var(--text-hint);
-    font-size: 10.5px;
+    font-size: 12px;
     line-height: 1.5;
     text-align: center;
-    margin: 14px 4px 0;
-    padding-top: 10px;
-    border-top: 1px solid var(--divider);
+    margin: 24px 4px 0;
+    padding-top: 16px;
+    border-top: 1px dashed var(--divider);
   }
+  
   .podium {
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    gap: 8px;
+    gap: 12px;
+    margin-top: 20px;
   }
   .podium-item {
-    flex: 0 1 92px;
-    max-width: 92px;
+    flex: 0 1 100px;
+    max-width: 110px;
     min-width: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
     cursor: pointer;
+    transition: transform 0.2s;
   }
-  .podium-item:active { opacity: 0.85; }
-  .podium-item .medal { font-size: 22px; line-height: 1; margin-bottom: 4px; }
+  .podium-item:hover { transform: translateY(-4px); }
+  .podium-item:active { opacity: 0.85; transform: translateY(0); }
+  .podium-item .medal { font-size: 28px; line-height: 1; margin-bottom: 8px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
   .podium-item .p-name {
-    font-size: 12px;
-    font-weight: bold;
+    font-size: 13px;
+    font-weight: 700;
     color: var(--text-primary);
-    line-height: 1.35;
-    height: 2.7em;
+    line-height: 1.4;
+    height: 2.8em;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    padding: 0 2px;
-    margin-bottom: 4px;
+    padding: 0 4px;
+    margin-bottom: 6px;
+    word-break: keep-all;
   }
   .podium-item .p-rating {
-    font-size: 11px;
-    font-weight: bold;
+    font-size: 12px;
+    font-weight: 800;
     color: var(--gold);
-    margin-bottom: 6px;
+    margin-bottom: 8px;
+    background: #fffbeb;
+    padding: 2px 8px;
+    border-radius: 12px;
     white-space: nowrap;
   }
   .podium-item .p-block {
     width: 100%;
-    border-radius: 8px 8px 0 0;
-    background: var(--navy-medium);
+    border-radius: 10px 10px 0 0;
+    background: linear-gradient(180deg, var(--navy-medium), #0f172a);
     color: var(--white);
-    font-weight: bold;
-    font-size: 15px;
+    font-weight: 800;
+    font-size: 18px;
     display: flex;
     justify-content: center;
-    padding-top: 6px;
+    padding-top: 10px;
+    box-shadow: inset 0 2px 4px rgba(255,255,255,0.1);
   }
-  .podium-item.rank-1 .p-block { height: 64px; background: var(--navy-dark); font-size: 17px; }
-  .podium-item.rank-2 .p-block { height: 46px; }
-  .podium-item.rank-3 .p-block { height: 34px; }
+  .podium-item.rank-1 .p-block { height: 80px; background: linear-gradient(180deg, #1e293b, #020617); font-size: 22px; }
+  .podium-item.rank-2 .p-block { height: 56px; }
+  .podium-item.rank-3 .p-block { height: 42px; }
 
-  /* 폭죽 효과 */
+  /* Confetti */
   #confettiLayer {
     position: fixed;
     inset: 0;
@@ -212,50 +278,69 @@
     100% { transform: translateY(115vh) rotate(560deg); opacity: 0.85; }
   }
 
+  /* Buttons & Utilities */
   #loadMoreBtn, .btn-primary {
     display: block;
     width: 100%;
-    padding: 13px;
-    border-radius: 12px;
+    padding: 16px;
+    border-radius: var(--radius-md);
     border: none;
     background: var(--navy-dark);
     color: var(--white);
-    font-size: 14px;
-    font-weight: bold;
+    font-size: 15px;
+    font-weight: 700;
     cursor: pointer;
-    margin-top: 6px;
+    margin-top: 16px;
+    transition: all 0.2s;
+    box-shadow: var(--shadow-sm);
   }
-  #loadMoreBtn:disabled { opacity: 0.5; cursor: default; }
+  #loadMoreBtn:hover, .btn-primary:hover {
+    background: var(--navy-medium);
+    box-shadow: var(--shadow-md);
+  }
+  #loadMoreBtn:disabled { opacity: 0.5; cursor: default; box-shadow: none; }
+  
   .empty, .hint {
     text-align: center;
     color: var(--text-hint);
-    font-size: 13px;
-    padding: 40px 10px;
+    font-size: 14px;
+    padding: 60px 20px;
+    background: var(--white);
+    border-radius: var(--radius-md);
+    border: 1px dashed var(--divider);
+    margin-top: 12px;
   }
 
-  /* 상세 화면 */
-  #detailView { display: none; }
+  /* Detail View */
+  #detailView { display: none; animation: fadeIn 0.3s ease; }
   #detailView.active { display: block; }
   #listView.hidden { display: none; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
   .back-row {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 4px;
+    gap: 12px;
   }
   .back-row button {
-    background: none;
+    background: rgba(255,255,255,0.1);
     border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: var(--white);
     font-size: 20px;
     cursor: pointer;
-    padding: 4px 8px 4px 0;
+    transition: background 0.2s;
   }
+  .back-row button:hover { background: rgba(255,255,255,0.2); }
   .back-row .title {
     color: var(--white);
-    font-size: 15px;
-    font-weight: bold;
+    font-size: 17px;
+    font-weight: 700;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -264,69 +349,88 @@
   .detail-card {
     background: var(--white);
     border: 1px solid var(--divider);
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 14px;
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-sm);
   }
-  .detail-card .case-name { font-size: 16px; font-weight: bold; margin-bottom: 8px; }
-  .detail-card .meta { color: var(--text-secondary); font-size: 13px; line-height: 1.8; }
+  .detail-card .case-name { font-size: 20px; font-weight: 800; margin-bottom: 12px; color: var(--navy-dark); line-height: 1.4; }
+  .detail-card .meta { color: var(--text-secondary); font-size: 14px; line-height: 1.8; }
 
-  /* 상세화면 2단 배치: 왼쪽 원문(PDF/HTML) + 리뷰, 오른쪽 AI 요약 */
+  /* 2-Column Layout */
   .detail-layout {
     display: flex;
     align-items: flex-start;
-    gap: 20px;
+    gap: 24px;
   }
   .detail-main { flex: 1; min-width: 0; }
   .detail-side {
-    width: 340px;
+    width: 380px;
     flex-shrink: 0;
     position: sticky;
-    top: 76px;
+    top: 90px;
   }
-  @media (max-width: 900px) {
+  @media (max-width: 960px) {
     .detail-layout { flex-direction: column; }
     .detail-side { width: 100%; position: static; }
   }
 
+  /* PDF View */
   .pdf-card-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 10px;
+    margin-bottom: 16px;
   }
   .pdf-card-header .section-title { margin: 0; }
   .ext-link {
-    font-size: 12.5px;
-    font-weight: bold;
-    color: var(--navy-medium);
+    font-size: 13px;
+    font-weight: 700;
+    color: #3b82f6;
     text-decoration: none;
-    white-space: nowrap;
+    background: #eff6ff;
+    padding: 6px 12px;
+    border-radius: 20px;
+    transition: all 0.2s;
   }
-  .ext-link:hover { text-decoration: underline; }
+  .ext-link:hover { background: #dbeafe; }
   .pdf-frame {
     display: block;
     width: 100%;
-    height: 78vh;
-    min-height: 480px;
-    border: none;
-    border-radius: 8px;
-    background: var(--white);
+    height: 75vh;
+    min-height: 500px;
+    border: 1px solid var(--divider);
+    border-radius: var(--radius-md);
+    background: #f8fafc;
   }
 
-  .summary-body { font-size: 13.5px; line-height: 1.7; color: var(--text-primary); white-space: pre-wrap; }
+  /* AI Summary Section */
+  #summaryCard {
+    background: linear-gradient(to bottom, #ffffff, #f8fafc);
+    border: 1px solid #cbd5e1;
+    position: relative;
+    overflow: hidden;
+  }
+  #summaryCard::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, #4285F4, #9C27B0, #E91E63);
+  }
+  .summary-body { font-size: 15px; line-height: 1.8; color: var(--text-primary); white-space: pre-wrap; }
   .summary-body.error { color: var(--text-hint); }
 
-  /* AI 요약 생성 중 로딩 연출 (Gemini 느낌의 그라데이션 스파클) */
+  /* Gemini Loading */
   .gemini-loading {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 4px 0;
+    gap: 12px;
+    padding: 20px 0;
+    justify-content: center;
   }
   .gemini-spark {
-    width: 22px;
-    height: 22px;
+    width: 26px;
+    height: 26px;
     flex-shrink: 0;
     animation: gemini-pulse 1.6s ease-in-out infinite;
     transform-origin: center;
@@ -336,8 +440,8 @@
     50%      { transform: scale(1.15) rotate(90deg); opacity: 1; }
   }
   .gemini-shimmer-text {
-    font-size: 13.5px;
-    font-weight: bold;
+    font-size: 15px;
+    font-weight: 700;
     background: linear-gradient(90deg, #4285F4, #9C27B0, #E91E63, #4285F4);
     background-size: 300% 100%;
     -webkit-background-clip: text;
@@ -351,50 +455,67 @@
   }
 
   .section-title {
-    font-size: 15px;
-    font-weight: bold;
-    margin: 0 0 10px;
+    font-size: 18px;
+    font-weight: 800;
+    margin: 0 0 16px;
+    color: var(--navy-dark);
   }
 
-  .stars { font-size: 26px; letter-spacing: 4px; cursor: pointer; user-select: none; margin-bottom: 12px; }
-  .stars span { color: var(--divider); }
+  /* Review Section */
+  .stars { 
+    font-size: 32px; 
+    letter-spacing: 6px; 
+    cursor: pointer; 
+    user-select: none; 
+    margin-bottom: 16px; 
+    display: inline-block;
+  }
+  .stars span { color: #cbd5e1; transition: color 0.2s; }
   .stars span.on { color: var(--gold); }
+  .stars span:hover ~ span { color: #cbd5e1 !important; }
+  .stars:hover span { color: var(--gold-hover); }
 
   textarea, input[type=text].plain {
     width: 100%;
     border: 1px solid var(--divider);
-    border-radius: 10px;
-    padding: 12px;
-    font-size: 14px;
+    border-radius: var(--radius-md);
+    padding: 16px;
+    font-size: 15px;
     font-family: inherit;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     resize: vertical;
-    background: var(--white);
+    background: #f8fafc;
     color: var(--text-primary);
+    transition: border-color 0.2s, background 0.2s;
   }
-  textarea { min-height: 80px; }
+  textarea:focus, input[type=text].plain:focus {
+    outline: none;
+    border-color: var(--navy-medium);
+    background: var(--white);
+  }
+  textarea { min-height: 100px; }
 
-  .divider-line { border: none; border-top: 1px solid var(--divider); margin: 14px 0; }
+  .divider-line { border: none; border-top: 1px solid var(--divider); margin: 32px 0; }
 
-  .review-summary { font-weight: bold; font-size: 14px; margin-bottom: 10px; }
+  .review-summary { font-weight: 800; font-size: 16px; margin-bottom: 16px; color: var(--navy-dark); }
 
   .review-item {
-    background: var(--white);
-    border: 1px solid var(--divider);
-    border-radius: 12px;
-    padding: 12px 14px;
-    margin-bottom: 8px;
+    background: var(--bg);
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    margin-bottom: 12px;
   }
   .review-item .row1 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 6px;
+    margin-bottom: 10px;
   }
-  .review-item .rating { color: var(--gold); font-size: 13px; letter-spacing: 1px; }
-  .review-item .author { font-size: 12px; color: var(--text-secondary); }
-  .review-item .date { font-size: 11px; color: var(--text-hint); }
-  .review-item .opinion { font-size: 13.5px; line-height: 1.5; white-space: pre-wrap; }
+  .review-item .rating { color: var(--gold); font-size: 15px; letter-spacing: 2px; }
+  .review-item .author { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-left: 8px; }
+  .review-item .date { font-size: 12px; color: var(--text-hint); }
+  .review-item .opinion { font-size: 14.5px; line-height: 1.6; white-space: pre-wrap; color: var(--text-secondary); }
 </style>
 </head>
 <body>
@@ -402,7 +523,17 @@
 <div id="confettiLayer"></div>
 
 <header id="listHeader">
-  <h1>⚖️ 판례인사이트</h1>
+  <!-- 고해상도 벡터 SVG 로고 -->
+  <svg class="header-logo-svg" viewBox="0 0 340 50" xmlns="http://www.w3.org/2000/svg" onclick="location.reload();">
+    <!-- M 아이콘 박스 -->
+    <rect width="46" height="46" rx="8" fill="#786117"/>
+    <text x="23" y="33" fill="#ffffff" font-family="'Pretendard', sans-serif" font-weight="900" font-size="28" text-anchor="middle">M</text>
+    <!-- 세로 구분선 -->
+    <line x1="62" y1="10" x2="62" y2="36" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
+    <!-- 텍스트 -->
+    <text x="82" y="33" fill="#ffffff" font-family="'Pretendard', sans-serif" font-weight="800" font-size="26" letter-spacing="-0.5px">판례인사이트</text>
+  </svg>
+
   <div class="search-row">
     <input id="searchInput" type="text" placeholder="🔍  사건명, 사건번호, 법원명 검색..." />
     <button id="searchBtn">검색</button>
@@ -453,9 +584,9 @@
         <div class="stars" id="ratingStars">
           <span data-v="1">★</span><span data-v="2">★</span><span data-v="3">★</span><span data-v="4">★</span><span data-v="5">★</span>
         </div>
-        <textarea id="opinionInput" placeholder="의견을 입력하세요"></textarea>
-        <input class="plain" id="authorInput" type="text" placeholder="작성자 (선택, 비우면 익명)" />
-        <button class="btn-primary" id="submitReviewBtn">리뷰 등록</button>
+        <textarea id="opinionInput" placeholder="이 판례에 대한 자유로운 의견을 남겨주세요."></textarea>
+        <input class="plain" id="authorInput" type="text" placeholder="작성자 (선택사항, 미입력 시 익명)" />
+        <button class="btn-primary" id="submitReviewBtn">리뷰 등록하기</button>
 
         <hr class="divider-line"/>
 
@@ -465,7 +596,7 @@
 
       <div class="detail-side">
         <div class="detail-card" id="summaryCard">
-          <div class="section-title" style="margin-bottom:8px;">⚖️ AI 요약</div>
+          <div class="section-title" style="margin-bottom:12px;">✨ AI 요약 인사이트</div>
           <div id="summaryBody" class="summary-body">요약을 불러오는 중...</div>
         </div>
       </div>
@@ -608,17 +739,17 @@
   }
 
   // 시상대 등장 시 터지는 폭죽 효과
-  const CONFETTI_COLORS = ["#C8A84B", "#E85D75", "#4C9F70", "#4A90D9", "#F2B807", "#8E5FD4"];
+  const CONFETTI_COLORS = ["#d4af37", "#E85D75", "#4C9F70", "#4A90D9", "#F2B807", "#8E5FD4"];
   function fireConfetti() {
     const layer = el("confettiLayer");
     if (!layer) return;
-    const count = 60;
+    const count = 70;
     for (let i = 0; i < count; i++) {
       const piece = document.createElement("div");
       piece.className = "confetti-piece";
-      const size = 6 + Math.random() * 6;
-      const duration = 2.2 + Math.random() * 1.4;
-      const delay = Math.random() * 0.35;
+      const size = 6 + Math.random() * 8;
+      const duration = 2.2 + Math.random() * 1.5;
+      const delay = Math.random() * 0.4;
       piece.style.left = `${Math.random() * 100}vw`;
       piece.style.width = `${size}px`;
       piece.style.height = `${size * 1.6}px`;
@@ -654,6 +785,8 @@
     el("detailHeader").style.display = "block";
     el("listView").classList.add("hidden");
     el("detailView").classList.add("active");
+
+    window.scrollTo(0, 0);
 
     el("detailTitle").textContent = item.case_name;
     el("detailInfo").innerHTML = `
@@ -691,8 +824,8 @@
     } catch {
       if (docId !== currentDocId) return;
       container.innerHTML = `
-        <div class="hint">원문을 불러오지 못했습니다.<br/>
-          <a href="${escapeHtml(currentLink || "")}" target="_blank" rel="noopener noreferrer">새 탭에서 열기 ↗</a>
+        <div class="hint">원문을 바로 불러오지 못했습니다.<br/><br/>
+          <a href="${escapeHtml(currentLink || "")}" target="_blank" rel="noopener noreferrer" class="ext-link" style="display:inline-block;">새 탭에서 원문 열기 ↗</a>
         </div>`;
     }
   }
@@ -762,7 +895,7 @@
     el("reviewList").innerHTML = data.items.map((r) => `
       <div class="review-item">
         <div class="row1">
-          <div><span class="rating">${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}</span> <span class="author">${escapeHtml(r.author_name)}</span></div>
+          <div><span class="rating">${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}</span> <span class="author">${escapeHtml(r.author_name) || "익명"}</span></div>
           <div class="date">${escapeHtml((r.created_at || "").slice(0, 10).replace(/-/g, "."))}</div>
         </div>
         <div class="opinion">${escapeHtml(r.opinion)}</div>
@@ -799,7 +932,7 @@
       alert("리뷰 등록에 실패했습니다.");
     } finally {
       btn.disabled = false;
-      btn.textContent = "리뷰 등록";
+      btn.textContent = "리뷰 등록하기";
     }
   });
 </script>
