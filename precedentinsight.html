@@ -12,7 +12,7 @@
     --navy-medium: #1e293b;
     --gold: #d4af37;
     --gold-hover: #b8962e;
-    --bg: #f4f7f9;
+    --bg: #f8fafc;
     --white: #ffffff;
     --text-primary: #1e293b;
     --text-secondary: #475569;
@@ -39,51 +39,96 @@
 
   /* Header (Glassmorphism) */
   header {
-    background: rgba(15, 23, 42, 0.85);
+    background: rgba(15, 23, 42, 0.9);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    padding: 16px 20px;
+    padding: 16px 24px;
     position: sticky;
     top: 0;
     z-index: 100;
     box-shadow: var(--shadow-sm);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
-  /* SVG Logo Style */
-  .header-logo-svg {
-    height: 38px;
-    width: auto;
-    margin-bottom: 16px;
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     cursor: pointer;
+  }
+  .header-logo-svg {
+    height: 32px;
+    width: auto;
     display: block;
-    transition: opacity 0.2s;
   }
-  .header-logo-svg:hover {
-    opacity: 0.9;
+  .header-menu {
+    display: flex;
+    gap: 16px;
+    align-items: center;
   }
-  
-  /* Search Input */
+  .header-menu a, .header-menu button {
+    color: rgba(255, 255, 255, 0.8);
+    background: none;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .header-menu a:hover, .header-menu button:hover {
+    color: var(--gold);
+  }
+
+  /* Main Hero Search Section */
+  .hero-section {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: var(--white);
+    padding: 48px 20px 56px;
+    text-align: center;
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
+    box-shadow: var(--shadow-lg);
+    margin-bottom: 32px;
+  }
+  .hero-container {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+  .hero-title {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    letter-spacing: -0.5px;
+  }
   .search-row {
     display: flex;
     gap: 10px;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 8px;
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+    transition: all 0.2s;
+  }
+  .search-row:focus-within {
+    border-color: var(--gold);
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.2);
   }
   .search-row input {
     flex: 1;
-    padding: 14px 16px;
+    padding: 12px 16px;
     border-radius: var(--radius-md);
-    border: 1px solid rgba(255,255,255,0.15);
-    background: rgba(255,255,255,0.08);
+    border: none;
+    background: transparent;
     color: var(--white);
     font-size: 15px;
     outline: none;
-    transition: all 0.2s ease;
   }
-  .search-row input:focus {
-    border-color: var(--gold);
-    background: rgba(255,255,255,0.12);
-    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
-  }
-  .search-row input::placeholder { color: rgba(255,255,255,0.4); }
+  .search-row input::placeholder { color: rgba(255, 255, 255, 0.45); }
   .search-row button {
     padding: 0 24px;
     border-radius: var(--radius-md);
@@ -101,14 +146,35 @@
     transform: translateY(-1px);
     box-shadow: var(--shadow-gold);
   }
-  .search-row button:active {
-    transform: translateY(1px);
+
+  /* 추천 키워드 태그 */
+  .keyword-tags {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+  .keyword-tag {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 13px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.2s;
+  }
+  .keyword-tag:hover {
+    background: var(--gold);
+    color: var(--navy-dark);
+    font-weight: 700;
   }
 
   main {
-    max-width: 680px;
+    max-width: 720px;
     margin: 0 auto;
-    padding: 24px 16px;
+    padding: 0 16px 40px;
   }
   main:has(#detailView.active) {
     max-width: 1200px;
@@ -120,7 +186,7 @@
     border: 1px solid var(--divider);
     border-radius: var(--radius-md);
     padding: 20px;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
     cursor: pointer;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: var(--shadow-sm);
@@ -155,46 +221,58 @@
     border: 1px solid #e2e8f0;
   }
 
+  /* Section Titles */
+  .section-header-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--navy-dark);
+    margin: 32px 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
   /* Podium / Award Section */
-  #lowRatedSection { margin-bottom: 32px; }
+  #lowRatedSection { margin-bottom: 36px; }
   #lowRatedSection .award-card {
     background: var(--white);
     border: none;
     border-radius: var(--radius-lg);
-    padding: 30px 20px 24px;
+    padding: 26px 20px 22px;
     position: relative;
     overflow: hidden;
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--divider);
   }
   #lowRatedSection .award-card::before {
     content: "";
     position: absolute;
     top: 0; left: 0; right: 0;
-    height: 6px;
+    height: 5px;
     background: linear-gradient(90deg, var(--gold), #fef08a, var(--gold));
   }
   #lowRatedSection .award-title {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 900;
     color: var(--navy-dark);
     text-align: center;
-    margin: 0 0 8px;
+    margin: 0 0 6px;
     letter-spacing: -0.5px;
   }
   #lowRatedSection .award-sub {
-    font-size: 14px;
+    font-size: 13.5px;
     color: var(--text-secondary);
     text-align: center;
-    margin: 0 0 24px;
+    margin: 0 0 20px;
   }
   #lowRatedSection .award-sub b { color: var(--navy-dark); font-weight: 800; }
   #lowRatedSection .caption {
     color: var(--text-hint);
-    font-size: 12px;
+    font-size: 11.5px;
     line-height: 1.5;
     text-align: center;
-    margin: 24px 4px 0;
-    padding-top: 16px;
+    margin: 20px 4px 0;
+    padding-top: 14px;
     border-top: 1px dashed var(--divider);
   }
   
@@ -203,11 +281,11 @@
     align-items: flex-end;
     justify-content: center;
     gap: 12px;
-    margin-top: 20px;
+    margin-top: 16px;
   }
   .podium-item {
-    flex: 0 1 100px;
-    max-width: 110px;
+    flex: 0 1 110px;
+    max-width: 120px;
     min-width: 0;
     display: flex;
     flex-direction: column;
@@ -217,27 +295,26 @@
     transition: transform 0.2s;
   }
   .podium-item:hover { transform: translateY(-4px); }
-  .podium-item:active { opacity: 0.85; transform: translateY(0); }
-  .podium-item .medal { font-size: 28px; line-height: 1; margin-bottom: 8px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
+  .podium-item .medal { font-size: 26px; line-height: 1; margin-bottom: 6px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
   .podium-item .p-name {
-    font-size: 13px;
+    font-size: 12.5px;
     font-weight: 700;
     color: var(--text-primary);
-    line-height: 1.4;
-    height: 2.8em;
+    line-height: 1.35;
+    height: 2.7em;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     padding: 0 4px;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
     word-break: keep-all;
   }
   .podium-item .p-rating {
-    font-size: 12px;
+    font-size: 11.5px;
     font-weight: 800;
     color: var(--gold);
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     background: #fffbeb;
     padding: 2px 8px;
     border-radius: 12px;
@@ -249,15 +326,26 @@
     background: linear-gradient(180deg, var(--navy-medium), #0f172a);
     color: var(--white);
     font-weight: 800;
-    font-size: 18px;
+    font-size: 16px;
     display: flex;
     justify-content: center;
-    padding-top: 10px;
+    padding-top: 8px;
     box-shadow: inset 0 2px 4px rgba(255,255,255,0.1);
   }
-  .podium-item.rank-1 .p-block { height: 80px; background: linear-gradient(180deg, #1e293b, #020617); font-size: 22px; }
-  .podium-item.rank-2 .p-block { height: 56px; }
-  .podium-item.rank-3 .p-block { height: 42px; }
+  .podium-item.rank-1 .p-block { height: 75px; background: linear-gradient(180deg, #1e293b, #020617); font-size: 20px; }
+  .podium-item.rank-2 .p-block { height: 52px; }
+  .podium-item.rank-3 .p-block { height: 38px; }
+
+  /* News Iframe */
+  .news-iframe {
+    width: 100%;
+    height: 250px;
+    border: 1px solid var(--divider);
+    border-radius: var(--radius-md);
+    background: #f8fafc;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 24px;
+  }
 
   /* Confetti */
   #confettiLayer {
@@ -304,7 +392,7 @@
     text-align: center;
     color: var(--text-hint);
     font-size: 14px;
-    padding: 60px 20px;
+    padding: 50px 20px;
     background: var(--white);
     border-radius: var(--radius-md);
     border: 1px dashed var(--divider);
@@ -317,10 +405,19 @@
   #listView.hidden { display: none; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+  .back-header {
+    background: var(--navy-dark);
+    padding: 16px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
   .back-row {
     display: flex;
     align-items: center;
     gap: 12px;
+    max-width: 1200px;
+    margin: 0 auto;
   }
   .back-row button {
     background: rgba(255,255,255,0.1);
@@ -362,6 +459,7 @@
     display: flex;
     align-items: flex-start;
     gap: 24px;
+    margin-top: 24px;
   }
   .detail-main { flex: 1; min-width: 0; }
   .detail-side {
@@ -522,25 +620,20 @@
 
 <div id="confettiLayer"></div>
 
+<!-- 상단 MARU 브랜드 헤더 -->
 <header id="listHeader">
-  <!-- 고해상도 벡터 SVG 로고 -->
-  <svg class="header-logo-svg" viewBox="0 0 340 50" xmlns="http://www.w3.org/2000/svg" onclick="location.reload();">
-    <!-- M 아이콘 박스 -->
-    <rect width="46" height="46" rx="8" fill="#786117"/>
-    <text x="23" y="33" fill="#ffffff" font-family="'Pretendard', sans-serif" font-weight="900" font-size="28" text-anchor="middle">M</text>
-    <!-- 세로 구분선 -->
-    <line x1="62" y1="10" x2="62" y2="36" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
-    <!-- 텍스트 -->
-    <text x="82" y="33" fill="#ffffff" font-family="'Pretendard', sans-serif" font-weight="800" font-size="26" letter-spacing="-0.5px">판례인사이트</text>
-  </svg>
-
-  <div class="search-row">
-    <input id="searchInput" type="text" placeholder="🔍  사건명, 사건번호, 법원명 검색..." />
-    <button id="searchBtn">검색</button>
+  <div class="header-brand" onclick="location.reload();">
+    <!-- SVG로 구현된 MARU 프리미엄 로고 -->
+    <svg class="header-logo-svg" viewBox="0 0 340 50" xmlns="http://www.w3.org/2000/svg">
+      <rect width="46" height="46" rx="8" fill="#786117"/>
+      <text x="23" y="33" fill="#ffffff" font-family="'Pretendard', sans-serif" font-weight="900" font-size="28" text-anchor="middle">M</text>
+      <line x1="62" y1="10" x2="62" y2="36" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
+      <text x="82" y="33" fill="#ffffff" font-family="'Pretendard', sans-serif" font-weight="800" font-size="26" letter-spacing="-0.5px">판례인사이트</text>
+    </svg>
   </div>
 </header>
 
-<header id="detailHeader" style="display:none;">
+<header id="detailHeader" class="back-header" style="display:none;">
   <div class="back-row">
     <button id="backBtn">←</button>
     <div class="title" id="detailTitle">사건명</div>
@@ -549,18 +642,42 @@
 
 <main>
   <div id="listView">
-    <div id="lowRatedSection" style="display:none;">
-      <div class="award-card">
-        <div class="award-title" id="lowRatedTitle">🎉 Congratulations!</div>
-        <div class="award-sub" id="lowRatedSub">국민이 뽑은 <b>최악의 판례 TOP 3</b>에 선정되셨습니다!</div>
-        <div id="lowRatedResults" class="podium"></div>
-        <div class="caption" id="lowRatedCaption">판결서는 확정 후 누구나 열람할 수 있는 공개 기록입니다(형사소송법 제59조의3, 민사소송법 제163조의2).</div>
+    <!-- 메인 검색 히어로 섹션 -->
+    <div class="hero-section">
+      <div class="hero-container">
+        <div class="hero-title">대한민국 모든 판례와 AI 인사이트</div>
+        <div class="search-row">
+          <input id="searchInput" type="text" placeholder="🔍 사건명, 사건번호, 주요 키워드로 검색해보세요." />
+          <button id="searchBtn">검색</button>
+        </div>
+        <div class="keyword-tags">
+          <span class="keyword-tag" onclick="searchByTag('#위법수집증거')">#위법수집증거</span>
+          <span class="keyword-tag" onclick="searchByTag('#정보공개청구')">#정보공개청구</span>
+          <span class="keyword-tag" onclick="searchByTag('#의제배당')">#의제배당</span>
+        </div>
       </div>
     </div>
+
+    <!-- SECTION 1: 국민이 뽑은 최악의 판례 TOP 3 -->
+    <div id="lowRatedSection" style="display:none;">
+      <div class="award-card">
+        <div class="award-title" id="lowRatedTitle">🏆 국민이 뽑은 최악의 판례 TOP 3</div>
+        <div class="award-sub" id="lowRatedSub">아직 리뷰가 모이고 있어요! 첫 평가의 주인공이 되어보세요.</div>
+        <div id="lowRatedResults" class="podium"></div>
+        <div class="caption" id="lowRatedCaption">판결서는 확정 후 누구나 열람할 수 있는 공개 기록입니다.</div>
+      </div>
+    </div>
+
+    <!-- SECTION 2: 최신 주요 판례 뉴스 -->
+    <div class="section-header-title">최신 주요 판례 뉴스</div>
+    <iframe class="news-iframe" src="https://www.lawtimes.co.kr/news/articleList.html?sc_section_code=S1N3&view_type=sm" title="법률신문 판례 뉴스"></iframe>
+
+    <!-- SECTION 3: 검색 결과 목록 -->
+    <div class="section-header-title" id="searchResultTitle">📋 판례 검색 결과</div>
     <div id="results"></div>
     <button id="loadMoreBtn" style="display:none;">더 보기</button>
     <div id="emptyMsg" class="empty" style="display:none;">검색 결과가 없습니다.</div>
-    <div id="initialHint" class="hint">검색어를 입력해 판례를 찾아보세요.</div>
+    <div id="initialHint" class="hint">검색어나 추천 키워드를 눌러 판례를 찾아보세요.</div>
   </div>
 
   <div id="detailView">
@@ -612,8 +729,8 @@
   let currentDocId = null;
   let currentLink = null;
 
-  let searchGen = 0;         // 검색이 바뀔 때마다 증가 (오래된 응답 무시용)
-  let lastPodiumIds = null;  // 마지막으로 보여준 TOP3 조합 (동일하면 폭죽 재발사 안 함)
+  let searchGen = 0;
+  let lastPodiumIds = null;
 
   const el = (id) => document.getElementById(id);
 
@@ -623,7 +740,13 @@
     }[c]));
   }
 
-  // ── 검색/목록 ────────────────────────────────────────────────
+  function searchByTag(tag) {
+    const keyword = tag.replace('#', '');
+    el("searchInput").value = keyword;
+    currentQuery = keyword;
+    search(true);
+  }
+
   async function search(reset) {
     if (reset) {
       page = 1;
@@ -637,11 +760,14 @@
 
     const params = new URLSearchParams({ page, size: 20 });
     if (currentQuery) params.set("q", currentQuery);
+    
+    // 검색어가 있을 때만 타이틀 표시
+    el("searchResultTitle").style.display = currentQuery || page > 1 ? "flex" : "none";
 
     const res = await fetch(`${API}/precedents?${params}`);
     if (!res.ok) return;
     const data = await res.json();
-    if (myGen !== searchGen) return; // 그 사이 다른 검색이 시작됐으면 무시
+    if (myGen !== searchGen) return;
 
     if (reset && data.items.length === 0) {
       el("emptyMsg").style.display = "block";
@@ -665,8 +791,6 @@
     page = data.page + 1;
   }
 
-  // 전체 판례 DB(16만여 건) 중 리뷰가 1건 이상 있는 판례를 대상으로
-  // 평균 평점이 가장 낮은 3개를 백엔드 집계 쿼리로 받아와 상단 위젯에 표시한다.
   async function loadWorstRated() {
     try {
       const res = await fetch(`${API}/precedents/worst-reviewed?limit=3`);
@@ -679,21 +803,17 @@
   }
 
   function renderWorstRated(items) {
-    // 엔드포인트가 응답은 했지만(=배포됨) 순위를 매길 데이터가 없는 경우
-    // (리뷰가 아예 없거나, 리뷰가 달린 판례가 전부 만점이라 대상이 없는 경우) —
-    // 위젯을 숨기지 않고 리뷰 작성을 유도하는 문구로 대체한다.
     if (!items || items.length === 0) { renderReviewPrompt(); return; }
 
     el("lowRatedSection").style.display = "block";
-    el("lowRatedTitle").textContent = "🎉 Congratulations!";
-    el("lowRatedSub").innerHTML = "국민이 뽑은 <b>최악의 판례 TOP 3</b>에 선정되셨습니다!";
+    el("lowRatedTitle").textContent = "🏆 국민이 뽑은 최악의 판례 TOP 3";
+    el("lowRatedSub").innerHTML = "여러분의 리뷰 데이터로 선정된 불명예의 전당입니다.";
     el("lowRatedCaption").textContent = "판결서는 확정 후 누구나 열람할 수 있는 공개 기록입니다(형사소송법 제59조의3, 민사소송법 제163조의2).";
 
     const box = el("lowRatedResults");
     box.className = "podium";
     box.innerHTML = "";
 
-    // 시상대 배치: 가운데(가장 낮은 평점) - 왼쪽(2위) - 오른쪽(3위)
     const MEDAL = ["🥇", "🥈", "🥉"];
     const order =
       items.length === 1 ? [0] :
@@ -702,7 +822,7 @@
 
     order.forEach((idx) => {
       const item = items[idx];
-      const rank = idx + 1; // 1 = 평점이 가장 낮은 판례
+      const rank = idx + 1;
       const slot = document.createElement("div");
       slot.className = `podium-item rank-${rank}`;
       slot.innerHTML = `
@@ -714,7 +834,6 @@
       box.appendChild(slot);
     });
 
-    // TOP3 구성이 이전과 달라졌을 때만 폭죽을 새로 터뜨림 (동일 목록 재표시 시 중복 방지)
     const idsKey = items.map((x) => x.doc_id).join(",");
     if (idsKey !== lastPodiumIds) {
       lastPodiumIds = idsKey;
@@ -724,9 +843,9 @@
 
   function renderReviewPrompt() {
     el("lowRatedSection").style.display = "block";
-    el("lowRatedTitle").textContent = "✍️ 첫 리뷰를 남겨주세요";
-    el("lowRatedSub").innerHTML = "아직 순위를 매길 만큼 리뷰가 쌓이지 않았어요.<br/>판례에 별점과 의견을 남겨보세요!";
-    el("lowRatedCaption").textContent = "리뷰가 쌓이면 국민이 뽑은 최악의 판례 TOP 3가 이 자리에 나타납니다.";
+    el("lowRatedTitle").textContent = "🏆 국민이 뽑은 최악의 판례 TOP 3";
+    el("lowRatedSub").innerHTML = "아직 리뷰가 모이고 있어요! 첫 평가의 주인공이 되어보세요.";
+    el("lowRatedCaption").textContent = "리뷰가 충분히 쌓이면 최악의 판례 TOP 3가 이 자리에 나타납니다.";
     el("lowRatedResults").className = "";
     el("lowRatedResults").innerHTML = "";
     lastPodiumIds = null;
@@ -738,7 +857,6 @@
     lastPodiumIds = null;
   }
 
-  // 시상대 등장 시 터지는 폭죽 효과
   const CONFETTI_COLORS = ["#d4af37", "#E85D75", "#4C9F70", "#4A90D9", "#F2B807", "#8E5FD4"];
   function fireConfetti() {
     const layer = el("confettiLayer");
@@ -771,11 +889,10 @@
   });
   el("loadMoreBtn").addEventListener("click", () => search(false));
 
-  // 안드로이드 앱과 동일하게, 검색어 없이 열자마자 최신 판례 목록을 바로 보여준다.
+  // 초기 실행
   search(true);
   loadWorstRated();
 
-  // ── 상세 화면 ────────────────────────────────────────────────
   function openDetail(item) {
     currentDocId = item.doc_id;
     currentLink = item.link;
@@ -808,15 +925,13 @@
     loadOriginalView(item.doc_id);
   }
 
-  // 상세화면 중앙에 띄울 원문(세무 판례는 국세청 PDF 뷰어, 일반 판례는
-  // law.go.kr 페이지)을 백엔드에 물어봐서 iframe으로 임베드한다.
   async function loadOriginalView(docId) {
     const container = el("originalViewContainer");
     container.innerHTML = `<div class="hint">원문을 불러오는 중...</div>`;
 
     try {
       const res = await fetch(`${API}/precedents/${encodeURIComponent(docId)}/original-view`);
-      if (docId !== currentDocId) return; // 그 사이 다른 판례로 넘어갔으면 무시
+      if (docId !== currentDocId) return;
       if (!res.ok) throw new Error();
       const data = await res.json();
       if (docId !== currentDocId) return;
@@ -853,7 +968,7 @@
 
     try {
       const res = await fetch(`${API}/precedents/${encodeURIComponent(docId)}/summary`);
-      if (docId !== currentDocId) return; // 그 사이 다른 판례로 넘어갔으면 무시
+      if (docId !== currentDocId) return;
       if (!res.ok) throw new Error();
       const data = await res.json();
       body.className = "summary-body";
@@ -866,11 +981,11 @@
   }
 
   el("backBtn").addEventListener("click", () => {
-    el("listHeader").style.display = "block";
+    el("listHeader").style.display = "flex";
     el("detailHeader").style.display = "none";
     el("listView").classList.remove("hidden");
     el("detailView").classList.remove("active");
-    loadWorstRated(); // 상세에서 평점을 남겼을 수 있으니 위젯 갱신
+    loadWorstRated();
   });
 
   function setStars(v) {
