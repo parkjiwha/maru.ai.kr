@@ -727,10 +727,15 @@
     flex-direction: column;
     justify-content: space-between;
   }
-  @media (max-width: 1100px) {
+  @media (max-width: 1160px) {
     .side-ad-panel {
       display: none; /* 화면 폭이 좁을 경우 콘텐츠 가림 방지를 위해 숨김 */
     }
+  }
+  /* 상세보기는 자체 AI 요약 사이드 패널(.detail-side)을 우측에 쓰므로,
+     우측 고정 광고 패널과 겹치지 않도록 상세보기에서는 숨긴다 */
+  body:has(#detailView.active) .side-ad-panel {
+    display: none;
   }
 
   .side-ad-header {
@@ -780,6 +785,12 @@
     min-height: 220px;
     background: linear-gradient(180deg, #f8fafc 0%, #edf2f7 100%);
   }
+  .side-ad-card.tall.has-unit {
+    padding: 0;
+    overflow: hidden;
+    border-style: solid;
+    background: var(--white);
+  }
   .side-ad-icon { font-size: 24px; }
   .side-ad-card-title { font-size: 13px; font-weight: 800; color: var(--navy-dark); word-break: keep-all; }
   .side-ad-card-desc { font-size: 11px; color: var(--text-secondary); line-height: 1.4; word-break: keep-all; }
@@ -790,6 +801,29 @@
     font-size: 11px;
     color: var(--text-hint);
     text-align: center;
+  }
+
+  /* 📢 검색창 하단 가로형 배너 광고 자리 */
+  .ad-slot {
+    background: var(--white);
+    border: 1px dashed #cbd5e1;
+    border-radius: var(--radius-md);
+    margin-bottom: 28px;
+    text-align: center;
+  }
+  .ad-hero-banner {
+    min-height: 90px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 12px 16px;
+    color: var(--text-secondary);
+    font-size: 13px;
+  }
+  .ad-hero-banner .ad-unit-wrap {
+    width: 100%;
   }
 
   textarea, input[type=text].plain {
@@ -880,8 +914,14 @@
     <!-- 📢 [광고 영역 1] 검색창 하단 가로형 띠 배너 -->
     <div class="ad-slot ad-hero-banner">
       <span class="ad-badge">AD</span>
-      <div>📢 광고 영역 (728x90 / 반응형 디스플레이 배너)</div>
-      <div style="font-size:11px; color:#94a3b8; margin-top:4px;">Google AdSense / Kakao AdFit 코드 삽입 구역</div>
+      <div class="ad-unit-wrap">
+        <ins class="adsbygoogle"
+             style="display:block; width:100%; min-height:90px;"
+             data-ad-client="ca-pub-9347990449949447"
+             data-ad-slot="REPLACE_WITH_HERO_BANNER_SLOT_ID"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+      </div>
     </div>
 
     <!-- SECTION 1: 국민이 뽑은 최악의 판례 TOP 3 -->
@@ -950,7 +990,7 @@
   </div>
 </main>
 
-<!-- 📢 우측 세로 날씬한 밀착형 고정 광고 패널 -->
+<!-- 📢 우측 세로 날씬한 밀착형 고정 광고 패널 (리스트뷰에서만 노출, 상세뷰에서는 CSS로 숨김) -->
 <div id="sideAdPanel" class="side-ad-panel">
   <div class="side-ad-header">
     <span class="ad-badge">AD</span>
@@ -965,13 +1005,12 @@
       <div class="side-ad-card-desc">판례 분석 기반 1:1 비밀 법률 자문</div>
     </div>
 
-    <!-- 하단 세로 스카이스크래퍼 디스플레이 배너 영역 -->
-    <div class="side-ad-card tall">
-      <div style="font-weight:700; color:var(--navy-dark); font-size:12px; margin-bottom:4px;">📢 타워 배너 구역</div>
-      <div style="font-size:10.5px; color:var(--text-hint); line-height:1.4;">
-        Google AdSense / Kakao AdFit<br/>
-        (160x600 스카이스크래퍼)
-      </div>
+    <!-- 하단 세로 스카이스크래퍼 디스플레이 광고 -->
+    <div class="side-ad-card tall has-unit">
+      <ins class="adsbygoogle"
+           style="display:block; width:160px; height:600px;"
+           data-ad-client="ca-pub-9347990449949447"
+           data-ad-slot="REPLACE_WITH_SKYSCRAPER_SLOT_ID"></ins>
     </div>
   </div>
 
@@ -997,6 +1036,17 @@
     return (s || "").replace(/[&<>"']/g, (c) => ({
       "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
     }[c]));
+  }
+
+  // 페이지의 모든 adsbygoogle <ins> 유닛을 채운다 (Google 표준 패턴)
+  function pushAdUnits() {
+    try {
+      document.querySelectorAll("ins.adsbygoogle:not([data-adsbygoogle-status])").forEach(() => {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      });
+    } catch (e) {
+      /* 광고 차단기 등으로 실패해도 앱 동작에는 영향 없음 */
+    }
   }
 
   function searchByTag(tag) {
@@ -1185,6 +1235,7 @@
   search(true);
   loadWorstRated();
   loadLawNews();
+  pushAdUnits();
 
   function openDetail(item) {
     currentDocId = item.doc_id;
