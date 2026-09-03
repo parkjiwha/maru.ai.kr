@@ -4,6 +4,10 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>판례인사이트</title>
+
+<!-- Google AdSense 연결 스크립트 -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9347990449949447" crossorigin="anonymous"></script>
+
 <style>
   @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
@@ -705,6 +709,89 @@
   .stars span:hover ~ span { color: #cbd5e1 !important; }
   .stars:hover span { color: var(--gold-hover); }
 
+  /* 📢 우측 세로 날씬한 밀착형 고정 광고 패널 */
+  .side-ad-panel {
+    position: fixed;
+    top: 68px;
+    right: 0;
+    bottom: 0;
+    width: 200px;
+    background: var(--white);
+    border-left: 1px solid var(--divider);
+    border-top: 1px solid var(--divider);
+    border-radius: 16px 0 0 0;
+    box-shadow: -4px 0 20px rgba(15, 23, 42, 0.06);
+    padding: 16px 12px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  @media (max-width: 1100px) {
+    .side-ad-panel {
+      display: none; /* 화면 폭이 좁을 경우 콘텐츠 가림 방지를 위해 숨김 */
+    }
+  }
+
+  .side-ad-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--divider);
+  }
+  .side-ad-title {
+    font-size: 12.5px;
+    font-weight: 800;
+    color: var(--navy-dark);
+  }
+  .ad-badge {
+    background: #e2e8f0;
+    color: #64748b;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 5px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  .side-ad-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 12px 0;
+    overflow-y: auto;
+  }
+  .side-ad-card {
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: var(--radius-md);
+    padding: 14px 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .side-ad-card.tall {
+    flex: 1;
+    min-height: 220px;
+    background: linear-gradient(180deg, #f8fafc 0%, #edf2f7 100%);
+  }
+  .side-ad-icon { font-size: 24px; }
+  .side-ad-card-title { font-size: 13px; font-weight: 800; color: var(--navy-dark); word-break: keep-all; }
+  .side-ad-card-desc { font-size: 11px; color: var(--text-secondary); line-height: 1.4; word-break: keep-all; }
+
+  .side-ad-footer {
+    padding-top: 10px;
+    border-top: 1px solid var(--divider);
+    font-size: 11px;
+    color: var(--text-hint);
+    text-align: center;
+  }
+
   textarea, input[type=text].plain {
     width: 100%;
     border: 1px solid var(--divider);
@@ -790,6 +877,13 @@
       </div>
     </div>
 
+    <!-- 📢 [광고 영역 1] 검색창 하단 가로형 띠 배너 -->
+    <div class="ad-slot ad-hero-banner">
+      <span class="ad-badge">AD</span>
+      <div>📢 광고 영역 (728x90 / 반응형 디스플레이 배너)</div>
+      <div style="font-size:11px; color:#94a3b8; margin-top:4px;">Google AdSense / Kakao AdFit 코드 삽입 구역</div>
+    </div>
+
     <!-- SECTION 1: 국민이 뽑은 최악의 판례 TOP 3 -->
     <div id="lowRatedSection" style="display:none;">
       <div class="award-card">
@@ -800,7 +894,7 @@
       </div>
     </div>
 
-    <!-- SECTION 2: 최신 주요 판례 뉴스 (법률신문) -->
+    <!-- SECTION 2: 최신 주요 판례 뉴스 -->
     <div class="section-header-title">최신 주요 판례 뉴스</div>
     <div id="lawNews" class="law-news-grid"></div>
     <div class="law-news-notice">
@@ -855,6 +949,36 @@
     </div>
   </div>
 </main>
+
+<!-- 📢 우측 세로 날씬한 밀착형 고정 광고 패널 -->
+<div id="sideAdPanel" class="side-ad-panel">
+  <div class="side-ad-header">
+    <span class="ad-badge">AD</span>
+    <span class="side-ad-title">스폰서 파트너</span>
+  </div>
+  
+  <div class="side-ad-body">
+    <!-- 상단 스폰서 프로모션 카드 -->
+    <div class="side-ad-card">
+      <div class="side-ad-icon">⚖️</div>
+      <div class="side-ad-card-title">변호사 맞춤 상담</div>
+      <div class="side-ad-card-desc">판례 분석 기반 1:1 비밀 법률 자문</div>
+    </div>
+
+    <!-- 하단 세로 스카이스크래퍼 디스플레이 배너 영역 -->
+    <div class="side-ad-card tall">
+      <div style="font-weight:700; color:var(--navy-dark); font-size:12px; margin-bottom:4px;">📢 타워 배너 구역</div>
+      <div style="font-size:10.5px; color:var(--text-hint); line-height:1.4;">
+        Google AdSense / Kakao AdFit<br/>
+        (160x600 스카이스크래퍼)
+      </div>
+    </div>
+  </div>
+
+  <div class="side-ad-footer">
+    <span>판례인사이트 광고 센터</span>
+  </div>
+</div>
 
 <script>
   const API = "https://d2xqa2k3k9ovhh.cloudfront.net";
