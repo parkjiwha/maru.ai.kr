@@ -236,29 +236,6 @@
     justify-content: space-between;
     gap: 8px;
   }
-  .section-header-title .title-left {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  /* Source Badge for Legal Newspaper */
-  .source-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 12px;
-    font-weight: 700;
-    color: #1d4ed8;
-    background: #eff6ff;
-    border: 1px solid #bfdbfe;
-    padding: 3px 10px;
-    border-radius: 12px;
-  }
-  .source-badge::before {
-    content: "📰";
-    font-size: 11px;
-  }
 
   /* Podium / Award Section */
   #lowRatedSection { margin-bottom: 36px; }
@@ -372,9 +349,7 @@
     margin-bottom: 28px;
   }
   @media (max-width: 640px) {
-    .law-news-grid {
-      grid-template-columns: 1fr;
-    }
+    .law-news-grid { grid-template-columns: 1fr; }
   }
   .law-news-card {
     background: var(--white);
@@ -409,11 +384,7 @@
     border-radius: 12px;
     padding: 2px 8px;
   }
-  .law-news-tag {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--text-hint);
-  }
+  .law-news-tag { font-size: 11px; font-weight: 600; color: var(--text-hint); }
   .law-news-card-title {
     font-size: 14px;
     font-weight: 700;
@@ -435,9 +406,7 @@
     padding-top: 8px;
     border-top: 1px dashed var(--divider);
   }
-  .law-news-card:hover .law-news-card-footer {
-    color: #1d4ed8;
-  }
+  .law-news-card:hover .law-news-card-footer { color: #1d4ed8; }
   .law-news-empty {
     grid-column: 1 / -1;
     padding: 20px 16px;
@@ -448,7 +417,6 @@
     border-radius: var(--radius-md);
     text-align: center;
   }
-
   .law-news-notice {
     font-size: 12.5px;
     color: var(--text-secondary);
@@ -463,9 +431,7 @@
     margin-left: 4px;
     transition: color 0.2s;
   }
-  .law-news-notice a:hover {
-    color: #1e40af;
-  }
+  .law-news-notice a:hover { color: #1e40af; }
 
   /* Confetti */
   #confettiLayer {
@@ -709,7 +675,7 @@
   .stars span:hover ~ span { color: #cbd5e1 !important; }
   .stars:hover span { color: var(--gold-hover); }
 
-  /* 📢 우측 세로 날씬한 밀착형 고정 광고 패널 */
+  /* 📢 우측 세로 고정 광고 패널 */
   .side-ad-panel {
     position: fixed;
     top: 68px;
@@ -728,15 +694,9 @@
     justify-content: space-between;
   }
   @media (max-width: 1160px) {
-    .side-ad-panel {
-      display: none; /* 화면 폭이 좁을 경우 콘텐츠 가림 방지를 위해 숨김 */
-    }
+    .side-ad-panel { display: none; }
   }
-  /* 상세보기는 자체 AI 요약 사이드 패널(.detail-side)을 우측에 쓰므로,
-     우측 고정 광고 패널과 겹치지 않도록 상세보기에서는 숨긴다 */
-  body:has(#detailView.active) .side-ad-panel {
-    display: none;
-  }
+  body:has(#detailView.active) .side-ad-panel { display: none; }
 
   .side-ad-header {
     display: flex;
@@ -745,11 +705,7 @@
     padding-bottom: 10px;
     border-bottom: 1px solid var(--divider);
   }
-  .side-ad-title {
-    font-size: 12.5px;
-    font-weight: 800;
-    color: var(--navy-dark);
-  }
+  .side-ad-title { font-size: 12.5px; font-weight: 800; color: var(--navy-dark); }
   .ad-badge {
     background: #e2e8f0;
     color: #64748b;
@@ -768,27 +724,12 @@
     margin: 12px 0;
     overflow-y: auto;
   }
-  .side-ad-card {
-    background: #f8fafc;
-    border: 1px dashed #cbd5e1;
-    border-radius: var(--radius-md);
-    padding: 14px 10px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-  }
-  .side-ad-card.tall {
+  .side-ad-card.tall.has-unit {
     flex: 1;
     min-height: 220px;
-    background: linear-gradient(180deg, #f8fafc 0%, #edf2f7 100%);
-  }
-  .side-ad-card.tall.has-unit {
     padding: 0;
     overflow: hidden;
-    border-style: solid;
+    border: 1px solid var(--divider);
     background: var(--white);
   }
 
@@ -811,9 +752,7 @@
     color: var(--text-secondary);
     font-size: 13px;
   }
-  .ad-hero-banner .ad-unit-wrap {
-    width: 100%;
-  }
+  .ad-hero-banner .ad-unit-wrap { width: 100%; }
 
   textarea, input[type=text].plain {
     width: 100%;
@@ -836,7 +775,6 @@
   textarea { min-height: 100px; }
 
   .divider-line { border: none; border-top: 1px solid var(--divider); margin: 32px 0; }
-
   .review-summary { font-weight: 800; font-size: 16px; margin-bottom: 16px; color: var(--navy-dark); }
 
   .review-item {
@@ -856,16 +794,52 @@
   .review-item .author { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-left: 8px; }
   .review-item .date { font-size: 12px; color: var(--text-hint); }
   .review-item .opinion { font-size: 14.5px; line-height: 1.6; white-space: pre-wrap; color: var(--text-secondary); }
+
+  /* 📢 우측 하단 플로팅 제보 위젯 스타일 */
+  #reportWidget {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #ffffff;
+    padding: 14px 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-size: 14.5px;
+    font-weight: 800;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.35), 0 0 0 2px rgba(212, 175, 55, 0.4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+  }
+  #reportWidget:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.45), 0 0 0 2px #d4af37;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  }
+  #reportWidget .widget-icon { font-size: 18px; line-height: 1; }
+  #reportWidget .widget-text { letter-spacing: -0.3px; color: #ffffff; }
+
+  @media (max-width: 640px) {
+    #reportWidget {
+      bottom: 20px;
+      right: 20px;
+      padding: 12px 16px;
+    }
+    #reportWidget .widget-text { font-size: 13.5px; }
+  }
 </style>
 </head>
 <body>
 
 <div id="confettiLayer"></div>
 
-<!-- 상단 MARU 브랜드 헤더 -->
+<!-- 상단 브랜드 헤더 -->
 <header id="listHeader">
   <div class="header-brand" onclick="location.reload();">
-    <!-- SVG로 구현된 MARU 프리미엄 로고 -->
     <svg class="header-logo-svg" viewBox="0 0 340 50" xmlns="http://www.w3.org/2000/svg">
       <rect width="46" height="46" rx="8" fill="#786117"/>
       <text x="23" y="33" fill="#ffffff" font-family="'Pretendard', sans-serif" font-weight="900" font-size="28" text-anchor="middle">M</text>
@@ -979,15 +953,13 @@
   </div>
 </main>
 
-<!-- 📢 우측 세로 날씬한 밀착형 고정 광고 패널 (리스트뷰에서만 노출, 상세뷰에서는 CSS로 숨김) -->
+<!-- 📢 우측 세로 고정 광고 패널 -->
 <div id="sideAdPanel" class="side-ad-panel">
   <div class="side-ad-header">
     <span class="ad-badge">AD</span>
     <span class="side-ad-title">광고</span>
   </div>
-  
   <div class="side-ad-body">
-    <!-- AdSense 세로 스카이스크래퍼 광고 (실제 광고 유닛만 노출) -->
     <div class="side-ad-card tall has-unit">
       <ins class="adsbygoogle"
            style="display:block; width:160px; height:600px;"
@@ -996,6 +968,12 @@
     </div>
   </div>
 </div>
+
+<!-- 📢 우측 하단 플로팅 제보 위젯 -->
+<a id="reportWidget" href="https://forms.gle/44rbZgZrGVPuX2DEA" target="_blank" rel="noopener noreferrer" title="판결문 제보하기">
+  <span class="widget-icon">⚖️</span>
+  <span class="widget-text">판결문 제보 핫라인</span>
+</a>
 
 <script>
   const API = "https://d2xqa2k3k9ovhh.cloudfront.net";
@@ -1016,15 +994,12 @@
     }[c]));
   }
 
-  // 페이지의 모든 adsbygoogle <ins> 유닛을 채운다 (Google 표준 패턴)
   function pushAdUnits() {
     try {
       document.querySelectorAll("ins.adsbygoogle:not([data-adsbygoogle-status])").forEach(() => {
         (window.adsbygoogle = window.adsbygoogle || []).push({});
       });
-    } catch (e) {
-      /* 광고 차단기 등으로 실패해도 앱 동작에는 영향 없음 */
-    }
+    } catch (e) {}
   }
 
   function searchByTag(tag) {
@@ -1048,34 +1023,41 @@
     const params = new URLSearchParams({ page, size: 20 });
     if (currentQuery) params.set("q", currentQuery);
     
-    // 검색어가 있을 때만 타이틀 표시
     el("searchResultTitle").style.display = currentQuery || page > 1 ? "flex" : "none";
 
-    const res = await fetch(`${API}/precedents?${params}`);
-    if (!res.ok) return;
-    const data = await res.json();
-    if (myGen !== searchGen) return;
+    try {
+      const res = await fetch(`${API}/precedents?${params}`);
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      if (myGen !== searchGen) return;
 
-    if (reset && data.items.length === 0) {
+      if (reset && data.items.length === 0) {
+        el("emptyMsg").textContent = "검색 결과가 없습니다.";
+        el("emptyMsg").style.display = "block";
+      }
+
+      for (const item of data.items) {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <div class="case-name">${escapeHtml(item.case_name)}</div>
+          <div class="meta">
+            <span class="badge">${escapeHtml(item.case_type || "")}</span>
+            ${escapeHtml(item.case_number)}<br/>
+            ${escapeHtml(item.court)} · ${escapeHtml(item.date)}
+          </div>`;
+        card.addEventListener("click", () => openDetail(item));
+        el("results").appendChild(card);
+      }
+
+      el("loadMoreBtn").style.display = data.has_more ? "block" : "none";
+      page = data.page + 1;
+    } catch {
+      if (myGen !== searchGen) return;
+      el("emptyMsg").textContent = "판례 정보를 불러오는 중에 오류가 발생했습니다.";
       el("emptyMsg").style.display = "block";
+      el("loadMoreBtn").style.display = "none";
     }
-
-    for (const item of data.items) {
-      const card = document.createElement("div");
-      card.className = "card";
-      card.innerHTML = `
-        <div class="case-name">${escapeHtml(item.case_name)}</div>
-        <div class="meta">
-          <span class="badge">${escapeHtml(item.case_type || "")}</span>
-          ${escapeHtml(item.case_number)}<br/>
-          ${escapeHtml(item.court)} · ${escapeHtml(item.date)}
-        </div>`;
-      card.addEventListener("click", () => openDetail(item));
-      el("results").appendChild(card);
-    }
-
-    el("loadMoreBtn").style.display = data.has_more ? "block" : "none";
-    page = data.page + 1;
   }
 
   async function loadWorstRated() {
@@ -1209,7 +1191,6 @@
   });
   el("loadMoreBtn").addEventListener("click", () => search(false));
 
-  // 초기 실행
   search(true);
   loadWorstRated();
   loadLawNews();
@@ -1320,6 +1301,7 @@
     el("listView").classList.remove("hidden");
     el("detailView").classList.remove("active");
     loadWorstRated();
+    pushAdUnits();
   });
 
   function setStars(v) {
