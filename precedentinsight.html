@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>판례인사이트</title>
 
-<!-- Google AdSense 연결 스크립트 -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9347990449949447" crossorigin="anonymous"></script>
 
 <style>
@@ -41,7 +40,6 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* Header (Glassmorphism) */
   header {
     background: rgba(15, 23, 42, 0.9);
     backdrop-filter: blur(12px);
@@ -86,7 +84,6 @@
     color: var(--gold);
   }
 
-  /* Main Hero Search Section */
   .hero-section {
     background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     color: var(--white);
@@ -151,7 +148,6 @@
     box-shadow: var(--shadow-gold);
   }
 
-  /* 추천 키워드 태그 */
   .keyword-tags {
     display: flex;
     justify-content: center;
@@ -184,7 +180,6 @@
     max-width: 1200px;
   }
 
-  /* List Cards */
   .card {
     background: var(--white);
     border: 1px solid var(--divider);
@@ -225,7 +220,6 @@
     border: 1px solid #e2e8f0;
   }
 
-  /* Section Titles */
   .section-header-title {
     font-size: 18px;
     font-weight: 800;
@@ -237,7 +231,6 @@
     gap: 8px;
   }
 
-  /* Podium / Award Section */
   #lowRatedSection { margin-bottom: 36px; }
   #lowRatedSection .award-card {
     background: var(--white);
@@ -341,7 +334,6 @@
   .podium-item.rank-2 .p-block { height: 52px; }
   .podium-item.rank-3 .p-block { height: 38px; }
 
-  /* Law News Grid (3 Horizontal Cards) */
   .law-news-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -433,7 +425,6 @@
   }
   .law-news-notice a:hover { color: #1e40af; }
 
-  /* Confetti */
   #confettiLayer {
     position: fixed;
     inset: 0;
@@ -452,7 +443,6 @@
     100% { transform: translateY(115vh) rotate(560deg); opacity: 0.85; }
   }
 
-  /* Buttons & Utilities */
   #loadMoreBtn, .btn-primary {
     display: block;
     width: 100%;
@@ -485,7 +475,6 @@
     margin-top: 12px;
   }
 
-  /* Detail View */
   #detailView { display: none; animation: fadeIn 0.3s ease; }
   #detailView.active { display: block; }
   #listView.hidden { display: none; }
@@ -540,7 +529,6 @@
   .detail-card .case-name { font-size: 20px; font-weight: 800; margin-bottom: 12px; color: var(--navy-dark); line-height: 1.4; }
   .detail-card .meta { color: var(--text-secondary); font-size: 14px; line-height: 1.8; }
 
-  /* 2-Column Layout */
   .detail-layout {
     display: flex;
     align-items: flex-start;
@@ -559,7 +547,6 @@
     .detail-side { width: 100%; position: static; }
   }
 
-  /* PDF View */
   .pdf-card-header {
     display: flex;
     align-items: center;
@@ -604,7 +591,6 @@
     background: #f8fafc;
   }
 
-  /* AI Summary Section */
   #summaryCard {
     background: linear-gradient(to bottom, #ffffff, #f8fafc);
     border: 1px solid #cbd5e1;
@@ -620,7 +606,6 @@
   .summary-body { font-size: 15px; line-height: 1.8; color: var(--text-primary); white-space: pre-wrap; }
   .summary-body.error { color: var(--text-hint); }
 
-  /* Gemini Loading */
   .gemini-loading {
     display: flex;
     align-items: center;
@@ -661,7 +646,6 @@
     color: var(--navy-dark);
   }
 
-  /* Review Section */
   .stars { 
     font-size: 32px; 
     letter-spacing: 6px; 
@@ -675,7 +659,6 @@
   .stars span:hover ~ span { color: #cbd5e1 !important; }
   .stars:hover span { color: var(--gold-hover); }
 
-  /* 📢 우측 세로 고정 광고 패널 */
   .side-ad-panel {
     position: fixed;
     top: 68px;
@@ -733,7 +716,6 @@
     background: var(--white);
   }
 
-  /* 📢 검색창 하단 가로형 배너 광고 자리 */
   .ad-slot {
     background: var(--white);
     border: 1px dashed #cbd5e1;
@@ -795,7 +777,6 @@
   .review-item .date { font-size: 12px; color: var(--text-hint); }
   .review-item .opinion { font-size: 14.5px; line-height: 1.6; white-space: pre-wrap; color: var(--text-secondary); }
 
-  /* 📢 우측 하단 플로팅 제보 위젯 스타일 */
   #reportWidget {
     position: fixed;
     bottom: 28px;
@@ -837,7 +818,6 @@
 
 <div id="confettiLayer"></div>
 
-<!-- 상단 브랜드 헤더 -->
 <header id="listHeader">
   <div class="header-brand" onclick="location.reload();">
     <svg class="header-logo-svg" viewBox="0 0 340 50" xmlns="http://www.w3.org/2000/svg">
@@ -858,7 +838,6 @@
 
 <main>
   <div id="listView">
-    <!-- 메인 검색 히어로 섹션 -->
     <div class="hero-section">
       <div class="hero-container">
         <div class="hero-title">대한민국 모든 판례와 AI 인사이트</div>
@@ -874,7 +853,6 @@
       </div>
     </div>
 
-    <!-- 📢 [광고 영역 1] 검색창 하단 가로형 띠 배너 -->
     <div class="ad-slot ad-hero-banner">
       <span class="ad-badge">AD</span>
       <div class="ad-unit-wrap">
@@ -887,7 +865,6 @@
       </div>
     </div>
 
-    <!-- SECTION 1: 국민이 뽑은 최악의 판례 TOP 3 -->
     <div id="lowRatedSection" style="display:none;">
       <div class="award-card">
         <div class="award-title" id="lowRatedTitle">🏆 국민이 뽑은 최악의 판례 TOP 3</div>
@@ -897,14 +874,12 @@
       </div>
     </div>
 
-    <!-- SECTION 2: 최신 주요 판례 뉴스 -->
     <div class="section-header-title">최신 주요 판례 뉴스</div>
     <div id="lawNews" class="law-news-grid"></div>
     <div class="law-news-notice">
       이 기사는 법률신문에서 제공받고 있습니다. <a href="https://www.lawtimes.co.kr/" target="_blank" rel="noopener noreferrer">법률신문 바로가기</a>
     </div>
 
-    <!-- SECTION 3: 검색 결과 목록 -->
     <div class="section-header-title" id="searchResultTitle">📋 판례 검색 결과</div>
     <div id="results"></div>
     <button id="loadMoreBtn" style="display:none;">더 보기</button>
@@ -953,7 +928,6 @@
   </div>
 </main>
 
-<!-- 📢 우측 세로 고정 광고 패널 -->
 <div id="sideAdPanel" class="side-ad-panel">
   <div class="side-ad-header">
     <span class="ad-badge">AD</span>
@@ -969,7 +943,6 @@
   </div>
 </div>
 
-<!-- 📢 우측 하단 플로팅 제보 위젯 -->
 <a id="reportWidget" href="https://forms.gle/44rbZgZrGVPuX2DEA" target="_blank" rel="noopener noreferrer" title="판결문 제보하기">
   <span class="widget-icon">⚖️</span>
   <span class="widget-text">판결문 제보 핫라인</span>
