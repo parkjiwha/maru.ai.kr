@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>판례인사이트</title>
 
-<!-- Google AdSense 스크립트 -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9347990449949447" crossorigin="anonymous"></script>
-
 <!-- Tailwind CSS & Pretendard Font -->
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+<!-- 구글 애드센스 자동 광고 스크립트 -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9347990449949447" crossorigin="anonymous"></script>
 
 <style>
   :root {
@@ -451,20 +451,6 @@
   </div>
 </main>
 
-<!-- Right Side Fixed Ad Panel (Desktop) -->
-<aside id="sideAdPanel" class="fixed top-20 right-4 w-44 bg-white border border-slate-200 rounded-2xl p-3 shadow-lg hidden xl:block z-40">
-  <div class="flex items-center justify-between border-b border-slate-100 pb-2 mb-2">
-    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-slate-100 px-1.5 py-0.5 rounded">AD</span>
-    <span class="text-xs font-semibold text-slate-500">광고</span>
-  </div>
-  <div class="w-full min-h-[500px] flex items-center justify-center">
-    <ins class="adsbygoogle"
-         style="display:block; width:160px; height:600px;"
-         data-ad-client="ca-pub-9347990449949447"
-         data-ad-slot="REPLACE_WITH_SKYSCRAPER_SLOT_ID"></ins>
-  </div>
-</aside>
-
 <!-- Floating Report Hotline Widget with Speech Bubble -->
 <div class="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 pointer-events-none">
   <!-- Speech Bubble -->
@@ -527,14 +513,6 @@
     if (target) {
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-  }
-
-  function pushAdUnits() {
-    try {
-      document.querySelectorAll("ins.adsbygoogle:not([data-adsbygoogle-status])").forEach(() => {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-      });
-    } catch (e) {}
   }
 
   function searchByTag(tag) {
@@ -918,7 +896,6 @@
     el("listView").classList.remove("hidden");
     el("detailView").classList.add("hidden");
     loadWorstRated();
-    pushAdUnits();
   });
 
   function setStars(v) {
@@ -1028,7 +1005,6 @@
   loadRecentReviews();
   loadWorstRated();
   loadLawNews();
-  pushAdUnits();
 </script>
 </body>
 </html>
