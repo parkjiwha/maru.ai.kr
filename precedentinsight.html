@@ -111,17 +111,6 @@
     to { opacity: 1; transform: translateY(0) scale(1); }
   }
 
-  /* Judge Map Card Glow */
-  .judge-map-card {
-    transition: all 0.25s ease;
-    border: 1px solid #E2E8F0;
-  }
-  .judge-map-card:hover {
-    border-color: #3B82F6;
-    box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.12);
-    transform: translateY(-2px);
-  }
-
   /* Gentle 2-time bounce keyframe */
   @keyframes gentleBounceTwice {
     0%, 100% { transform: translateY(0); }
@@ -151,9 +140,9 @@
 
     <!-- Navigation Menu -->
     <nav class="flex items-center gap-2 sm:gap-4">
-      <button onclick="scrollToSection('recentCasesSection')" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold bg-amber-500/10 text-amber-300 border border-amber-500/30 hover:bg-amber-500 hover:text-slate-900 transition-all flex items-center gap-1.5">
-        <span>최신 선고 판례</span>
-        <span class="bg-amber-400 text-slate-900 text-[10px] font-black px-1.5 py-0.2 rounded-full hidden sm:inline-block">HOT</span>
+      <button onclick="scrollToSection('recentReviewsSection')" class="px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold bg-indigo-500/10 text-indigo-300 border border-indigo-500/30 hover:bg-indigo-600 hover:text-white transition-all flex items-center gap-1.5">
+        <span>최근 시민 리뷰</span>
+        <span class="bg-indigo-500 text-white text-[10px] font-black px-1.5 py-0.2 rounded-full hidden sm:inline-block">NEW</span>
       </button>
     </nav>
   </div>
@@ -218,27 +207,21 @@
       </div>
     </section>
 
-    <!-- SECTION: RECENT PRECEDENTS (최신 선고 판례 카드) -->
-    <section id="recentCasesSection" class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
-        <div>
-          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold mb-2">
-            <span>실시간 판례 리포트</span>
-            <span class="text-blue-300">|</span>
-            <span>오늘 기준 선고 완료 판례</span>
-          </div>
-          <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-            최신 선고 판례
-          </h2>
-        </div>
-        <button onclick="loadRecentCases()" class="text-xs sm:text-sm font-bold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-4 py-2.5 rounded-xl border border-blue-200 flex items-center gap-1.5 self-start sm:self-auto transition-all shadow-sm">
-          <span>새로고침</span>
-        </button>
+    <!-- SECTION: 최근 시민 리뷰 -->
+    <section id="recentReviewsSection" class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
+      <div class="flex items-center gap-2.5 border-b border-slate-100 pb-5">
+        <svg class="w-6 h-6 text-slate-900 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24">
+          <rect x="3" y="4" width="18" height="13" rx="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M7 17l-3 3v-3"/>
+        </svg>
+        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+          최근 리뷰
+        </h2>
       </div>
 
-      <!-- Recent Cases Grid Cards (Larger 2-column layout) -->
-      <div id="recentCasesGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="col-span-full text-center py-12 text-slate-400 text-sm">최신 판례를 불러오는 중...</div>
+      <!-- Recent Reviews Cards Grid -->
+      <div id="recentReviewsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="col-span-full text-center py-12 text-slate-400 text-sm">최근 작성된 시민 리뷰를 불러오는 중입니다...</div>
       </div>
     </section>
 
@@ -281,7 +264,7 @@
       </div>
     </section>
 
-    <!-- SECTION: Case Type Filter Bar (Moved Below Legal News) -->
+    <!-- SECTION: Case Type Filter Bar -->
     <section class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div class="flex items-center gap-2">
@@ -334,7 +317,6 @@
         
         <!-- Case Information Header Card -->
         <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4" id="detailInfo">
-          <!-- Populated by JS -->
         </div>
 
         <!-- Case Original Text Card -->
@@ -354,7 +336,7 @@
           </div>
         </div>
 
-        <!-- Citizen Judge Review & Opinion Form (Japan Judge Map style) -->
+        <!-- Citizen Judge Review & Opinion Form -->
         <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
           <div class="border-b border-slate-100 pb-4">
             <div class="inline-block px-2.5 py-0.5 rounded bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-extrabold mb-1">
@@ -367,7 +349,6 @@
           </div>
 
           <div class="space-y-5">
-            <!-- Overall Star Rating -->
             <div>
               <label class="block text-xs font-bold text-slate-700 mb-1">종합 판결 만족도</label>
               <div class="stars flex gap-1.5 text-2xl text-slate-300 cursor-pointer" id="ratingStars">
@@ -379,7 +360,6 @@
               </div>
             </div>
 
-            <!-- Multi-Criteria Breakdown (Judge Map style) -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs">
               <div>
                 <span class="font-bold text-slate-700 block mb-1">법리 타당성</span>
@@ -407,7 +387,6 @@
               </div>
             </div>
 
-            <!-- Trait Tag Selector -->
             <div>
               <label class="block text-xs font-bold text-slate-700 mb-1.5">재판부 성향 키워드 태그 선택 (다중 가능)</label>
               <div class="flex flex-wrap gap-1.5 text-xs" id="reviewTagSelector">
@@ -488,10 +467,9 @@
 
 <!-- Floating Report Hotline Widget with Speech Bubble -->
 <div class="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 pointer-events-none">
-  <!-- Speech Bubble (Bounces gently twice on load, then stays completely still) -->
+  <!-- Speech Bubble -->
   <div class="pointer-events-auto bg-slate-800 text-slate-100 text-xs sm:text-sm font-medium px-3.5 py-2 rounded-xl shadow-lg border border-slate-700/80 relative hidden sm:flex items-center bounce-twice">
     <span>목록에 없는 판결을 찾으셨나요?</span>
-    <!-- Pointer Triangle towards button -->
     <div class="absolute -right-2 top-1/2 -translate-y-1/2 w-0 h-0 border-y-[5px] border-y-transparent border-l-[7px] border-l-slate-800"></div>
   </div>
 
@@ -551,21 +529,6 @@
     }
   }
 
-  function parseCaseDate(dateStr) {
-    if (!dateStr) return null;
-    const cleaned = dateStr.replace(/[^\d.]/g, '').replace(/\.$/, '');
-    const parts = cleaned.split('.');
-    if (parts.length >= 3) {
-      const y = parseInt(parts[0], 10);
-      const m = parseInt(parts[1], 10) - 1;
-      const d = parseInt(parts[2], 10);
-      if (!isNaN(y) && !isNaN(m) && !isNaN(d)) {
-        return new Date(y, m, d);
-      }
-    }
-    return null;
-  }
-
   function pushAdUnits() {
     try {
       document.querySelectorAll("ins.adsbygoogle:not([data-adsbygoogle-status])").forEach(() => {
@@ -581,56 +544,64 @@
     search(true);
   }
 
-  async function loadRecentCases() {
-    const grid = el("recentCasesGrid");
+  /* 최근 작성된 시민 리뷰 불러오기 (GET /precedents/recently-reviewed?limit=5) */
+  async function loadRecentReviews() {
+    const grid = el("recentReviewsGrid");
     if (!grid) return;
-    grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 text-sm">최신 판례를 불러오는 중...</div>`;
+
+    grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 text-sm flex flex-col items-center justify-center gap-2">
+      <div class="w-5 h-5 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+      <span>최근 등록된 시민 리뷰 목록을 불러오는 중입니다...</span>
+    </div>`;
 
     try {
-      const res = await fetch(`${API}/precedents?page=1&size=30`);
-      if (!res.ok) throw new Error();
+      const res = await fetch(`${API}/precedents/recently-reviewed?limit=5`);
+      if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
       const data = await res.json();
-      
-      const today = new Date();
-      today.setHours(23, 59, 59, 999);
+      const rawItems = Array.isArray(data) ? data : (data.items || []);
+      // 최대 5개까지만 노출하도록 제한
+      const items = rawItems.slice(0, 5);
 
-      const filtered = (data.items || []).filter(item => {
-        const d = parseCaseDate(item.date);
-        if (!d) return true;
-        return d <= today;
-      });
-
-      if (filtered.length === 0) {
-        grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 text-sm">표시할 최신 판례가 없습니다.</div>`;
+      if (items.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 text-sm">아직 등록된 최근 리뷰가 없습니다.</div>`;
         return;
       }
 
-      const displayItems = filtered.slice(0, 4);
-      grid.innerHTML = displayItems.map(item => `
-        <div onclick='openDetail(${JSON.stringify(item).replace(/'/g, "&#39;")})' class="bg-slate-50/80 hover:bg-white border border-slate-200/90 hover:border-blue-500 rounded-2xl p-6 sm:p-7 cursor-pointer space-y-4 transition-all hover:shadow-xl flex flex-col justify-between group min-h-[180px]">
-          <div class="space-y-3">
-            <div class="flex items-center justify-between gap-3">
-              <span class="text-xs font-black px-3 py-1 rounded-md bg-blue-100/80 text-blue-800 border border-blue-200/60">
-                ${escapeHtml(item.court || "법원")}
-              </span>
-              <span class="text-xs sm:text-sm font-semibold text-slate-500">
-                ${escapeHtml(item.date || "")}
-              </span>
+      grid.innerHTML = items.map(item => {
+        const ratingVal = Number(item.rating || item.average_rating || 5);
+        const stars = "★".repeat(Math.min(5, Math.max(1, ratingVal))) +
+                      "☆".repeat(5 - Math.min(5, Math.max(1, ratingVal)));
+        const author = escapeHtml(item.author_name || "익명");
+        const dateStr = escapeHtml((item.created_at || item.date || "").slice(0, 10).replace(/-/g, "."));
+        const opinionText = escapeHtml(item.opinion || item.summary || "등록된 리뷰 내용이 없습니다.");
+        const caseName = escapeHtml(item.case_name || "판례 사건");
+        const caseNumber = escapeHtml(item.case_number || "");
+
+        return `
+          <div onclick='openDetail(${JSON.stringify(item).replace(/'/g, "&#39;")})' class="bg-slate-50/90 border border-slate-200 hover:border-indigo-500 rounded-2xl p-5 hover:shadow-md cursor-pointer transition-all space-y-3 flex flex-col justify-between group">
+            <div class="space-y-2.5">
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-amber-500 font-extrabold tracking-widest">${stars}</span>
+                <span class="text-slate-400 font-medium">${dateStr}</span>
+              </div>
+              <div class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                <span class="px-2 py-0.5 rounded bg-indigo-100 text-indigo-700 font-black text-[11px]">${author}</span>
+                <span class="text-slate-400">시민 법관 리뷰</span>
+              </div>
+              <p class="text-xs text-slate-700 leading-relaxed line-clamp-3 bg-white p-3 rounded-xl border border-slate-200/80 font-normal italic shadow-2xs">
+                "${opinionText}"
+              </p>
             </div>
-            <h4 class="font-black text-base sm:text-lg text-slate-900 group-hover:text-blue-600 line-clamp-2 leading-snug tracking-tight">
-              ${escapeHtml(item.case_name)}
-            </h4>
+            <div class="pt-2.5 border-t border-slate-200/80 flex items-center justify-between text-xs">
+              <span class="font-extrabold text-slate-900 group-hover:text-indigo-600 transition-colors truncate max-w-[180px]">${caseName}</span>
+              <span class="text-slate-400 text-[11px] flex-shrink-0">${caseNumber}</span>
+            </div>
           </div>
-          <div class="pt-3.5 border-t border-slate-200/80 flex items-center justify-between text-xs sm:text-sm text-slate-500 font-medium">
-            <span class="text-blue-600 font-extrabold text-sm sm:text-base">${escapeHtml(item.case_number)}</span>
-            <span class="px-3 py-1 rounded-md bg-slate-200/80 text-slate-800 text-xs font-bold">
-              ${escapeHtml(item.case_type || "판례")}
-            </span>
-          </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     } catch (e) {
-      grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 text-sm">최신 판례를 불러오는데 실패했습니다.</div>`;
+      console.error("loadRecentReviews Error:", e);
+      grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 text-sm">최근 리뷰를 불러오는 데 실패했습니다. (서버 연결을 확인해주세요)</div>`;
     }
   }
 
@@ -664,7 +635,7 @@
 
     try {
       const res = await fetch(`${API}/precedents?${params}`);
-      if (!res.ok) throw new Error();
+      if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
       const data = await res.json();
       if (myGen !== searchGen) return;
 
@@ -703,9 +674,10 @@
 
       el("loadMoreBtn").style.display = data.has_more ? "block" : "none";
       page = data.page + 1;
-    } catch {
+    } catch (err) {
+      console.error("search Error:", err);
       if (myGen !== searchGen) return;
-      el("emptyMsg").textContent = "판례 정보를 불러오는 중에 오류가 발생했습니다.";
+      el("emptyMsg").textContent = "판례 정보를 불러오는 중에 오류가 발생했습니다. 백엔드 서버 상태를 확인해주세요.";
       el("emptyMsg").classList.remove("hidden");
       el("loadMoreBtn").style.display = "none";
     }
@@ -861,7 +833,6 @@
     el("authorInput").value = "";
     setStars(0);
 
-    // Reset tag buttons
     document.querySelectorAll(".tag-opt-btn").forEach(btn => {
       btn.className = "tag-opt-btn px-2.5 py-1 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium";
     });
@@ -962,26 +933,30 @@
   });
 
   async function loadReviews() {
-    const res = await fetch(`${API}/precedents/${encodeURIComponent(currentDocId)}/reviews`);
-    if (!res.ok) return;
-    const data = await res.json();
+    try {
+      const res = await fetch(`${API}/precedents/${encodeURIComponent(currentDocId)}/reviews`);
+      if (!res.ok) throw new Error();
+      const data = await res.json();
 
-    el("reviewSummary").textContent = data.average_rating != null
-      ? `시민 리뷰 ${data.count}건 (평균 ★${data.average_rating.toFixed(1)})`
-      : `시민 리뷰 ${data.count}건`;
+      el("reviewSummary").textContent = data.average_rating != null
+        ? `시민 리뷰 ${data.count}건 (평균 ★${data.average_rating.toFixed(1)})`
+        : `시민 리뷰 ${data.count}건`;
 
-    el("reviewList").innerHTML = data.items.map((r) => `
-      <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
-        <div class="flex items-center justify-between text-xs">
-          <div class="flex items-center gap-2">
-            <span class="text-amber-400 font-bold">${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}</span>
-            <span class="font-bold text-slate-800">${escapeHtml(r.author_name) || "익명"}</span>
+      el("reviewList").innerHTML = data.items.map((r) => `
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
+          <div class="flex items-center justify-between text-xs">
+            <div class="flex items-center gap-2">
+              <span class="text-amber-400 font-bold">${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}</span>
+              <span class="font-bold text-slate-800">${escapeHtml(r.author_name) || "익명"}</span>
+            </div>
+            <span class="text-slate-400">${escapeHtml((r.created_at || "").slice(0, 10).replace(/-/g, "."))}</span>
           </div>
-          <span class="text-slate-400">${escapeHtml((r.created_at || "").slice(0, 10).replace(/-/g, "."))}</span>
+          <p class="text-xs text-slate-700 leading-relaxed">${escapeHtml(r.opinion)}</p>
         </div>
-        <p class="text-xs text-slate-700 leading-relaxed">${escapeHtml(r.opinion)}</p>
-      </div>
-    `).join("") || `<div class="text-center py-8 text-xs text-slate-400 bg-slate-50 rounded-xl border border-dashed border-slate-200">아직 등록된 리뷰가 없습니다.</div>`;
+      `).join("") || `<div class="text-center py-8 text-xs text-slate-400 bg-slate-50 rounded-xl border border-dashed border-slate-200">아직 등록된 리뷰가 없습니다.</div>`;
+    } catch {
+      el("reviewList").innerHTML = `<div class="text-center py-8 text-xs text-slate-400 bg-slate-50 rounded-xl border border-dashed border-slate-200">리뷰 목록을 불러오지 못했습니다.</div>`;
+    }
   }
 
   el("submitReviewBtn").addEventListener("click", async () => {
@@ -989,7 +964,6 @@
     if (currentRating < 1) { showToast("별점을 선택해주세요.", true); return; }
     if (!opinion) { showToast("의견을 입력해주세요.", true); return; }
 
-    // 1. 세부 평가 드롭다운 항목 수집 (법리 타당성, 양형 적정성, 국민 눈높이)
     const evalLogicEl = el("evalLogic");
     const evalPenaltyEl = el("evalPenalty");
     const evalPublicEl = el("evalPublic");
@@ -998,7 +972,6 @@
     const penaltyTxt = evalPenaltyEl ? evalPenaltyEl.options[evalPenaltyEl.selectedIndex].text : "";
     const publicTxt = evalPublicEl ? evalPublicEl.options[evalPublicEl.selectedIndex].text : "";
 
-    // 2. 기존 opinion 필드에 세부 항목과 태그를 텍스트 머리말로 포맷팅하여 결합
     let metaPrefixes = [];
     if (logicTxt || penaltyTxt || publicTxt) {
       metaPrefixes.push(`[세부평가] 법리: ${logicTxt} | 양형: ${penaltyTxt} | 국민눈높이: ${publicTxt}`);
@@ -1016,7 +989,6 @@
     btn.textContent = "등록 중...";
 
     try {
-      // 3. 기존 서버 API 스펙({ rating, opinion, author_name }) 그대로 전송
       const res = await fetch(`${API}/precedents/${encodeURIComponent(currentDocId)}/reviews`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -1035,7 +1007,7 @@
       showToast("리뷰가 성공적으로 등록되었습니다!");
       await loadReviews();
     } catch {
-      showToast("리뷰 등록에 실패했습니다.", true);
+      showToast("리뷰 등록에 실패했습니다. 백엔드 상태를 확인해주세요.", true);
     } finally {
       btn.disabled = false;
       btn.textContent = "리뷰 등록하기";
@@ -1051,8 +1023,9 @@
   });
   el("loadMoreBtn").addEventListener("click", () => search(false));
 
+  // 초기 로드 실행
   search(true);
-  loadRecentCases();
+  loadRecentReviews();
   loadWorstRated();
   loadLawNews();
   pushAdUnits();
