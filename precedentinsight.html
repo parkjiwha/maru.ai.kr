@@ -165,7 +165,7 @@
 
 <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
   <div id="listView" class="space-y-8">
-    
+
     <!-- Hero Search Section -->
     <section class="bg-gradient-to-b from-slate-900 via-slate-900 to-slate-800 rounded-2xl p-6 sm:p-10 text-white shadow-xl border border-slate-800 relative overflow-hidden">
       <div class="absolute -right-16 -top-16 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -176,7 +176,7 @@
           <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path></svg>
           스마트 인공지능 요약 & 심층 원문 제공
         </div>
-        
+
         <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight">
           판례 검색부터 AI 인사이트 분석까지
         </h1>
@@ -259,8 +259,21 @@
       <div id="lawNews" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
 
       <div class="text-right text-xs text-slate-500">
-        이 기사는 법률신문에서 제공받고 있습니다. 
+        이 기사는 법률신문에서 제공받고 있습니다.
         <a href="https://www.lawtimes.co.kr/" target="_blank" rel="noopener noreferrer" class="text-blue-600 font-semibold underline hover:text-blue-700 ml-1">법률신문 바로가기 ↗</a>
+      </div>
+    </section>
+
+    <!-- SECTION: Court Filter Bar -->
+    <section class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <div class="w-2.5 h-2.5 rounded-full bg-blue-600"></div>
+          <span class="text-sm font-bold text-slate-900">법원별 검색 필터</span>
+        </div>
+        <select id="courtFilterSelect" onchange="selectCourt(this.value)" class="w-full sm:w-auto px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 text-slate-700 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option value="전체">전체 법원</option>
+        </select>
       </div>
     </section>
 
@@ -300,7 +313,7 @@
       <div id="emptyMsg" class="hidden text-center py-16 bg-white rounded-2xl border border-dashed border-slate-200 text-slate-400 text-sm">
         검색 결과가 없습니다.
       </div>
-      
+
       <div id="initialHint" class="text-center py-16 bg-white rounded-2xl border border-dashed border-slate-200 text-slate-400 text-sm">
         검색어나 상단 추천 키워드를 눌러 판례를 찾아보세요.
       </div>
@@ -311,12 +324,36 @@
   <!-- Case Detail View -->
   <div id="detailView" class="hidden">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      
+
       <!-- Left Column: Case Header & Legal Document Reader -->
       <div class="lg:col-span-8 space-y-6">
-        
+
         <!-- Case Information Header Card -->
         <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4" id="detailInfo">
+        </div>
+
+        <!-- Presiding Judges Card -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4" id="judgesCard" style="display:none;">
+          <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
+            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 1.79-3 4s1.343 4 3 4 3-1.79 3-4-1.343-4-3-4z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2v2m0 16v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M2 12h2m16 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+            <h3 class="text-base font-bold text-slate-900">담당 재판관</h3>
+            <span class="text-xs text-slate-400 font-medium ml-auto">이름 클릭 시 같은 법관의 다른 판례</span>
+          </div>
+
+          <div id="judgesList" class="flex flex-wrap gap-2"></div>
+
+          <div id="judgeOtherCases" class="hidden space-y-3 pt-4 border-t border-slate-100">
+            <div class="flex items-center justify-between">
+              <h4 class="text-sm font-bold text-slate-800">
+                <span id="judgeOtherCasesName" class="text-indigo-600"></span> 법관의 다른 판례
+              </h4>
+              <button onclick="closeJudgeOtherCases()" class="text-xs text-slate-400 hover:text-slate-600 font-medium">닫기 ✕</button>
+            </div>
+            <div id="judgeOtherCasesList" class="space-y-2"></div>
+            <button id="judgeOtherCasesMore" class="hidden w-full py-2 text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-all">
+              더 보기
+            </button>
+          </div>
         </div>
 
         <!-- Case Original Text Card -->
@@ -472,12 +509,15 @@
   let page = 1;
   let currentQuery = "";
   let currentCaseType = "전체";
+  let currentCourt = "전체";
   let currentRating = 0;
   let currentDocId = null;
   let currentLink = null;
   let searchGen = 0;
   let lastPodiumIds = null;
   let selectedTags = [];
+  let judgeOtherCasesPage = 1;
+  let judgeOtherCasesName = null;
 
   function selectCaseType(type) {
     currentCaseType = type;
@@ -491,10 +531,39 @@
     search(true);
   }
 
+  function selectCourt(court) {
+    currentCourt = court;
+    search(true);
+  }
+
+  async function loadCourts() {
+    const select = el("courtFilterSelect");
+    if (!select) return;
+    try {
+      const res = await fetch(`${API}/precedents/courts`);
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      const courts = data.courts || [];
+      select.innerHTML = `<option value="전체">전체 법원</option>` +
+        courts.map(name => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join("");
+    } catch {
+      // 법원 목록은 부가 필터라 실패해도 "전체 법원" 옵션만 남기고 조용히 넘어간다
+    }
+  }
+
   function escapeHtml(s) {
     return (s || "").replace(/[&<>"']/g, (c) => ({
       "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
     }[c]));
+  }
+
+  // API가 주는 embed_url은 API 서버 기준 상대경로다(예: "/precedents/.../original-file").
+  // 프로덕션은 프론트/API가 같은 도메인이라 그대로 써도 되지만, 로컬 개발처럼
+  // 프론트와 API가 다른 origin에 떠 있으면 페이지 origin으로 잘못 풀린다 —
+  // 그래서 "/"로 시작하는 상대경로만 API origin을 붙여 절대경로로 만든다.
+  function resolveEmbedUrl(url) {
+    if (!url || !url.startsWith("/")) return url;
+    return API + url;
   }
 
   function showToast(msg, isError = false) {
@@ -608,8 +677,9 @@
     const params = new URLSearchParams({ page, size: 20 });
     if (currentQuery) params.set("q", currentQuery);
     if (currentCaseType && currentCaseType !== "전체") params.set("case_type", currentCaseType);
-    
-    el("searchResultTitle").style.display = currentQuery || currentCaseType !== "전체" || page > 1 ? "flex" : "none";
+    if (currentCourt && currentCourt !== "전체") params.set("court_name", currentCourt);
+
+    el("searchResultTitle").style.display = currentQuery || currentCaseType !== "전체" || currentCourt !== "전체" || page > 1 ? "flex" : "none";
 
     try {
       const res = await fetch(`${API}/precedents?${params}`);
@@ -623,7 +693,11 @@
       }
 
       if (reset && items.length === 0) {
-        el("emptyMsg").textContent = `${currentCaseType !== "전체" ? '[' + currentCaseType + '] ' : ''}검색 결과가 없습니다.`;
+        const tags = [
+          currentCaseType !== "전체" ? currentCaseType : null,
+          currentCourt !== "전체" ? currentCourt : null,
+        ].filter(Boolean);
+        el("emptyMsg").textContent = `${tags.length ? '[' + tags.join(', ') + '] ' : ''}검색 결과가 없습니다.`;
         el("emptyMsg").classList.remove("hidden");
       }
 
@@ -778,11 +852,128 @@
     }
   }
 
-  function openDetail(item) {
+  /* 담당 재판관 목록 불러오기 (GET /precedents/{doc_id}/judges) */
+  async function loadJudges(docId) {
+    const card = el("judgesCard");
+    const list = el("judgesList");
+    card.style.display = "none";
+    el("judgeOtherCases").classList.add("hidden");
+    judgeOtherCasesName = null;
+
+    try {
+      const res = await fetch(`${API}/precedents/${encodeURIComponent(docId)}/judges`);
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      const judges = data.judges || [];
+      if (judges.length === 0) return;
+
+      card.style.display = "block";
+      list.innerHTML = judges.map(name => `
+        <button onclick="loadJudgeOtherCases('${escapeHtml(name).replace(/'/g, "&#39;")}')" class="px-3.5 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-600 hover:text-white text-indigo-700 text-sm font-bold border border-indigo-200 transition-all">
+          ${escapeHtml(name)} 법관
+        </button>
+      `).join("");
+    } catch {
+      // 담당 재판관 정보는 부가 기능이라 실패해도 조용히 무시 — 상세보기 자체는 계속 보여준다
+    }
+  }
+
+  /* 같은 이름의 법관이 관여한 다른 판례 (GET /precedents/by-judge) */
+  async function loadJudgeOtherCases(name, reset = true) {
+    if (reset) {
+      judgeOtherCasesPage = 1;
+      judgeOtherCasesName = name;
+      el("judgeOtherCasesList").innerHTML = `<div class="text-center py-6 text-slate-400 text-xs">불러오는 중...</div>`;
+      el("judgeOtherCasesMore").classList.add("hidden");
+    }
+    el("judgeOtherCases").classList.remove("hidden");
+    el("judgeOtherCasesName").textContent = name;
+
+    const listEl = el("judgeOtherCasesList");
+
+    try {
+      const params = new URLSearchParams({
+        name, page: judgeOtherCasesPage, size: 10,
+      });
+      if (currentDocId) params.set("exclude_doc_id", currentDocId);
+      const res = await fetch(`${API}/precedents/by-judge?${params}`);
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+
+      if (reset) {
+        listEl.innerHTML = "";
+        if (data.items.length === 0) {
+          listEl.innerHTML = `<div class="text-center py-6 text-slate-400 text-xs">다른 판례가 없습니다.</div>`;
+        }
+      }
+
+      data.items.forEach(item => {
+        const row = document.createElement("div");
+        row.className = "bg-slate-50 border border-slate-200 hover:border-indigo-400 rounded-xl p-3 cursor-pointer transition-all";
+        row.innerHTML = `
+          <div class="font-bold text-sm text-slate-900 line-clamp-1">${escapeHtml(item.case_name)}</div>
+          <div class="flex items-center gap-2 text-xs text-slate-500 mt-1 flex-wrap">
+            <span class="text-indigo-600 font-semibold">${escapeHtml(item.case_number)}</span>
+            <span>•</span>
+            <span>${escapeHtml(item.court)}</span>
+            <span>•</span>
+            <span>${escapeHtml(item.date)}</span>
+          </div>`;
+        row.addEventListener("click", () => openDetail(item));
+        listEl.appendChild(row);
+      });
+
+      el("judgeOtherCasesMore").classList.toggle("hidden", !data.has_more);
+      judgeOtherCasesPage = data.page + 1;
+    } catch {
+      if (reset) listEl.innerHTML = `<div class="text-center py-6 text-slate-400 text-xs">목록을 불러오지 못했습니다.</div>`;
+    }
+  }
+
+  function closeJudgeOtherCases() {
+    el("judgeOtherCases").classList.add("hidden");
+    judgeOtherCasesName = null;
+  }
+
+  el("judgeOtherCasesMore").addEventListener("click", () => {
+    if (judgeOtherCasesName) loadJudgeOtherCases(judgeOtherCasesName, false);
+  });
+
+  function updateUrlForDetail(item, replace) {
+    const params = new URLSearchParams();
+    params.set("doc_id", item.doc_id);
+    if (item.case_number) params.set("case", item.case_number);
+    const url = `${location.pathname}?${params.toString()}`;
+    if (replace) history.replaceState({ docId: item.doc_id }, "", url);
+    else history.pushState({ docId: item.doc_id }, "", url);
+  }
+
+  function updateUrlForList(replace) {
+    if (replace) history.replaceState({}, "", location.pathname);
+    else history.pushState({}, "", location.pathname);
+  }
+
+  /* 공유 링크(?doc_id=...)로 직접 진입했을 때 해당 판례를 불러와 연다.
+     opts.skipUrlUpdate: 뒤로/앞으로가기(popstate)로 들어온 경우 — 주소창이
+     이미 맞는 상태라 다시 건드릴 필요가 없다. */
+  async function openByDocId(docId, opts = {}) {
+    try {
+      const res = await fetch(`${API}/precedents/${encodeURIComponent(docId)}`);
+      if (!res.ok) throw new Error("not found");
+      const item = await res.json();
+      openDetail(item, opts);
+    } catch {
+      showToast("링크로 전달된 판례를 찾을 수 없습니다.", true);
+    }
+  }
+
+  function openDetail(item, opts = {}) {
     currentDocId = item.doc_id;
     currentLink = item.link;
     currentRating = 0;
     selectedTags = [];
+
+    if (!opts.skipUrlUpdate) updateUrlForDetail(item, !!opts.replace);
 
     el("listHeader").classList.add("hidden");
     el("detailHeader").classList.remove("hidden");
@@ -818,6 +1009,7 @@
     loadReviews();
     loadSummary(item.doc_id);
     loadOriginalView(item.doc_id);
+    loadJudges(item.doc_id);
   }
 
   function toggleTagBtn(btn, tag) {
@@ -847,12 +1039,12 @@
         container.innerHTML = `
           <div class="text-center py-12 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
             <p class="text-xs text-slate-500">이 판례는 HWP 원본 파일이라 미리보기를 지원하지 않습니다.</p>
-            <a href="${escapeHtml(data.embed_url)}" target="_blank" rel="noopener noreferrer" class="inline-block text-xs font-bold text-blue-600 bg-white hover:bg-slate-100 border border-slate-200 px-4 py-2 rounded-lg shadow-sm">
+            <a href="${escapeHtml(resolveEmbedUrl(data.embed_url))}" target="_blank" rel="noopener noreferrer" class="inline-block text-xs font-bold text-blue-600 bg-white hover:bg-slate-100 border border-slate-200 px-4 py-2 rounded-lg shadow-sm">
               원본 파일 다운로드 ↓
             </a>
           </div>`;
       } else if (data.embed_url) {
-        container.innerHTML = `<iframe class="w-full h-[70vh] min-h-[500px] border border-slate-200 rounded-xl bg-slate-50" src="${escapeHtml(data.embed_url)}"></iframe>`;
+        container.innerHTML = `<iframe class="w-full h-[70vh] min-h-[500px] border border-slate-200 rounded-xl bg-slate-50" src="${escapeHtml(resolveEmbedUrl(data.embed_url))}"></iframe>`;
       } else {
         throw new Error();
       }
@@ -890,12 +1082,24 @@
     }
   }
 
-  el("backBtn").addEventListener("click", () => {
+  function showListView(opts = {}) {
+    currentDocId = null;
     el("listHeader").classList.remove("hidden");
     el("detailHeader").classList.add("hidden");
     el("listView").classList.remove("hidden");
     el("detailView").classList.add("hidden");
     loadWorstRated();
+    if (!opts.skipUrlUpdate) updateUrlForList(false);
+  }
+
+  el("backBtn").addEventListener("click", () => showListView());
+
+  /* 뒤로/앞으로 가기 — 공유 링크로 들어온 뒤 브라우저 내비게이션도 주소창과
+     화면이 어긋나지 않게 맞춰준다 */
+  window.addEventListener("popstate", () => {
+    const docId = new URLSearchParams(location.search).get("doc_id");
+    if (docId) openByDocId(docId, { skipUrlUpdate: true });
+    else showListView({ skipUrlUpdate: true });
   });
 
   function setStars(v) {
@@ -1005,6 +1209,11 @@
   loadRecentReviews();
   loadWorstRated();
   loadLawNews();
+  loadCourts();
+
+  // 공유 링크(?doc_id=...)로 들어온 경우 해당 판례를 바로 연다
+  const initialDocId = new URLSearchParams(location.search).get("doc_id");
+  if (initialDocId) openByDocId(initialDocId, { replace: true });
 </script>
 </body>
 </html>
