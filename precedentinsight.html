@@ -502,9 +502,37 @@
   </a>
 </div>
 
+<!-- Floating "Ask the Judgment" Widget — 원문이 텍스트로 표시된 판례에서만 노출 -->
+<div id="askOriginalWidget" class="hidden fixed bottom-24 right-6 z-50 flex-col items-end gap-3">
+  <!-- Expandable Panel -->
+  <div id="askOriginalPanel" class="hidden w-80 max-w-[calc(100vw-3rem)] bg-white rounded-2xl shadow-2xl border border-indigo-100 p-4 space-y-3">
+    <div class="flex items-center justify-between">
+      <p class="text-sm font-extrabold text-indigo-700">이 판결문에 질문하기</p>
+      <button id="askOriginalCloseBtn" class="text-slate-400 hover:text-slate-600 text-lg leading-none" aria-label="닫기">&times;</button>
+    </div>
+    <div class="flex gap-2">
+      <input id="askOriginalInput" type="text" placeholder="예: 이 사건의 쟁점이 뭐야?" class="flex-1 text-sm px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-300" />
+      <button id="askOriginalBtn" class="px-3.5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold shadow-sm whitespace-nowrap flex-shrink-0">질문</button>
+    </div>
+    <div id="askOriginalAnswer" class="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap max-h-64 overflow-y-auto custom-scrollbar"></div>
+  </div>
+
+  <!-- Toggle Button -->
+  <button id="askOriginalToggleBtn" class="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:opacity-90 text-white px-4 py-3 rounded-2xl shadow-xl transition-all hover:scale-105 active:scale-95 flex-shrink-0">
+    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z"/></svg>
+    <span class="text-xs sm:text-sm font-bold tracking-tight">판결문에 질문하기</span>
+  </button>
+</div>
+
 <script>
   const API = "https://d2xqa2k3k9ovhh.cloudfront.net";
   const el = (id) => document.getElementById(id);
+
+  /* 원문이 화면에 이미 텍스트로 표시된 경우(kind==="text")에 한해, 그 원문을
+     컨텍스트로 질문할 수 있다. NVIDIA를 브라우저에서 직접 호출하려 했으나
+     NVIDIA가 CORS preflight 자체를 막아놔서 불가능함을 확인 — 백엔드
+     프록시(POST /precedents/{doc_id}/ask)를 거친다. */
+  let currentOriginalText = null;
 
   let page = 1;
   let currentQuery = "";
@@ -1034,8 +1062,12 @@
       if (docId !== currentDocId) return;
 
       if (data.kind === "text" && data.text) {
+        currentOriginalText = data.text;
         container.innerHTML = `<div class="w-full max-h-[70vh] min-h-[400px] overflow-y-auto custom-scrollbar border border-slate-200 rounded-xl bg-white p-5 text-sm leading-relaxed text-slate-800 whitespace-pre-wrap font-sans">${escapeHtml(data.text)}</div>`;
+        showAskOriginalWidget();
       } else if (data.kind === "hwp" && data.embed_url) {
+        currentOriginalText = null;
+        hideAskOriginalWidget();
         container.innerHTML = `
           <div class="text-center py-12 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
             <p class="text-xs text-slate-500">이 판례는 HWP 원본 파일이라 미리보기를 지원하지 않습니다.</p>
@@ -1044,11 +1076,15 @@
             </a>
           </div>`;
       } else if (data.embed_url) {
+        currentOriginalText = null;
+        hideAskOriginalWidget();
         container.innerHTML = `<iframe class="w-full h-[70vh] min-h-[500px] border border-slate-200 rounded-xl bg-slate-50" src="${escapeHtml(resolveEmbedUrl(data.embed_url))}"></iframe>`;
       } else {
         throw new Error();
       }
     } catch {
+      currentOriginalText = null;
+      hideAskOriginalWidget();
       if (docId !== currentDocId) return;
       container.innerHTML = `
         <div class="text-center py-12 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
@@ -1060,13 +1096,72 @@
     }
   }
 
+  /* "판결문 제보 핫라인"과 같은 플로팅 위젯 스타일 — 원문이 텍스트로 있는
+     판례를 볼 때만 버튼이 나타나고, 눌러야 질문 패널이 펼쳐진다. */
+  function showAskOriginalWidget() {
+    el("askOriginalWidget").classList.remove("hidden");
+    el("askOriginalWidget").classList.add("flex");
+    el("askOriginalPanel").classList.add("hidden");
+    el("askOriginalInput").value = "";
+    el("askOriginalAnswer").textContent = "";
+  }
+  function hideAskOriginalWidget() {
+    el("askOriginalWidget").classList.add("hidden");
+    el("askOriginalWidget").classList.remove("flex");
+    el("askOriginalPanel").classList.add("hidden");
+  }
+  function toggleAskOriginalPanel(open) {
+    el("askOriginalPanel").classList.toggle("hidden", !open);
+  }
+  el("askOriginalToggleBtn").addEventListener("click", () => {
+    toggleAskOriginalPanel(el("askOriginalPanel").classList.contains("hidden"));
+  });
+  el("askOriginalCloseBtn").addEventListener("click", () => toggleAskOriginalPanel(false));
+
+  /* 화면에 표시된 원문(kind==="text")에 대해 질문한다 — 백엔드 프록시
+     (POST /precedents/{doc_id}/ask)가 DB에 저장된 full_text를 그대로 써서
+     NVIDIA를 대신 호출해준다. */
+  async function askAboutOriginal() {
+    const input = el("askOriginalInput");
+    const answerEl = el("askOriginalAnswer");
+    const btn = el("askOriginalBtn");
+    const question = input.value.trim();
+    if (!question || !currentOriginalText) return;
+
+    const askedDocId = currentDocId;
+    btn.disabled = true;
+    btn.textContent = "생성 중";
+    answerEl.textContent = "";
+
+    try {
+      const res = await fetch(`${API}/precedents/${encodeURIComponent(askedDocId)}/ask`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question }),
+      });
+      if (askedDocId !== currentDocId) return;
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      if (askedDocId !== currentDocId) return;
+      answerEl.textContent = data.answer || "답변을 받지 못했습니다.";
+    } catch {
+      if (askedDocId !== currentDocId) return;
+      answerEl.textContent = "질문 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
+    } finally {
+      if (askedDocId === currentDocId) {
+        btn.disabled = false;
+        btn.textContent = "질문";
+      }
+    }
+  }
+  el("askOriginalBtn").addEventListener("click", askAboutOriginal);
+  el("askOriginalInput").addEventListener("keydown", (e) => { if (e.key === "Enter") askAboutOriginal(); });
+
   async function loadSummary(docId) {
     const body = el("summaryBody");
     body.innerHTML = `
       <div class="py-8 flex flex-col items-center justify-center gap-3 text-center">
-        <div class="w-6 h-6 animate-spin text-blue-600">
-          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-        </div>
+        <div class="w-6 h-6 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
         <span class="text-xs font-bold text-indigo-600 animate-pulse">AI가 판례 원문을 분석하고 있습니다...</span>
       </div>`;
 
@@ -1088,6 +1183,7 @@
     el("detailHeader").classList.add("hidden");
     el("listView").classList.remove("hidden");
     el("detailView").classList.add("hidden");
+    hideAskOriginalWidget();
     loadWorstRated();
     if (!opts.skipUrlUpdate) updateUrlForList(false);
   }
