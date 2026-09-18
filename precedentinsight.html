@@ -310,15 +310,71 @@
         결과 더 보기
       </button>
 
-      <div id="emptyMsg" class="hidden text-center py-16 bg-white rounded-2xl border border-dashed border-slate-200 text-slate-400 text-sm">
-        검색 결과가 없습니다.
-      </div>
-
       <div id="initialHint" class="text-center py-16 bg-white rounded-2xl border border-dashed border-slate-200 text-slate-400 text-sm">
         검색어나 상단 추천 키워드를 눌러 판례를 찾아보세요.
       </div>
     </section>
 
+  </div>
+
+  <!-- Full Screen Public Institution Style Error / Notice View -->
+  <div id="errorView" class="hidden min-h-[80vh] flex-col items-center justify-center py-10 px-4 bg-slate-100 font-sans">
+    <div class="max-w-2xl w-full bg-white border-2 border-slate-400 shadow-md rounded-none overflow-hidden text-slate-800">
+      <!-- Top Official Header Bar -->
+      <div class="bg-[#1b365d] text-white px-5 py-3 flex items-center justify-between border-b-2 border-[#0f2342]">
+        <div class="flex items-center gap-3">
+          <svg class="h-7 w-auto flex-shrink-0" viewBox="0 0 340 50" xmlns="http://www.w3.org/2000/svg">
+            <rect width="46" height="46" rx="6" fill="#786117"/>
+            <text x="23" y="33" fill="#ffffff" font-family="'Pretendard', sans-serif" font-weight="900" font-size="28" text-anchor="middle">M</text>
+            <line x1="62" y1="10" x2="62" y2="36" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
+            <text x="82" y="33" fill="#ffffff" font-family="'Pretendard', sans-serif" font-weight="800" font-size="26" letter-spacing="-0.5px">판례인사이트</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Main Content Container -->
+      <div class="p-6 sm:p-8 space-y-5">
+        <!-- Main Alert Banner -->
+        <div class="flex items-start gap-4 p-4 bg-[#fff8f0] border border-[#f5c6cb] text-slate-800">
+          <div class="w-12 h-12 rounded-none bg-[#d9534f] text-white font-black text-2xl flex items-center justify-center flex-shrink-0 border border-[#b52b27]">
+            !
+          </div>
+          <div class="space-y-1">
+            <h2 class="text-lg sm:text-xl font-bold text-[#a94442] tracking-tight leading-snug" id="errorTitle">
+              ■ 이용에 불편을 드려 죄송합니다.
+            </h2>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              서버장애가 발생하여 접속이 지연되고 있습니다. 잠시 후 다시 시도해주세요.
+            </p>
+          </div>
+        </div>
+
+        <!-- System Error Specification Table (Classic Korean Public Sector Style) -->
+        <div class="space-y-1.5">
+          <table class="w-full text-xs border-t-2 border-t-[#1b365d] border-b border-b-slate-300 border-collapse">
+            <tbody>
+              <tr class="border-b border-slate-200">
+                <th class="bg-[#f1f5f9] text-slate-700 font-bold p-2.5 text-left w-28 border-r border-slate-200">오류 코드</th>
+                <td class="p-2.5 font-mono text-slate-700">HTTP_500_TIMEOUT_EXCEEDED (SYS_GATEWAY_NO_RESPONSE)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Retry Action Button -->
+        <div class="pt-2 flex justify-center gap-2">
+          <button onclick="search(true)" class="px-7 py-2.5 bg-[#1b365d] hover:bg-[#0f2342] text-white font-bold text-xs rounded-none border border-[#0f2342] shadow-xs active:bg-[#0b1a30] transition-colors flex items-center gap-1.5">
+            <span>[ 다시 시도하기 ]</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Bottom Institutional Footer Strip -->
+      <div class="bg-[#e2e8f0] px-5 py-2.5 text-center text-[11px] text-slate-600 font-medium border-t border-slate-300 flex flex-col sm:flex-row items-center justify-between gap-1">
+        <span>대한민국 법원 판례전산망 서비스 운영센터</span>
+        <span class="font-mono text-slate-500">Copyright © Supreme Court of Korea. All rights reserved.</span>
+      </div>
+    </div>
   </div>
 
   <!-- Case Detail View -->
@@ -502,8 +558,7 @@
   </button>
 </div>
 
-<!-- 판결문 제보 핫라인 모달 — Google Form 대신 자체 폼 + Discord 웹훅 직접 전송
-     (원문 업로드는 안 받으므로 파일 첨부 없음 → Form의 로그인 강제 문제도 사라짐) -->
+<!-- 판결문 제보 핫라인 모달 -->
 <div id="reportModal" class="hidden fixed inset-0 z-[60] items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
   <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md flex flex-col overflow-hidden">
     <div class="flex items-center justify-between px-5 py-3.5 border-b border-slate-100 flex-shrink-0">
@@ -529,7 +584,7 @@
   </div>
 </div>
 
-<!-- Floating "Ask the Judgment" Widget — 원문이 텍스트로 표시된 판례에서만 노출 -->
+<!-- Floating "Ask the Judgment" Widget -->
 <div id="askOriginalWidget" class="hidden fixed bottom-24 right-6 z-50 flex-col items-end gap-3">
   <!-- Expandable Panel -->
   <div id="askOriginalPanel" class="hidden w-80 max-w-[calc(100vw-3rem)] bg-white rounded-2xl shadow-2xl border border-indigo-100 p-4 space-y-3">
@@ -555,12 +610,63 @@
   const API = "https://d2xqa2k3k9ovhh.cloudfront.net";
   const el = (id) => document.getElementById(id);
 
-  /* 원문이 화면에 이미 텍스트로 표시된 경우(kind==="text")에 한해, 그 원문을
-     컨텍스트로 질문할 수 있다. NVIDIA를 브라우저에서 직접 호출하려 했으나
-     NVIDIA가 CORS preflight 자체를 막아놔서 불가능함을 확인 — 백엔드
-     프록시(POST /precedents/{doc_id}/ask)를 거친다. */
-  let currentOriginalText = null;
+  function showErrorScreen(title, text) {
+    el("listView").classList.add("hidden");
+    el("detailView").classList.add("hidden");
+    el("errorView").classList.remove("hidden");
+    el("errorView").classList.add("flex");
 
+    el("errorTitle").textContent = title || "이용에 불편을 드려 죄송합니다.";
+    if (el("errorText")) el("errorText").textContent = text || "현재 서버 장애가 발생하여 연결이 지연되고 있습니다. 잠시후 다시시도해주세요.";
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function hideErrorScreen() {
+    el("errorView").classList.add("hidden");
+    el("errorView").classList.remove("flex");
+  }
+
+  function resetToHome() {
+    el("searchInput").value = "";
+    currentQuery = "";
+    currentCaseType = "전체";
+    currentCourt = "전체";
+    if (el("courtFilterSelect")) el("courtFilterSelect").value = "전체";
+    selectCaseType("전체");
+    showListView();
+  }
+
+  // 5~8초 타임아웃 지원 fetch 래퍼 함수 (AbortError 처리 개선)
+  async function fetchWithTimeout(resource, options = {}) {
+    const { timeout = 8000, ...fetchOptions } = options;
+    const controller = new AbortController();
+    let timedOut = false;
+    const id = setTimeout(() => {
+      timedOut = true;
+      try {
+        controller.abort(new Error(`Timeout of ${timeout}ms exceeded`));
+      } catch {
+        controller.abort();
+      }
+    }, timeout);
+
+    try {
+      const response = await fetch(resource, {
+        ...fetchOptions,
+        signal: controller.signal
+      });
+      clearTimeout(id);
+      return response;
+    } catch (error) {
+      clearTimeout(id);
+      if (timedOut || error.name === 'AbortError' || error.message?.includes('aborted')) {
+        throw new Error('서버 응답 시간이 초과되었습니다.');
+      }
+      throw error;
+    }
+  }
+
+  let currentOriginalText = null;
   let page = 1;
   let currentQuery = "";
   let currentCaseType = "전체";
@@ -595,14 +701,14 @@
     const select = el("courtFilterSelect");
     if (!select) return;
     try {
-      const res = await fetch(`${API}/precedents/courts`);
+      const res = await fetchWithTimeout(`${API}/precedents/courts`);
       if (!res.ok) throw new Error();
       const data = await res.json();
       const courts = data.courts || [];
       select.innerHTML = `<option value="전체">전체 법원</option>` +
         courts.map(name => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join("");
     } catch {
-      // 법원 목록은 부가 필터라 실패해도 "전체 법원" 옵션만 남기고 조용히 넘어간다
+      // 부가 필터
     }
   }
 
@@ -612,10 +718,6 @@
     }[c]));
   }
 
-  // API가 주는 embed_url은 API 서버 기준 상대경로다(예: "/precedents/.../original-file").
-  // 프로덕션은 프론트/API가 같은 도메인이라 그대로 써도 되지만, 로컬 개발처럼
-  // 프론트와 API가 다른 origin에 떠 있으면 페이지 origin으로 잘못 풀린다 —
-  // 그래서 "/"로 시작하는 상대경로만 API origin을 붙여 절대경로로 만든다.
   function resolveEmbedUrl(url) {
     if (!url || !url.startsWith("/")) return url;
     return API + url;
@@ -646,7 +748,7 @@
     search(true);
   }
 
-  /* 최근 작성된 시민 리뷰 불러오기 (GET /precedents/recently-reviewed?limit=5) */
+  /* 최근 작성된 시민 리뷰 불러오기 */
   async function loadRecentReviews() {
     const grid = el("recentReviewsGrid");
     if (!grid) return;
@@ -657,11 +759,10 @@
     </div>`;
 
     try {
-      const res = await fetch(`${API}/precedents/recently-reviewed?limit=5`);
+      const res = await fetchWithTimeout(`${API}/precedents/recently-reviewed?limit=5`);
       if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
       const data = await res.json();
       const rawItems = Array.isArray(data) ? data : (data.items || []);
-      // 최대 5개까지만 노출하도록 제한
       const items = rawItems.slice(0, 5);
 
       if (items.length === 0) {
@@ -702,14 +803,14 @@
         `;
       }).join('');
     } catch (e) {
-      console.error("loadRecentReviews Error:", e);
-      grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 text-sm">최근 리뷰를 불러오는 데 실패했습니다. (서버 연결을 확인해주세요)</div>`;
+      console.warn("loadRecentReviews Note:", e.message || e);
+      grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 text-sm">최근 리뷰를 불러오는 데 실패했습니다. (서버 연결 상태 확인 필요)</div>`;
     }
   }
 
   async function loadWorstRated() {
     try {
-      const res = await fetch(`${API}/precedents/worst-reviewed?limit=3`);
+      const res = await fetchWithTimeout(`${API}/precedents/worst-reviewed?limit=3`);
       if (!res.ok) throw new Error();
       const items = await res.json();
       renderWorstRated(items);
@@ -727,7 +828,7 @@
     const myGen = searchGen;
 
     el("initialHint").style.display = "none";
-    el("emptyMsg").classList.add("hidden");
+    hideErrorScreen();
 
     const params = new URLSearchParams({ page, size: 20 });
     if (currentQuery) params.set("q", currentQuery);
@@ -737,7 +838,8 @@
     el("searchResultTitle").style.display = currentQuery || currentCaseType !== "전체" || currentCourt !== "전체" || page > 1 ? "flex" : "none";
 
     try {
-      const res = await fetch(`${API}/precedents?${params}`);
+      // 5초 이내에 응답하지 않으면 AbortController를 통해 timeout 예외 발생
+      const res = await fetchWithTimeout(`${API}/precedents?${params}`, { timeout: 5000 });
       if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
       const data = await res.json();
       if (myGen !== searchGen) return;
@@ -747,14 +849,14 @@
         items = items.filter(item => (item.case_type || "").includes(currentCaseType));
       }
 
+      // 판례 목록이 0건일 때 전체 화면 에러 페이지 전환
       if (reset && items.length === 0) {
-        const tags = [
-          currentCaseType !== "전체" ? currentCaseType : null,
-          currentCourt !== "전체" ? currentCourt : null,
-        ].filter(Boolean);
-        el("emptyMsg").textContent = `${tags.length ? '[' + tags.join(', ') + '] ' : ''}검색 결과가 없습니다.`;
-        el("emptyMsg").classList.remove("hidden");
+        showErrorScreen("이용에 불편을 드려 죄송합니다.", "현재 서버 장애가 발생하여 연결이 지연되고 있습니다. 잠시후 다시시도해주세요.");
+        return;
       }
+
+      // 결과가 정상적으로 존재하는 경우 listView 노출 확인
+      el("listView").classList.remove("hidden");
 
       for (const item of items) {
         const card = document.createElement("div");
@@ -782,10 +884,10 @@
       el("loadMoreBtn").style.display = data.has_more ? "block" : "none";
       page = data.page + 1;
     } catch (err) {
-      console.error("search Error:", err);
+      console.warn("search Note:", err.message || err);
       if (myGen !== searchGen) return;
-      el("emptyMsg").textContent = "판례 정보를 불러오는 중에 오류가 발생했습니다. 백엔드 서버 상태를 확인해주세요.";
-      el("emptyMsg").classList.remove("hidden");
+      // 5초 타임아웃 또는 서버 장애 발생 시 화면 전체를 전환하여 안내 문구 표출
+      showErrorScreen("이용에 불편을 드려 죄송합니다.", "현재 서버 장애가 발생하여 연결이 지연되고 있습니다. 잠시후 다시시도해주세요.");
       el("loadMoreBtn").style.display = "none";
     }
   }
@@ -849,7 +951,7 @@
 
   async function loadLawNews() {
     try {
-      const res = await fetch(`${API}/news/top`);
+      const res = await fetchWithTimeout(`${API}/news/top`);
       if (!res.ok) throw new Error();
       const data = await res.json();
       renderLawNews(data.items || []);
@@ -907,7 +1009,6 @@
     }
   }
 
-  /* 담당 재판관 목록 불러오기 (GET /precedents/{doc_id}/judges) */
   async function loadJudges(docId) {
     const card = el("judgesCard");
     const list = el("judgesList");
@@ -916,7 +1017,7 @@
     judgeOtherCasesName = null;
 
     try {
-      const res = await fetch(`${API}/precedents/${encodeURIComponent(docId)}/judges`);
+      const res = await fetchWithTimeout(`${API}/precedents/${encodeURIComponent(docId)}/judges`);
       if (!res.ok) throw new Error();
       const data = await res.json();
       const judges = data.judges || [];
@@ -929,11 +1030,10 @@
         </button>
       `).join("");
     } catch {
-      // 담당 재판관 정보는 부가 기능이라 실패해도 조용히 무시 — 상세보기 자체는 계속 보여준다
+      // 부가 기능
     }
   }
 
-  /* 같은 이름의 법관이 관여한 다른 판례 (GET /precedents/by-judge) */
   async function loadJudgeOtherCases(name, reset = true) {
     if (reset) {
       judgeOtherCasesPage = 1;
@@ -951,7 +1051,7 @@
         name, page: judgeOtherCasesPage, size: 10,
       });
       if (currentDocId) params.set("exclude_doc_id", currentDocId);
-      const res = await fetch(`${API}/precedents/by-judge?${params}`);
+      const res = await fetchWithTimeout(`${API}/precedents/by-judge?${params}`);
       if (!res.ok) throw new Error();
       const data = await res.json();
 
@@ -1008,12 +1108,9 @@
     else history.pushState({}, "", location.pathname);
   }
 
-  /* 공유 링크(?doc_id=...)로 직접 진입했을 때 해당 판례를 불러와 연다.
-     opts.skipUrlUpdate: 뒤로/앞으로가기(popstate)로 들어온 경우 — 주소창이
-     이미 맞는 상태라 다시 건드릴 필요가 없다. */
   async function openByDocId(docId, opts = {}) {
     try {
-      const res = await fetch(`${API}/precedents/${encodeURIComponent(docId)}`);
+      const res = await fetchWithTimeout(`${API}/precedents/${encodeURIComponent(docId)}`);
       if (!res.ok) throw new Error("not found");
       const item = await res.json();
       openDetail(item, opts);
@@ -1028,6 +1125,7 @@
     currentRating = 0;
     selectedTags = [];
 
+    hideErrorScreen();
     if (!opts.skipUrlUpdate) updateUrlForDetail(item, !!opts.replace);
 
     el("listHeader").classList.add("hidden");
@@ -1082,7 +1180,7 @@
     container.innerHTML = `<div class="text-center py-12 text-slate-400 text-sm">원문을 불러오는 중...</div>`;
 
     try {
-      const res = await fetch(`${API}/precedents/${encodeURIComponent(docId)}/original-view`);
+      const res = await fetchWithTimeout(`${API}/precedents/${encodeURIComponent(docId)}/original-view`);
       if (docId !== currentDocId) return;
       if (!res.ok) throw new Error();
       const data = await res.json();
@@ -1097,7 +1195,7 @@
         hideAskOriginalWidget();
         container.innerHTML = `
           <div class="text-center py-12 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
-            <p class="text-xs text-slate-500">이 판례는 HWP 원본 파일이라 미리보기를 지원하지 않습니다.</p>
+            <p class="text-xs text-slate-500">이 판례는 HWP 원원본 파일이라 미리보기를 지원하지 않습니다.</p>
             <a href="${escapeHtml(resolveEmbedUrl(data.embed_url))}" target="_blank" rel="noopener noreferrer" class="inline-block text-xs font-bold text-blue-600 bg-white hover:bg-slate-100 border border-slate-200 px-4 py-2 rounded-lg shadow-sm">
               원본 파일 다운로드 ↓
             </a>
@@ -1123,11 +1221,6 @@
     }
   }
 
-  /* 판결문 제보 핫라인 — Google Form은 파일업로드 질문이 있으면 응답자
-     로그인을 강제하는 문제가 있었다. 원문 업로드는 애초에 안 받으므로
-     자체 폼으로 바꾸고, 접수는 Discord 웹훅으로 직접 쏜다(백엔드 경유 없음 —
-     MARU 앱 문의 위젯과 같은 패턴). 반드시 judiciary-api 전용 채널의
-     웹훅이어야 한다 — MARU 앱 문의 채널과 섞이면 안 된다. */
   const _REPORT_WEBHOOK_URL =
     "https://discord.com/api/webhooks/1549782728931541065/2OCI9v1FSEe-k-9upxgSw_O1Iat6eCNqxE-RxAomd_pl-47GA_ffAaOSX2QoFLFKtbGh";
 
@@ -1199,8 +1292,6 @@
     }
   });
 
-  /* "판결문 제보 핫라인"과 같은 플로팅 위젯 스타일 — 원문이 텍스트로 있는
-     판례를 볼 때만 버튼이 나타나고, 눌러야 질문 패널이 펼쳐진다. */
   function showAskOriginalWidget() {
     el("askOriginalWidget").classList.remove("hidden");
     el("askOriginalWidget").classList.add("flex");
@@ -1221,9 +1312,6 @@
   });
   el("askOriginalCloseBtn").addEventListener("click", () => toggleAskOriginalPanel(false));
 
-  /* 화면에 표시된 원문(kind==="text")에 대해 질문한다 — 백엔드 프록시
-     (POST /precedents/{doc_id}/ask)가 DB에 저장된 full_text를 그대로 써서
-     NVIDIA를 대신 호출해준다. */
   async function askAboutOriginal() {
     const input = el("askOriginalInput");
     const answerEl = el("askOriginalAnswer");
@@ -1269,7 +1357,7 @@
       </div>`;
 
     try {
-      const res = await fetch(`${API}/precedents/${encodeURIComponent(docId)}/summary`);
+      const res = await fetchWithTimeout(`${API}/precedents/${encodeURIComponent(docId)}/summary`);
       if (docId !== currentDocId) return;
       if (!res.ok) throw new Error();
       const data = await res.json();
@@ -1282,6 +1370,7 @@
 
   function showListView(opts = {}) {
     currentDocId = null;
+    hideErrorScreen();
     el("listHeader").classList.remove("hidden");
     el("detailHeader").classList.add("hidden");
     el("listView").classList.remove("hidden");
@@ -1293,8 +1382,6 @@
 
   el("backBtn").addEventListener("click", () => showListView());
 
-  /* 뒤로/앞으로 가기 — 공유 링크로 들어온 뒤 브라우저 내비게이션도 주소창과
-     화면이 어긋나지 않게 맞춰준다 */
   window.addEventListener("popstate", () => {
     const docId = new URLSearchParams(location.search).get("doc_id");
     if (docId) openByDocId(docId, { skipUrlUpdate: true });
@@ -1314,7 +1401,7 @@
 
   async function loadReviews() {
     try {
-      const res = await fetch(`${API}/precedents/${encodeURIComponent(currentDocId)}/reviews`);
+      const res = await fetchWithTimeout(`${API}/precedents/${encodeURIComponent(currentDocId)}/reviews`);
       if (!res.ok) throw new Error();
       const data = await res.json();
 
@@ -1410,7 +1497,7 @@
   loadLawNews();
   loadCourts();
 
-  // 공유 링크(?doc_id=...)로 들어온 경우 해당 판례를 바로 연다
+  // 공유 링크(?doc_id=...) 체크
   const initialDocId = new URLSearchParams(location.search).get("doc_id");
   if (initialDocId) openByDocId(initialDocId, { replace: true });
 </script>
