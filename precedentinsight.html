@@ -310,6 +310,10 @@
         결과 더 보기
       </button>
 
+      <div id="emptyMsg" class="hidden text-center py-16 bg-white rounded-2xl border border-dashed border-slate-200 text-slate-400 text-sm">
+        검색 결과가 없습니다.
+      </div>
+
       <div id="initialHint" class="text-center py-16 bg-white rounded-2xl border border-dashed border-slate-200 text-slate-400 text-sm">
         검색어나 상단 추천 키워드를 눌러 판례를 찾아보세요.
       </div>
@@ -827,6 +831,7 @@
     const myGen = searchGen;
 
     el("initialHint").style.display = "none";
+    el("emptyMsg").classList.add("hidden");
     hideErrorScreen();
 
     const params = new URLSearchParams({ page, size: 20 });
@@ -848,14 +853,21 @@
         items = items.filter(item => (item.case_type || "").includes(currentCaseType));
       }
 
-      // 판례 목록이 0건일 때 전체 화면 에러 페이지 전환
-      if (reset && items.length === 0) {
-        showErrorScreen("이용에 불편을 드려 죄송합니다.", "현재 서버 장애가 발생하여 연결이 지연되고 있습니다. 잠시후 다시시도해주세요.");
+      // 서버가 정상 응답했으므로(HTTP 200) 검색 결과가 0건이어도 장애 화면이 아니라
+      // 목록 화면에서 "검색 결과가 없습니다."를 보여준다. 장애 화면은 요청 실패/타임아웃일 때만 쓴다.
+      el("listView").classList.remove("hidden");
+
+      // 사건종류 필터는 받아온 페이지 안에서만 걸러내므로, 다음 페이지가 있으면 '없음'으로 단정하지 않는다.
+      if (reset && items.length === 0 && !data.has_more) {
+        const tags = [
+          currentCaseType !== "전체" ? currentCaseType : null,
+          currentCourt !== "전체" ? currentCourt : null,
+        ].filter(Boolean);
+        el("emptyMsg").textContent = `${tags.length ? '[' + tags.join(', ') + '] ' : ''}검색 결과가 없습니다.`;
+        el("emptyMsg").classList.remove("hidden");
+        el("loadMoreBtn").style.display = "none";
         return;
       }
-
-      // 결과가 정상적으로 존재하는 경우 listView 노출 확인
-      el("listView").classList.remove("hidden");
 
       for (const item of items) {
         const card = document.createElement("div");
