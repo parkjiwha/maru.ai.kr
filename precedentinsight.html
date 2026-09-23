@@ -225,6 +225,28 @@
       </div>
     </section>
 
+    <!-- SECTION: 분류별 최신 판결 (정치/연예/기업/직업/생활) - 10월 1일 이후 노출 -->
+    <section id="categorySection" class="hidden bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
+      <div class="flex items-center gap-2.5 border-b border-slate-100 pb-5">
+        <svg class="w-6 h-6 text-slate-900 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h10M4 18h7"/>
+        </svg>
+        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+          분류별 최신 판결
+        </h2>
+      </div>
+
+      <!-- Category Tabs -->
+      <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap" id="categoryTabContainer">
+        <!-- 버튼은 JS(renderCategoryTabs)가 채운다 -->
+      </div>
+
+      <!-- Category Items Grid -->
+      <div id="categoryGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="col-span-full text-center py-12 text-slate-400 text-sm">분류별 최신 판결을 불러오는 중입니다...</div>
+      </div>
+    </section>
+
     <!-- SECTION 1: TOP 3 Worst Precedents Board -->
     <section id="lowRatedSection" class="hidden">
       <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
@@ -682,6 +704,8 @@
   let selectedTags = [];
   let judgeOtherCasesPage = 1;
   let judgeOtherCasesName = null;
+  let categoryGroups = [];       // GET /precedents/by-category 응답(groups: [{category, items}, ...]) 캐시
+  let activeCategory = null;     // 현재 탭에서 선택된 분류(정치/연예/기업/직업/생활)
 
   function selectCaseType(type) {
     currentCaseType = type;
@@ -809,6 +833,88 @@
       console.warn("loadRecentReviews Note:", e.message || e);
       grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 text-sm">최근 리뷰를 불러오는 데 실패했습니다. (서버 연결 상태 확인 필요)</div>`;
     }
+  }
+
+  /* 분류별(정치/연예/기업/직업/생활) 최신 판결 — GET /precedents/by-category. */
+  async function loadCategoryPrecedents() {
+    const section = el("categorySection");
+    const tabs = el("categoryTabContainer");
+    const grid = el("categoryGrid");
+    if (!tabs || !grid) return;
+
+    // 올해 10월 1일 00시부터 표시 여부 확인 (자바스크립트 Date에서 월은 0부터 시작하므로 9가 10월)
+    const now = new Date();
+    const targetDate = new Date(now.getFullYear(), 9, 1, 0, 0, 0); 
+    
+    if (now < targetDate) {
+      if (section) section.classList.add("hidden");
+      return; // 날짜가 지나지 않았다면 서버 데이터를 호출하지 않고 함수 종료
+    } else {
+      if (section) section.classList.remove("hidden"); // 날짜가 지났다면 숨김 해제
+    }
+
+    try {
+      const res = await fetchWithTimeout(`${API}/precedents/by-category?limit=6`);
+      if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
+      const data = await res.json();
+      categoryGroups = data.groups || [];
+      if (categoryGroups.length === 0) throw new Error("empty groups");
+
+      activeCategory = categoryGroups[0].category;
+      renderCategoryTabs();
+      renderCategoryGrid();
+    } catch (e) {
+      console.warn("loadCategoryPrecedents Note:", e.message || e);
+      tabs.innerHTML = "";
+      grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 text-sm">분류별 최신 판결을 불러오는 데 실패했습니다. (서버 연결 상태 확인 필요)</div>`;
+    }
+  }
+
+  function renderCategoryTabs() {
+    const tabs = el("categoryTabContainer");
+    tabs.innerHTML = categoryGroups.map(g => {
+      const active = g.category === activeCategory;
+      const cls = active
+        ? "bg-blue-600 text-white shadow-md"
+        : "bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900 border border-slate-200";
+      return `<button type="button" onclick="selectCategory('${escapeHtml(g.category)}')" class="category-tab-btn px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${cls}">${escapeHtml(g.category)}</button>`;
+    }).join('');
+  }
+
+  function selectCategory(cat) {
+    activeCategory = cat;
+    renderCategoryTabs();
+    renderCategoryGrid();
+  }
+
+  function renderCategoryGrid() {
+    const grid = el("categoryGrid");
+    const group = categoryGroups.find(g => g.category === activeCategory);
+    const items = group ? group.items : [];
+
+    if (items.length === 0) {
+      // "기업로"/"직업로"처럼 조사가 어색해지는 경우가 있어(받침 유무에 따라 로/으로가
+      // 갈림) 조사 자체가 필요 없는 문장으로 쓴다.
+      grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 text-sm">선택한 분류('${escapeHtml(activeCategory || "")}')에는 아직 판례가 없습니다.</div>`;
+      return;
+    }
+
+    grid.innerHTML = items.map(item => `
+      <div onclick='openDetail(${JSON.stringify(item).replace(/'/g, "&#39;")})' class="bg-white border border-slate-200 hover:border-blue-500 rounded-2xl p-5 hover:shadow-md cursor-pointer transition-all space-y-3 flex flex-col justify-between group">
+        <div class="space-y-2">
+          <div class="flex items-start justify-between gap-2">
+            <h3 class="font-bold text-sm text-slate-900 group-hover:text-blue-600 transition-colors leading-snug line-clamp-2">
+              ${escapeHtml(item.case_name)}
+            </h3>
+            ${item.case_type ? `<span class="text-[11px] font-black px-2 py-0.5 rounded bg-slate-100 text-slate-700 flex-shrink-0 border border-slate-200">${escapeHtml(item.case_type)}</span>` : ""}
+          </div>
+        </div>
+        <div class="pt-2 border-t border-slate-200/80 flex items-center justify-between text-xs text-slate-500 font-medium">
+          <span class="text-slate-800 font-bold truncate max-w-[140px]">${escapeHtml(item.court || "")}</span>
+          <span class="flex-shrink-0">${escapeHtml(item.date || "")}</span>
+        </div>
+      </div>
+    `).join('');
   }
 
   async function loadWorstRated() {
@@ -1504,6 +1610,7 @@
   // 초기 로드 실행
   search(true);
   loadRecentReviews();
+  loadCategoryPrecedents();
   loadWorstRated();
   loadLawNews();
   loadCourts();
