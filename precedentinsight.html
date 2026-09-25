@@ -130,12 +130,7 @@
 <header id="listHeader" class="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 text-white transition-all">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
     <div class="flex items-center gap-3 cursor-pointer group" onclick="location.reload();">
-      <svg class="h-8 sm:h-9 w-auto" viewBox="0 0 340 50" xmlns="http://www.w3.org/2000/svg">
-        <rect width="46" height="46" rx="8" fill="#786117"/>
-        <text x="23" y="33" fill="#ffffff" font-family="'Pretendard', sans-serif" font-weight="900" font-size="28" text-anchor="middle">M</text>
-        <line x1="62" y1="10" x2="62" y2="36" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
-        <text x="82" y="33" fill="#ffffff" font-family="'Pretendard', sans-serif" font-weight="800" font-size="26" letter-spacing="-0.5px">판례인사이트</text>
-      </svg>
+      <img src="maru.jpg" alt="마루어플리케이션즈" class="h-8 sm:h-9 w-auto object-contain" />
     </div>
 
     <!-- Navigation Menu -->
@@ -354,12 +349,7 @@
       <!-- Top Official Header Bar -->
       <div class="bg-[#1b365d] text-white px-5 py-3 flex items-center justify-between border-b-2 border-[#0f2342]">
         <div class="flex items-center gap-3">
-          <svg class="h-7 w-auto flex-shrink-0" viewBox="0 0 340 50" xmlns="http://www.w3.org/2000/svg">
-            <rect width="46" height="46" rx="6" fill="#786117"/>
-            <text x="23" y="33" fill="#ffffff" font-family="'Pretendard', sans-serif" font-weight="900" font-size="28" text-anchor="middle">M</text>
-            <line x1="62" y1="10" x2="62" y2="36" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
-            <text x="82" y="33" fill="#ffffff" font-family="'Pretendard', sans-serif" font-weight="800" font-size="26" letter-spacing="-0.5px">판례인사이트</text>
-          </svg>
+          <img src="maru.jpg" alt="마루어플리케이션즈" class="h-7 w-auto flex-shrink-0 object-contain" />
         </div>
       </div>
 
@@ -1237,7 +1227,7 @@
       const item = await res.json();
       openDetail(item, opts);
     } catch {
-      showToast("링크로 전달된 판례를 찾을 수 없습니다.", true);
+      showToast("링크로 전달된 판례를 찾을 수 정습니다.", true);
     }
   }
 
