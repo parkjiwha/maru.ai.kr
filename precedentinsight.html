@@ -140,8 +140,9 @@
 <!-- Header Navbar -->
 <header id="listHeader" class="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 text-white transition-all">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-    <div class="flex items-center gap-3 cursor-pointer group" onclick="location.reload();">
-      <img src="maru.jpg" alt="마루어플리케이션즈" class="h-8 sm:h-9 w-auto object-contain" />
+    <div class="flex items-center gap-3 cursor-pointer group h-full" onclick="location.reload();">
+      <!-- 헤더 높이(h-16)에 맞게 꽉 채운 로고 이미지 -->
+      <img src="maru.jpg" alt="마루어플리케이션즈" class="h-16 w-auto object-contain" />
     </div>
 
     <!-- Navigation Menu -->
@@ -358,9 +359,10 @@
   <div id="errorView" class="hidden min-h-[80vh] flex-col items-center justify-center py-10 px-4 bg-slate-100 font-sans">
     <div class="max-w-2xl w-full bg-white border-2 border-slate-400 shadow-md rounded-none overflow-hidden text-slate-800">
       <!-- Top Official Header Bar -->
-      <div class="bg-[#1b365d] text-white px-5 py-3 flex items-center justify-between border-b-2 border-[#0f2342]">
-        <div class="flex items-center gap-3">
-          <img src="maru.jpg" alt="마루어플리케이션즈" class="h-7 w-auto flex-shrink-0 object-contain" />
+      <div class="bg-[#1b365d] text-white px-5 h-16 flex items-center justify-between border-b-2 border-[#0f2342]">
+        <div class="flex items-center gap-3 h-full">
+          <!-- 에러 화면 헤더 높이(h-16)에 맞게 꽉 채운 로고 이미지 -->
+          <img src="maru.jpg" alt="마루어플리케이션즈" class="h-16 w-auto flex-shrink-0 object-contain" />
         </div>
       </div>
 
