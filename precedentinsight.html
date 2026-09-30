@@ -462,6 +462,26 @@
           </div>
         </div>
 
+        <!-- Citizen Reaction (Like/Dislike) Card -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+          <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
+            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3zM7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"></path>
+            </svg>
+            <h3 class="text-base font-bold text-slate-900">이 판결, 어떠셨나요?</h3>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <button id="btnLikeReaction" class="flex items-center justify-center gap-2 py-3 rounded-xl border-2 border-emerald-200 text-emerald-700 font-bold text-sm hover:bg-emerald-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+              <span>👍 판결이 좋아요</span>
+              <span id="likeCount" class="font-black">0</span>
+            </button>
+            <button id="btnDislikeReaction" class="flex items-center justify-center gap-2 py-3 rounded-xl border-2 border-rose-200 text-rose-700 font-bold text-sm hover:bg-rose-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+              <span>👎 판결이 아쉬워요</span>
+              <span id="dislikeCount" class="font-black">0</span>
+            </button>
+          </div>
+        </div>
+
         <!-- Citizen Judge Review & Opinion Form -->
         <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
           <div class="border-b border-slate-100 pb-4">
@@ -714,6 +734,8 @@
   let judgeOtherCasesName = null;
   let categoryGroups = [];       // GET /precedents/by-category 응답(groups: [{category, items}, ...]) 캐시
   let activeCategory = null;     // 현재 탭에서 선택된 분류(정치/연예/기업/직업/생활)
+  let currentReactions = { like_count: 0, dislike_count: 0 };  // GET/POST /precedents/{doc_id}/reactions 집계 캐시
+  let reactionSubmitting = false;
 
   function selectCaseType(type) {
     currentCaseType = type;
@@ -852,8 +874,8 @@
 
     // 올해 10월 1일 00시부터 표시 여부 확인 (자바스크립트 Date에서 월은 0부터 시작하므로 9가 10월)
     const now = new Date();
-    const targetDate = new Date(now.getFullYear(), 9, 1, 0, 0, 0); 
-    
+    const targetDate = new Date(now.getFullYear(), 9, 1, 0, 0, 0);
+
     if (now < targetDate) {
       if (section) section.classList.add("hidden");
       return; // 날짜가 지나지 않았다면 서버 데이터를 호출하지 않고 함수 종료
@@ -1249,6 +1271,8 @@
     currentLink = item.link;
     currentRating = 0;
     selectedTags = [];
+    currentReactions = { like_count: 0, dislike_count: 0 };
+    renderReactionButtons();
 
     hideErrorScreen();
     if (!opts.skipUrlUpdate) updateUrlForDetail(item, !!opts.replace);
@@ -1285,6 +1309,7 @@
     });
 
     loadReviews();
+    loadReactions(item.doc_id);
     loadSummary(item.doc_id);
     loadOriginalView(item.doc_id);
     loadJudges(item.doc_id);
@@ -1550,6 +1575,59 @@
       el("reviewList").innerHTML = `<div class="text-center py-8 text-xs text-slate-400 bg-slate-50 rounded-xl border border-dashed border-slate-200">리뷰 목록을 불러오지 못했습니다.</div>`;
     }
   }
+
+  /* 좋아요/아쉬워요 (평점 리뷰와 별개의 가벼운 반응) — GET/POST /precedents/{doc_id}/reactions */
+  function renderReactionButtons() {
+    el("likeCount").textContent = currentReactions.like_count ?? 0;
+    el("dislikeCount").textContent = currentReactions.dislike_count ?? 0;
+  }
+
+  async function loadReactions(docId) {
+    try {
+      const res = await fetchWithTimeout(`${API}/precedents/${encodeURIComponent(docId)}/reactions`);
+      if (docId !== currentDocId) return;
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      if (docId !== currentDocId) return;
+      currentReactions = data;
+      renderReactionButtons();
+    } catch {
+      // 반응 집계는 부가 기능이라 실패해도 조용히 0/0 유지 — 상세보기 자체는 계속 보여준다
+    }
+  }
+
+  async function submitReaction(reaction) {
+    if (reactionSubmitting || !currentDocId) return;
+    const askedDocId = currentDocId;
+    reactionSubmitting = true;
+    el("btnLikeReaction").disabled = true;
+    el("btnDislikeReaction").disabled = true;
+
+    try {
+      const res = await fetch(`${API}/precedents/${encodeURIComponent(askedDocId)}/reactions`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reaction }),
+      });
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      if (askedDocId === currentDocId) {
+        currentReactions = data;
+        renderReactionButtons();
+      }
+    } catch {
+      showToast("반응 등록에 실패했습니다. 잠시 후 다시 시도해주세요.", true);
+    } finally {
+      reactionSubmitting = false;
+      if (askedDocId === currentDocId) {
+        el("btnLikeReaction").disabled = false;
+        el("btnDislikeReaction").disabled = false;
+      }
+    }
+  }
+
+  el("btnLikeReaction").addEventListener("click", () => submitReaction("like"));
+  el("btnDislikeReaction").addEventListener("click", () => submitReaction("dislike"));
 
   el("submitReviewBtn").addEventListener("click", async () => {
     let opinion = el("opinionInput").value.trim();
