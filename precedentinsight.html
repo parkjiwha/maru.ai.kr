@@ -14,7 +14,7 @@
 <meta property="og:image" content="insight.png" />
 <meta property="og:url" content="https://..." />
 <meta property="og:site_name" content="판례인사이트" />
-<meta name="theme-color" content="#5f4e19" />
+<meta name="theme-color" content="#ffffff" />
 
 <!-- Tailwind CSS & Pretendard Font -->
 <script src="https://cdn.tailwindcss.com"></script>
@@ -138,7 +138,7 @@
 <div id="toastContainer"></div>
 
 <!-- Header Navbar -->
-<header id="listHeader" class="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 text-white transition-all">
+<header id="listHeader" class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 text-slate-900 transition-all">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
     <div class="flex items-center gap-3 cursor-pointer group h-full" onclick="location.reload();">
       <!-- 헤더 높이(h-16)에 맞게 꽉 채운 로고 이미지 -->
@@ -147,7 +147,7 @@
 
     <!-- Navigation Menu -->
     <nav class="flex items-center gap-2 sm:gap-4">
-      <button onclick="scrollToSection('recentReviewsSection')" class="px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold bg-indigo-500/10 text-indigo-300 border border-indigo-500/30 hover:bg-indigo-600 hover:text-white transition-all flex items-center gap-1.5">
+      <button onclick="scrollToSection('recentReviewsSection')" class="px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold bg-indigo-50 text-indigo-600 border border-indigo-200 hover:bg-indigo-600 hover:text-white transition-all flex items-center gap-1.5">
         <span>최근 시민 리뷰</span>
         <span class="bg-indigo-500 text-white text-[10px] font-black px-1.5 py-0.2 rounded-full hidden sm:inline-block">NEW</span>
       </button>
@@ -156,15 +156,15 @@
 </header>
 
 <!-- Case Detail Header Navbar -->
-<header id="detailHeader" class="sticky top-0 z-50 bg-slate-900 text-white border-b border-slate-800 hidden">
+<header id="detailHeader" class="sticky top-0 z-50 bg-white text-slate-900 border-b border-slate-200 hidden">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
     <div class="flex items-center gap-3 min-w-0">
-      <button id="backBtn" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors flex-shrink-0 flex items-center justify-center">
+      <button id="backBtn" class="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 transition-colors flex-shrink-0 flex items-center justify-center">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
       </button>
       <div class="min-w-0">
-        <div class="text-xs text-blue-400 font-semibold tracking-wide uppercase">판례 상세보기</div>
-        <h1 class="text-base font-bold text-white truncate" id="detailTitle">사건명</h1>
+        <div class="text-xs text-blue-600 font-semibold tracking-wide uppercase">판례 상세보기</div>
+        <h1 class="text-base font-bold text-slate-900 truncate" id="detailTitle">사건명</h1>
       </div>
     </div>
   </div>
